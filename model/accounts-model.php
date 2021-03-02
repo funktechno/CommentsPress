@@ -7,8 +7,8 @@
 function getClient($clientEmail)
 {
     $db = acmeConnect();
-    $sql = 'SELECT clientId, clientFirstname, clientLastname, clientEmail, 
-            clientLevel, clientPassword FROM clients WHERE clientEmail = :email';
+    $sql = 'SELECT id, displayName, email, 
+            clientLevel, password FROM users WHERE clientEmail = :email';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':email', $clientEmail, PDO::PARAM_STR);
     $stmt->execute();
@@ -40,7 +40,7 @@ function getClientReviews($clientId)
 function checkUpdateExistingEmail($clientId, $clientEmail)
 {
     $db = acmeConnect();
-    $sql = 'SELECT clientEmail FROM clients WHERE clientEmail = :email and clientId = :clientId';
+    $sql = 'SELECT email FROM users WHERE email = :email and id = :clientId';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':email', $clientEmail, PDO::PARAM_STR);
     $stmt->bindValue(':clientId', $clientId, PDO::PARAM_INT);
@@ -59,7 +59,7 @@ function checkUpdateExistingEmail($clientId, $clientEmail)
 function checkExistingEmail($clientEmail)
 {
     $db = acmeConnect();
-    $sql = 'SELECT clientEmail FROM clients WHERE clientEmail = :email';
+    $sql = 'SELECT email FROM users WHERE email = :email';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':email', $clientEmail, PDO::PARAM_STR);
     $stmt->execute();
@@ -76,7 +76,11 @@ function checkExistingEmail($clientEmail)
 function regClient($clientEmail, $clientDisplayName, $hashedPassword)
 {
     // Create a connection object using the acme connection function
+    // echo 'test2';
+    // exit();
     $db = acmeConnect();
+    // echo 'test';
+    // exit();
     // The SQL statement
     $sql = 'INSERT INTO users (email, displayName, password)
         VALUES (:clientEmail, :clientDisplayName, :clientPassword)';
@@ -102,20 +106,17 @@ function regClient($clientEmail, $clientDisplayName, $hashedPassword)
  * update client info
  */
 function updateClient(
-    $clientFirstname,
-    $clientLastname,
+    $clientDisplayName,
     $clientEmail,
     $clientId
 ) {
     // Create a connection
     $db = acmeConnect();
     // The SQL statement to be used with the database
-    $sql = 'UPDATE clients SET clientFirstname = :clientFirstname, 
-   clientLastname = :clientLastname, clientEmail = :clientEmail WHERE clientId = :clientId';
+    $sql = 'UPDATE users SET displayName = :clientDisplayName, email = :clientEmail WHERE id = :clientId';
     $stmt = $db->prepare($sql);
 
-    $stmt->bindValue(':clientFirstname', $clientFirstname, PDO::PARAM_STR);
-    $stmt->bindValue(':clientLastname', $clientLastname, PDO::PARAM_STR);
+    $stmt->bindValue(':clientDisplayName', $clientDisplayName, PDO::PARAM_STR);
     $stmt->bindValue(':clientEmail', $clientEmail, PDO::PARAM_STR);
     $stmt->bindValue(':clientId', $clientId, PDO::PARAM_INT);
 
@@ -136,7 +137,7 @@ function updatePassword(
     // Create a connection
     $db = acmeConnect();
     // The SQL statement to be used with the database
-    $sql = 'UPDATE clients SET clientPassword = :clientPassword WHERE clientId = :clientId';
+    $sql = 'UPDATE users SET password = :clientPassword WHERE id = :clientId';
     $stmt = $db->prepare($sql);
 
     // $stmt->bindValue(':clientFirstname', $clientFirstname, PDO::PARAM_STR);

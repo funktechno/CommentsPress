@@ -124,7 +124,7 @@ switch ($action) {
         $clientData = getClient($clientEmail);
         // Compare the password just submitted against
         // the hashed password for the matching client
-        $hashCheck = password_verify($clientPassword, $clientData['clientPassword']);
+        $hashCheck = password_verify($clientPassword, $clientData['password']);
         // If the hashes don't match create an error
         // and return to the login view
         if (!$hashCheck) {
@@ -164,8 +164,8 @@ switch ($action) {
         include '../view/client-update.php';
         break;
     case 'updateClient':
-        $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
-        $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
+        $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
+        // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
         $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
         // $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
 
@@ -176,21 +176,20 @@ switch ($action) {
         // $existingEmail = checkExistingEmail($clientEmail);
 
         $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_NUMBER_INT);
-        if (empty($clientFirstname) || empty($clientLastname) || empty($clientEmail)) {
+        if (empty($clientDisplayName) || empty($clientEmail)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
             include '../client-update.php';
             exit;
         }
 
         $updateResult = updateClient(
-            $clientFirstname,
-            $clientLastname,
+            $clientDisplayName,
             $clientEmail,
             $clientId
         );
 
         if ($updateResult) {
-            $message = "<p class='notice'>$clientFirstname, your update was successful.</p>";
+            $message = "<p class='notice'>$clientDisplayName, your update was successful.</p>";
             $_SESSION['message'] = $message;
             $clientData = getClient($clientEmail);
             array_pop($clientData);
@@ -199,7 +198,7 @@ switch ($action) {
             // header('location: /acme/accounts/');
             exit;
         } else {
-            $message = "<p class='notice'>Error. $clientFirstname was not updated.</p>";
+            $message = "<p class='notice'>Error. $clientDisplayName was not updated.</p>";
             include '../client-update.php';
             exit;
         }

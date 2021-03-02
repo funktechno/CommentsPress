@@ -24,7 +24,7 @@
       $status = $db->getAttribute(PDO::ATTR_CONNECTION_STATUS);
       echo "database connection successful";
     } catch (Exception $e) {
-      echo $e;
+      // echo $e;
       // $error = $e;
       echo "database connection failed";
       // echo $error;
