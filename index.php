@@ -45,6 +45,10 @@ switch ($action) {
     case 'home':
         include 'view/home.php';
         break;
+
+    case 'bootstrap':
+        include 'view/bootstrap.php';
+        break;
     // case 'contact':
     //     include 'template/template.php';
 

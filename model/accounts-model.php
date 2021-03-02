@@ -78,7 +78,7 @@ function regClient($clientEmail, $clientDisplayName, $hashedPassword)
     // Create a connection object using the acme connection function
     $db = acmeConnect();
     // The SQL statement
-    $sql = 'INSERT INTO users (email, displayName,password)
+    $sql = 'INSERT INTO users (email, displayName, password)
         VALUES (:clientEmail, :clientDisplayName, :clientPassword)';
     // Create the prepared statement using the acme connection
     $stmt = $db->prepare($sql);

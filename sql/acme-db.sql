@@ -39,6 +39,7 @@ DROP TABLE IF EXISTS `users`;
    `id` varchar(32) NOT NULL,
    `email` varchar(40) NOT NULL,
    `displayName` varchar(40) NOT NULL,
+   `displayImageUrl` varchar(500) NULL,
    `password` varchar(255) NOT NULL,
    `resetCode` varchar(32) NULL,
    `emailConfirmed` TINYINT NULL,
