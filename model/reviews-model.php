@@ -22,6 +22,16 @@ function getUnapprovedReviews(){
     return $prodInfo;
 }
 
+function getContactForms(){
+    $db = acmeConnect();
+    $sql = 'SELECT f.* FROM contactForms as f;';
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
 function getReview($reviewId)
 {
     $db = acmeConnect();

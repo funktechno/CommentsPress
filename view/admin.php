@@ -38,6 +38,7 @@ if (!isset($_SESSION['loggedin'])) {
                 echo "<h1>Administrative Functions</h1>";
                 echo '<a href="/accounts/?action=testEmail">Test Email</a>';
                 echo '<p><a href="/accounts/?action=updateConfig">Update Configuration</a></p>';
+                echo '<p><a href="/accounts/?action=contactForms">View Messages</a></p>';
                 echo "<p>use the link below to moderate comments.</p>";
                 echo '<p><a href="/comments/?action=moderate">Moderate</a></p>';
             }
