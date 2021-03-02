@@ -12,6 +12,26 @@ function getUserReviews($clientId){
     return $prodInfo;
 }
 
+function getUnapprovedReviews(){
+    $db = acmeConnect();
+    $sql = 'SELECT c.*, p.slug FROM comments as c join pages as p on c.pageId = p.id  WHERE c.approved is null or c.approved != 1;';
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
+function getContactForms(){
+    $db = acmeConnect();
+    $sql = 'SELECT f.* FROM contactForms as f;';
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
 function getReview($reviewId)
 {
     $db = acmeConnect();

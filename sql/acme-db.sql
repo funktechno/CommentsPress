@@ -23,8 +23,8 @@ CREATE TABLE `configuration` (
   UNIQUE KEY `configuration_name_unique` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `contactForm`;
- CREATE TABLE `contactForm` (
+DROP TABLE IF EXISTS `contactForms`;
+ CREATE TABLE `contactForms` (
    `id` INT(11) NOT NULL AUTO_INCREMENT,
    `email` varchar(40) NOT NULL,
    `subject` varchar(50) NOT NULL,
@@ -89,6 +89,7 @@ CREATE TABLE `comments` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME NULL,
+  `reviewed_at` DATETIME NULL,
   `pageId` varchar(32) NOT NULL,
   `approved` TINYINT NULL,
   PRIMARY KEY (`id`),
@@ -122,17 +123,18 @@ VALUES('manualPages','false')
 ,('unlimitedReplies','false')	
 ,('facebookToken','');
 ;;
--- test insert data
+-- test insert data, password 2Manytests!
+-- update your user client level to 2 or above for admin
 INSERT INTO users(email, displayName, password)
-VALUES('test@me.com','testuser','has');
+VALUES('test@me.com','testuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu');
 ;;
 INSERT INTO users(email,displayName, password,clientLevel)
-VALUES('admin@me.com','adminuser','has', 3);
+VALUES('admin@me.com','adminuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu', 3);
 ;;
 INSERT INTO pages(slug,lockedComments)
 VALUES('test',0);
 ;;
-INSERT INTO contactForm(email,subject,message)
+INSERT INTO contactForms(email,subject,message)
 VALUES('test@me.com','test sub', 'test message');
 ;;
 
@@ -141,6 +143,11 @@ SELECT @pageId:=id FROM pages LIMIT 1;
 SELECT @userId:=id FROM users LIMIT 1;
 INSERT INTO comments(commentText, userId,pageId)
 VALUES('teset text',@userId, @pageId);
+
+SELECT @parentId:=id FROM comments LIMIT 1;
+
+INSERT INTO comments(commentText, userId,pageId, parentId)
+VALUES('child text',@userId, @pageId, @parentId);
 
 -- select @pageId
 select * from comments
@@ -155,7 +162,7 @@ select * from comments
 ;;
 select * from users;
 ;;
-select * from contactForm;
+select * from contactForms;
 ;;
 select * from pages;
 ;;

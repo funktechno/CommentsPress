@@ -10,7 +10,7 @@ if (isset($_COOKIE['firstname'])) {
 ?>
 <div id="topNav">
   <figure>
-    <img src="<?php echo $GLOBALS['documentRoot']; ?>images/site/logo.png" alt="Comment Logo">
+    <a href="/"><img src="<?php echo $GLOBALS['documentRoot']; ?>images/site/logo.png" alt="Comment Logo"></a>
   </figure>
   <div class="toplinks">
     <?php if (isset($cookieFirstname)) {
