@@ -122,12 +122,13 @@ VALUES('manualPages','false')
 ,('unlimitedReplies','false')	
 ,('facebookToken','');
 ;;
--- test insert data
+-- test insert data, password 2Manytests!
+-- update your user client level to 2 or above for admin
 INSERT INTO users(email, displayName, password)
-VALUES('test@me.com','testuser','has');
+VALUES('test@me.com','testuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu');
 ;;
 INSERT INTO users(email,displayName, password,clientLevel)
-VALUES('admin@me.com','adminuser','has', 3);
+VALUES('admin@me.com','adminuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu', 3);
 ;;
 INSERT INTO pages(slug,lockedComments)
 VALUES('test',0);
