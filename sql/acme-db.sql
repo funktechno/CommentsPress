@@ -136,6 +136,12 @@ VALUES('test@me.com','test sub', 'test message');
 
 ;;
 select * from users;
+;;
 select max(length(id)) from users;
+;;
 select * from contactForm;
+;;
 select * from pages;
+;;
+select * from comments;
+
