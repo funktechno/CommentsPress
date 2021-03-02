@@ -38,6 +38,7 @@ DROP TABLE IF EXISTS `users`;
  CREATE TABLE `users` (
    `id` varchar(32) NOT NULL,
    `email` varchar(40) NOT NULL,
+   `displayName` varchar(40) NOT NULL,
    `password` varchar(255) NOT NULL,
    `resetCode` varchar(32) NULL,
    `emailConfirmed` TINYINT NULL,
@@ -121,11 +122,11 @@ VALUES('manualPages','false')
 ,('facebookToken','');
 ;;
 -- test insert data
-INSERT INTO users(email, password)
-VALUES('test@me.com','has');
+INSERT INTO users(email, displayName, password)
+VALUES('test@me.com','testuser','has');
 ;;
-INSERT INTO users(email, password,clientLevel)
-VALUES('admin@me.com','has', 3);
+INSERT INTO users(email,displayName, password,clientLevel)
+VALUES('admin@me.com','adminuser','has', 3);
 ;;
 INSERT INTO pages(slug,lockedComments)
 VALUES('test',0);
