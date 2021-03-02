@@ -204,7 +204,9 @@ switch ($action) {
             exit;
         }
         break;
-
+    case 'contactForms':
+        include '../view/contactForms.php';
+        break;
     case 'updatePassword':
         // $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
         // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
