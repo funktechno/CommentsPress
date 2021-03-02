@@ -1,8 +1,10 @@
 <?php
-if (!isset($_SESSION['loggedin'])) {
-    // header('location: /acme/');
-    $clientId = $_SESSION['id'];
-    $reviewArray = getUserReviews($clientId);
+if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2) {
+    header('location: /accounts/');
+    // $clientId = $_SESSION['id'];
+    // $reviewArray = getUserReviews($clientId);
+} else {
+    $reviewArray = getUnapprovedReviews();
 }
 ?>
 <!DOCTYPE html>
@@ -25,24 +27,9 @@ if (!isset($_SESSION['loggedin'])) {
                 // unset message after displaying it
                 unset($_SESSION['message']);
             } ?>
-            <p>You are logged in.</p>
-            <ul>
-                <li>Display Name: <?php echo $_SESSION['clientData']['displayName'] ?></li>
-                <li>Email: <?= $_SESSION['clientData']['email'] ?></li>
-                <li>User Level: <?= $_SESSION['clientData']['clientLevel'] ?></li>
-            </ul>
-
-            <?php
-            echo "<p><a href='/accounts?action=modClient&clientId=" . $_SESSION['clientData']['clientId'] . "'>Update Account Information</a></p>";
-            if ($_SESSION['clientData']['clientLevel'] > 1) {
-                echo "<h1>Administrative Functions</h1>";
-                echo "<p>use the link below to moderate comments.</p>";
-                echo '<p><a href="/comments/?action=moderate">Moderate</a></p>';
-            }
-            ?>
 
             <?php if (isset($reviewArray) && count($reviewArray)) { ?>
-                <h3>Manage Your Comments</h3>
+                <h3>Moderate Comments</h3>
                 <div class="userReviewList">
                     <ul>
                         <?php foreach ($reviewArray as $review) { ?>
