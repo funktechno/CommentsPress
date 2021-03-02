@@ -7,8 +7,7 @@
 function getClient($clientEmail)
 {
     $db = acmeConnect();
-    $sql = 'SELECT id, displayName, email, 
-            clientLevel, password FROM users WHERE clientEmail = :email';
+    $sql = 'SELECT id, displayName, email, clientLevel, password FROM users WHERE email = :email';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':email', $clientEmail, PDO::PARAM_STR);
     $stmt->execute();
