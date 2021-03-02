@@ -1,6 +1,8 @@
 <?php
 if (!isset($_SESSION['loggedin'])) {
     // header('location: /acme/');
+    $clientId = $_SESSION['id'];
+    $reviewArray = getUserReviews($clientId);
 }
 ?>
 <!DOCTYPE html>
@@ -25,29 +27,28 @@ if (!isset($_SESSION['loggedin'])) {
             } ?>
             <p>You are logged in.</p>
             <ul>
-                <li>First name: <?php echo $_SESSION['clientData']['clientFirstname'] ?></li>
-                <li>Last name: <?= $_SESSION['clientData']['clientLastname'] ?></li>
-                <li>Email: <?= $_SESSION['clientData']['clientEmail'] ?></li>
+                <li>Display Name: <?php echo $_SESSION['clientData']['displayName'] ?></li>
+                <li>Email: <?= $_SESSION['clientData']['email'] ?></li>
                 <li>User Level: <?= $_SESSION['clientData']['clientLevel'] ?></li>
             </ul>
 
             <?php
-            echo "<p><a href='/acme/accounts?action=modClient&clientId=" . $_SESSION['clientData']['clientId'] . "'>Update Account Information</a></p>";
+            echo "<p><a href='/accounts?action=modClient&clientId=" . $_SESSION['clientData']['clientId'] . "'>Update Account Information</a></p>";
             if ($_SESSION['clientData']['clientLevel'] > 1) {
                 echo "<h1>Administrative Functions</h1>";
-                echo "<p>use the link below to manage products.</p>";
-                echo '<p><a href="/acme/products/">Products</a></p>';
+                echo "<p>use the link below to moderate comments.</p>";
+                echo '<p><a href="/comments/?moderate">Moderate</a></p>';
             }
             ?>
 
             <?php if (isset($reviewArray) && count($reviewArray)) { ?>
-                <h3>Manage Your Product Reviews</h3>
+                <h3>Manage Your Comments</h3>
                 <div class="userReviewList">
                     <ul>
                         <?php foreach ($reviewArray as $review) { ?>
                             <li><strong><?= $review['invName'] ?></strong> (Reviewed on <?php echo date("d F, Y", strtotime($review['reviewDate'])) ?>):
-                                <a href='/acme/reviews?action=mod&reviewId=<?php echo $review['reviewId'] ?>' title='Click to modify'>Edit</a>
-                                | <a href='/acme/reviews?action=del&reviewId=<?php echo $review['reviewId'] ?>' title='Click to Confirm Delete'>Delete</a></li>
+                                <a href='/comments?action=mod&reviewId=<?php echo $review['reviewId'] ?>' title='Click to modify'>Edit</a>
+                                | <a href='/comments?action=del&reviewId=<?php echo $review['reviewId'] ?>' title='Click to Confirm Delete'>Delete</a></li>
 
                         <?php } ?>
                     </ul>

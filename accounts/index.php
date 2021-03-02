@@ -16,6 +16,7 @@ require_once '../library/functions.php';
 // Get the acme model for use as needed
 require_once '../model/acme-model.php';
 require_once '../model/accounts-model.php';
+require_once '../model/reviews-model.php';
 
 
 // Get the array of categories
