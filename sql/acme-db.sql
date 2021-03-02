@@ -89,6 +89,7 @@ CREATE TABLE `comments` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME NULL,
+  `review_at` DATETIME NULL,
   `pageId` varchar(32) NOT NULL,
   `approved` TINYINT NULL,
   PRIMARY KEY (`id`),
@@ -142,6 +143,11 @@ SELECT @pageId:=id FROM pages LIMIT 1;
 SELECT @userId:=id FROM users LIMIT 1;
 INSERT INTO comments(commentText, userId,pageId)
 VALUES('teset text',@userId, @pageId);
+
+SELECT @parentId:=id FROM comments LIMIT 1;
+
+INSERT INTO comments(commentText, userId,pageId, parentId)
+VALUES('child text',@userId, @pageId, @parentId);
 
 -- select @pageId
 select * from comments
