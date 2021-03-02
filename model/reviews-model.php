@@ -14,7 +14,7 @@ function getUserReviews($clientId){
 
 function getUnapprovedReviews(){
     $db = acmeConnect();
-    $sql = 'SELECT c.* FROM comments as c  WHERE c.approved is null or c.approved != 1;';
+    $sql = 'SELECT c.*, p.slug FROM comments as c join pages as p on c.pageId = p.id  WHERE c.approved is null or c.approved != 1;';
     $stmt = $db->prepare($sql);
     $stmt->execute();
     $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);

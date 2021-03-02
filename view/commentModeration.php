@@ -37,7 +37,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                                     <a href='/comments?action=approve&reviewId=<?php echo $review['id'] ?>' title='Click to approve'>Approve</a>
                                     <br />
                                     <strong>Page:</strong>
-                                    <?= $review['pageId'] ?>
+                                    <?= $review['slug'] ?>
                                     <br/>
                                     <strong>Parent Comment:</strong>
                                     <?= $review['parentId'] ?>
