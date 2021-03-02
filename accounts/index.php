@@ -17,6 +17,7 @@ require_once '../library/functions.php';
 // require_once '../model/acme-model.php';
 require_once '../model/accounts-model.php';
 require_once '../model/reviews-model.php';
+require_once '../model/configuration-model.php';
 
 
 // Get the array of categories
@@ -203,6 +204,16 @@ switch ($action) {
             include '../client-update.php';
             exit;
         }
+        break;
+    case 'testEmail':
+        // echo 'test55';
+        $formEmails = getContactFormEmails();
+        echo 'test2';
+        exit;
+        $sentEmail = sentTestEmail($formEmails);
+        echo $sentEmail;
+        // send email
+        include '../view/admin.php';
         break;
     case 'contactForms':
         include '../view/contactForms.php';

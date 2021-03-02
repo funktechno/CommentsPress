@@ -72,6 +72,14 @@ function validatePrice($productPrice)
 //     }
 // }
 
+function sentTestEmail($formEmails){
+    $smtp = emailConnect();
+    // echo json_encode($formEmails);
+    echo $formEmails['data'];
+    $headers = array ('From' => $GLOBALS['email_from'], 'To' => $formEmails['data'], 'Subject' => 'test email', 'Reply-To' => $GLOBALS['email_from']);
+    $mail = $smtp->send($formEmails['data'], $headers, 'test message');
+    return $mail;
+}
 /* * ********************************
 *  Functions for working with images
 * ********************************* */
