@@ -75,12 +75,20 @@ function validatePrice($productPrice)
 function sentTestEmail($formEmails){
     // echo json_encode($formEmails);
     echo $formEmails['data'];
-    $headers = array ('From' => $GLOBALS['email_from'], 'To' => $formEmails['data'], 'Subject' => 'test email', 'Reply-To' => $GLOBALS['email_from']);
-    echo json_encode($headers);
-    exit;
-    $smtp = emailConnect();
 
-    $mail = $smtp->send($formEmails['data'], $headers, 'test message');
+    // $headers = array ('From' => $GLOBALS['email_from'], 'To' => $formEmails['data'], 'Subject' => 'test email', 'Reply-To' => $GLOBALS['email_from']);
+    // echo json_encode($headers);
+    // exit;
+
+    $mail = emailConnect();
+    echo "return email";
+    $mail->addAddress($formEmails['data']); 
+    echo "return email2";
+    $mail->send();
+    echo "return email3";
+    
+
+    // $mail = $smtp->send($formEmails['data'], $headers, 'test message');
     return $mail;
 }
 /* * ********************************
