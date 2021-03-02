@@ -51,8 +51,8 @@ switch ($action) {
         break;
     case 'register_user':
         // echo 'You are in the register case statement.';
-        $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
-        $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
+        // $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
+        $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
         $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
         $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
 
@@ -73,7 +73,7 @@ switch ($action) {
         //     echo 'Match found';
         //     exit;
         // }
-        if (empty($clientFirstname) || empty($clientLastname) || empty($clientEmail) || empty($checkPassword)) {
+        if (empty($clientDisplayName) || empty($clientEmail) || empty($checkPassword)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
             include '../view/registration.php';
             exit;
@@ -83,15 +83,15 @@ switch ($action) {
                 $hashedPassword = password_hash($clientPassword, PASSWORD_DEFAULT);
 
                 // Send the data to the model
-                $regOutcome = regClient($clientFirstname, $clientLastname, $clientEmail, $hashedPassword);
+                $regOutcome = regClient($clientEmail, $clientDisplayName,$hashedPassword);
                 if ($regOutcome === 1) {
-                    setcookie('firstname', $clientFirstname, strtotime('+1 year'), '/');
-                    $_SESSION['message'] = "<p>Thanks for registering $clientFirstname. Please use your  email and password to login.</p>";
+                    setcookie('displayName', $clientDisplayName, strtotime('+1 year'), '/');
+                    $_SESSION['message'] = "<p>Thanks for registering $clientDisplayName. Please use your  email and password to login.</p>";
                     // header('location: /acme/accounts/?action=login');
                     // include '../view/login.php';
                     exit;
                 } else {
-                    $_SESSION['message'] = "<p class='error'>Sorry $clientFirstname, but the registration failed. Please try again.</p>";
+                    $_SESSION['message'] = "<p class='error'>Sorry $clientDisplayName, but the registration failed. Please try again.</p>";
                     include '../view/registration.php';
                     exit;
                 }
