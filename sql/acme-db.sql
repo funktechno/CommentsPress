@@ -113,9 +113,18 @@ END
 -- ALTER TABLE `comments` 
 -- ADD CONSTRAINT `FK_comment_page` FOREIGN KEY (`pageId`) REFERENCES `pages`(`id`);
 
-
+-- test insert data
 INSERT INTO users(email, password)
 VALUES('test@me.com','has');
+;;
+INSERT INTO users(email, password,clientLevel)
+VALUES('admin@me.com','has', 3);
+;;
+INSERT INTO pages(slug,lockedComments)
+VALUES('test',0);
+;;
+INSERT INTO contactForm(email,subject,message)
+VALUES('test@me.com','test sub', 'test message');
 ;;
 
 -- VALUES(uuid(),'test@me.com','has');
@@ -128,3 +137,5 @@ VALUES('test@me.com','has');
 ;;
 select * from users;
 select max(length(id)) from users;
+select * from contactForm;
+select * from pages;
