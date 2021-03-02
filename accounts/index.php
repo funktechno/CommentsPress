@@ -47,7 +47,7 @@ switch ($action) {
         session_destroy();
         session_start();
         // include '../view/login.php';
-        // header('location: /acme/');
+        header('location: /');
         break;
     case 'register_user':
         // echo 'You are in the register case statement.';
