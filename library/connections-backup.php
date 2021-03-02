@@ -1,7 +1,7 @@
 <?php
 // change document root if serving from somewhere else such as /
 // copy this file to connections.php w/ proper info
-$GLOBALS['documentRoot']='/';
+$GLOBALS['documentRoot'] = '/';
 $GLOBALS['email_from '] = 'support@me.com';
 
 // http://localhost/acme/library/connections.php
@@ -39,7 +39,17 @@ function emailConnect()
     // // $email_body = "whatever you like";
     // $email_address = "reply-to@example.com";
     // $headers = array('From' => $email_from, 'To' => $to, 'Subject' => $email_subject, 'Reply-To' => $email_address);
-    $smtp = Mail::factory('smtp', array('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
-    return $smtp;
+    try {
+        $smtp = Mail::factory('smtp', array('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+        // echo 'link works!!';
+        return $smtp;
+    } catch (Exception $e) {
+        // echo $e;
+        $error = $e;
+        // echo 'Sorry, the connection failed';
+        // header('location: /view/500.php');
+        include $GLOBALS['root'] . 'view/500.php';
+        exit;
+    }
 }
 // createConnection();

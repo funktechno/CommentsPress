@@ -209,7 +209,7 @@ switch ($action) {
         // echo 'test55';
         $formEmails = getContactFormEmails();
         echo 'test2';
-        exit;
+        // exit;
         $sentEmail = sentTestEmail($formEmails);
         echo $sentEmail;
         // send email

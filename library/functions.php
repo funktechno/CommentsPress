@@ -73,10 +73,13 @@ function validatePrice($productPrice)
 // }
 
 function sentTestEmail($formEmails){
-    $smtp = emailConnect();
     // echo json_encode($formEmails);
     echo $formEmails['data'];
     $headers = array ('From' => $GLOBALS['email_from'], 'To' => $formEmails['data'], 'Subject' => 'test email', 'Reply-To' => $GLOBALS['email_from']);
+    echo json_encode($headers);
+    exit;
+    $smtp = emailConnect();
+
     $mail = $smtp->send($formEmails['data'], $headers, 'test message');
     return $mail;
 }
