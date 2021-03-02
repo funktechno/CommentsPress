@@ -23,13 +23,25 @@ CREATE TABLE `configuration` (
   UNIQUE KEY `configuration_name_unique` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `contactForm`;
+ CREATE TABLE `contactForm` (
+   `id` INT(11) NOT NULL AUTO_INCREMENT,
+   `email` varchar(40) NOT NULL,
+   `subject` varchar(50) NOT NULL,
+   `message` varchar(255) NOT NULL,
+   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS `comments`;
 DROP TABLE IF EXISTS `users`;
  CREATE TABLE `users` (
-   `id` varchar(36) NOT NULL,
+   `id` varchar(32) NOT NULL,
    `email` varchar(40) NOT NULL,
    `password` varchar(255) NOT NULL,
-   `resetCode` varchar(36) NULL,
+   `resetCode` varchar(32) NULL,
+   `emailConfirmed` TINYINT NULL,
+   `emailCode` varchar(32) NULL,
    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
    `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    `clientLevel` enum('1','2','3') NOT NULL DEFAULT '1',
@@ -42,13 +54,14 @@ CREATE TRIGGER before_insert_users
 BEFORE INSERT ON users
 FOR EACH ROW
 BEGIN
-   SET new.id = uuid();
+   SET new.id = replace(uuid(),'-','');
+   SET new.emailCode = replace(uuid(),'-','');
 END
 ;;
 
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
-  `id` varchar(36) NOT NULL,
+  `id` varchar(32) NOT NULL,
   `slug` varchar(255) NOT NULL ,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -62,19 +75,19 @@ CREATE TRIGGER before_insert_pages
 BEFORE INSERT ON pages
 FOR EACH ROW
 BEGIN
-   SET new.id = uuid();
+   SET new.id = replace(uuid(),'-','');
 END
 ;;
 
 CREATE TABLE `comments` (
-  `id` varchar(36) NOT NULL,
-  `parentId` varchar(36) NULL,
+  `id` varchar(32) NOT NULL,
+  `parentId` varchar(32) NULL,
   `commentText` TEXT NOT NULL,
-  `userId` varchar(36) NOT NULL,
+  `userId` varchar(32) NOT NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME NULL,
-  `pageId` varchar(36) NOT NULL,
+  `pageId` varchar(32) NOT NULL,
   `approved` TINYINT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT FK_user_comment FOREIGN KEY (userId) REFERENCES users(id),
@@ -87,7 +100,7 @@ CREATE TRIGGER before_insert_comments
 BEFORE INSERT ON comments
 FOR EACH ROW
 BEGIN
-   SET new.id = uuid();
+   SET new.id = replace(uuid(),'-','');
 END
 ;;
 
@@ -108,9 +121,10 @@ VALUES('test@me.com','has');
 -- VALUES(uuid(),'test@me.com','has');
 
 -- replace(uuid(),'-','')
--- varchar(36)
+-- varchar(32)
 -- will wrok w/ binary, but unreadable from db, appears as blob, keep varchar for simplicity
 -- unhex(replace(uuid(),'-',''))
 
 ;;
 select * from users;
+select max(length(id)) from users;
