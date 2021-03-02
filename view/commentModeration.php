@@ -33,7 +33,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                     <div class="userReviewList">
                         <ul>
                             <?php foreach ($reviewArray as $review) { ?>
-                                <li><strong><?= $review['id'] ?></strong> (Reviewed on <?php echo date("d F, Y", strtotime($review['review_at'])) ?>):
+                                <li><strong><?= $review['id'] ?></strong> (Updated on <?php echo date("d F, Y", strtotime($review['updated_at'])) ?>):
                                     <a href='/comments?action=approve&reviewId=<?php echo $review['id'] ?>' title='Click to approve'>Approve</a>
                                     <br />
                                     <strong>Page:</strong>

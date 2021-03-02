@@ -89,7 +89,7 @@ CREATE TABLE `comments` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME NULL,
-  `review_at` DATETIME NULL,
+  `reviewed_at` DATETIME NULL,
   `pageId` varchar(32) NOT NULL,
   `approved` TINYINT NULL,
   PRIMARY KEY (`id`),
