@@ -1,0 +1,455 @@
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    background-color: #ffffff;
+    /* background-image: url("../images/site/background.jpg") */
+}
+
+body main {
+    margin-top: -34px;
+    min-width: 750px;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+h1.acmeHeader {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#welcome {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #000000
+}
+
+hr {
+    border: none;
+    height: 4px;
+    color: #000000;
+    background-color: #000000;
+}
+
+body main section, footer {
+    padding: 10px;
+}
+
+body main section, footer {
+    width: 730px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+footer {
+    background-color: #ffffff;
+    margin-top: -15px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.width-250 {
+    width: 250px;
+}
+
+.width-225 {
+    width: 225px;
+}
+
+.form-1-group {
+    padding: 25px;
+}
+
+.max-input {
+    width: 100%;
+}
+
+main img.banner {
+    width: 725px;
+    margin-bottom: 20px;
+}
+
+main section>div {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+main section.col-2>div, footer>div>div.row, .col-div-2, .row {
+    display: flex;
+    flex-wrap: nowrap;
+    display: -webkit-flex;
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+}
+
+#featured {
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+}
+
+main section.col-2>div>div, .col-div-2>div, .col, #featured.a {
+    width: 50%;
+    padding-right: 20px;
+    line-height: 18px;
+}
+
+#featured>a {
+    text-decoration: none;
+}
+
+#featured span {
+    text-decoration: underline;
+    color: #0000ee;
+}
+
+.col-3 {
+    width: 43%;
+}
+
+.col-9 {
+    width: 57%;
+}
+
+#featured>a {
+    width: 115px;
+    margin: 5px;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+#featured>a img {
+    padding: 3px 25px 3px 25px;
+    background-color: #808080
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+main {}
+
+main section {
+    padding-top: 42px;
+    background-color: #ffffff;
+    padding-bottom: 5px;
+}
+
+main section div a:hover {
+    color: #de2226;
+    background-color: #ffffff;
+}
+
+/* img work */
+
+.col-div-2 img {
+    max-width: 100%;
+}
+
+#creative_pic {
+    height: 200px;
+}
+
+/* end img work */
+
+/* header */
+
+header nav {
+    width: 100%;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    margin-top: -100px;
+    height: 90px;
+}
+
+header nav>div {
+    width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header nav ul {
+    min-width: 500px;
+    margin-top: 100px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+header>div:first-child {
+    background-color: #ffffff;
+    width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+}
+
+#topNav {
+    margin-top: -17px;
+}
+
+.toplinks {
+    float: right;
+    margin-right: 19px;
+    color: #000000;
+    margin-top: -73px;
+}
+
+.toplinks a, .toplinks a:visited {
+    color: #000000;
+}
+
+#folder img {
+    width: 20px;
+}
+
+a:hover {
+    color: #808080
+}
+
+header nav ul {
+    margin-left: -30px;
+    padding-top: 15.8px;
+    padding-bottom: 17px;
+    border-radius: 8px;
+}
+
+header nav ul, footer>div, #image-display {
+    list-style-type: none;
+}
+
+footer>div {
+    margin-top: 25px;
+}
+
+#topNav figure {
+    width: 704px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+#bottomNav>div {
+    background-color: #de2226;
+}
+
+nav ul a {
+    padding-right: 5px;
+    padding-left: 5px;
+    text-align: center;
+}
+
+nav ul li:last-child a {
+    margin-right: 35px;
+}
+
+header nav li {
+    display: inline;
+    text-decoration: none;
+}
+
+.white-bd {
+    background-color: #ffffff;
+    padding: 15px;
+}
+
+#article {
+    padding: 25px;
+}
+
+header a, header a:visited, header span {
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #ffffff;
+    float: initial;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15pt;
+    text-shadow: 0px 0.4px, 0.4px 0px, 0.4px 0.4px;
+    letter-spacing: 0.06em;
+}
+
+header span {
+    color: #000000;
+}
+
+#bottomNav a:active, #bottomNav a.active, #bottomNav a:hover {
+    background-color: #ffffff;
+    color: #de2226;
+    padding: 10px 10px 18px 10px;
+}
+
+#topNav>figure>img {
+    margin-top: 10px;
+    margin-left: -8px;
+    width: 183px;
+}
+
+/* end header */
+
+/* welcome styling */
+
+#bannerCaption {
+    margin-top: -304px;
+    list-style-type: none;
+    margin-left: 448px;
+    padding-bottom: 120px;
+}
+
+#bannerCaption, #bannerCaption h2 {
+    color: #990033;
+}
+
+/* end welcome */
+
+/* main */
+
+/* end main */
+
+/* form */
+
+form input:not([type="submit"]) {
+    width: 200px;
+    height: 24px;
+}
+
+form input.long {
+    width: 300px;
+}
+
+input:required:invalid, input:focus:invalid, textarea:required:invalid, textarea:focus:invalid {
+    background: red;
+    background-position: right top;
+    background-repeat: no-repeat;
+}
+
+input:required:valid, textarea:required:valid {
+    background: #fff;
+    background-position: right top;
+    background-repeat: no-repeat;
+}
+
+/* #clientPassword {
+    width: 200px;
+} */
+
+form em {
+    font-size: 13px;
+}
+
+.btn {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.btn.red {
+    color: white;
+    background-color: red;
+}
+
+.btn.big {
+    font-size: 30px;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+.red-border {
+    color: red;
+    padding: 2px;
+    border-style: solid;
+}
+
+/* form end */
+
+/* table */
+
+thead>tr, tbody>tr:nth-child(odd) {
+    background-color: rgb(207, 204, 207);
+}
+
+/* end table */
+
+/* product list */
+
+#prod-display, #product-details {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+#prod-display li {
+    max-width: 200px;
+    text-align: center;
+    max-height: 400px;
+}
+
+#prod-display li, #product-details div {
+    flex: 1 0 auto;
+    list-style-type: none;
+    flex: 1 1 auto;
+}
+
+#product-details {
+    margin-top: -33px;
+}
+
+#product-details div {
+    max-width: 48%;
+    padding: 5px;
+}
+
+#prod-display li img, #product-details div img {
+    width: 100%;
+    height: 200px;
+}
+
+/* end product list */
+
+/* review box */
+
+.reviewBox {
+    background-color: #F7F193;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.reviewText {
+    background-color: white;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+/* end review box */

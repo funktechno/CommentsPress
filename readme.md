@@ -4,7 +4,7 @@
   * http://localhost//acme/index.php
   * http://localhost/phpmyadmin/
 * simple server `php -S localhost:8000`
-  * open `http://localhost:8000/home.php`
+  * open `http://localhost:8000`
 * restart data
   * run `sql/acme-db.sql` then `sql/inventory.sql`
 * acme-db.sql setup
