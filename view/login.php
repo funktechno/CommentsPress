@@ -16,7 +16,7 @@
         echo $_SESSION['message'];
       }
       ?>
-      <form action="/acme/accounts/" method="post">
+      <form action="/accounts/" method="post">
         <p>* indicates required fields</p>
 
         <label>Email Address *</label>
@@ -40,7 +40,7 @@
         <input type="hidden" name="action" value="login_user">
       </form>
       <h2>Not a member?</h2>
-      <a href="/acme/accounts/?action=registration" class="btn red big">Create an Account</a>
+      <a href="/accounts/?action=registration" class="btn red big">Create an Account</a>
       <br>
       <br>
       <hr>
