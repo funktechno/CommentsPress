@@ -23,8 +23,8 @@ CREATE TABLE `configuration` (
   UNIQUE KEY `configuration_name_unique` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `contactForm`;
- CREATE TABLE `contactForm` (
+DROP TABLE IF EXISTS `contactForms`;
+ CREATE TABLE `contactForms` (
    `id` INT(11) NOT NULL AUTO_INCREMENT,
    `email` varchar(40) NOT NULL,
    `subject` varchar(50) NOT NULL,
@@ -134,7 +134,7 @@ VALUES('admin@me.com','adminuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8
 INSERT INTO pages(slug,lockedComments)
 VALUES('test',0);
 ;;
-INSERT INTO contactForm(email,subject,message)
+INSERT INTO contactForms(email,subject,message)
 VALUES('test@me.com','test sub', 'test message');
 ;;
 
@@ -162,7 +162,7 @@ select * from comments
 ;;
 select * from users;
 ;;
-select * from contactForm;
+select * from contactForms;
 ;;
 select * from pages;
 ;;
