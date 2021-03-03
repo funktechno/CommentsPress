@@ -12,6 +12,54 @@ function getUserReviews($clientId){
     return $prodInfo;
 }
 
+/**
+ * get config data options and current page status
+ */
+function getPageStatus($slug){
+    $db = acmeConnect();
+    $sql = 'select (select c.data from configuration  c where c.name = "manualPages") as "manualPages",
+    (select c.data from configuration  c where c.name = "unlimitedReplies") as "unlimitedReplies",
+    p.id, p.deleted_at, p.lockedcomments from pages p where p.slug = :slug';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_INT);
+    $stmt->execute();
+    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
+function getComment($reviewId)
+{
+    $db = acmeConnect();
+    $sql = 'SELECT c.* FROM comments WHERE id = :reviewId';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':reviewId', $reviewId, PDO::PARAM_STR);
+    $stmt->execute();
+    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
+/**
+ * create a comment
+ */
+function createComment($userId,$pageId,$parentId,$body){
+    $db = acmeConnect();
+    $sql = 'INSERT INTO contactForms(email,subject,message)
+    VALUES(:email,:subject,:body)';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+    $stmt->bindValue(':subject', $subject, PDO::PARAM_STR);
+    $stmt->bindValue(':body', $body, PDO::PARAM_STR);
+    $stmt->execute();
+    // Ask how many rows changed as a result of our insert
+    $rowsChanged = $stmt->rowCount();
+    // Close the database interaction
+    $stmt->closeCursor();
+    // Return the indication of success (rows changed)
+    return $rowsChanged;
+}
+
 function getUnapprovedReviews(){
     $db = acmeConnect();
     $sql = 'SELECT c.*, p.slug FROM comments as c join pages as p on c.pageId = p.id  WHERE c.approved is null or c.approved != 1;';
