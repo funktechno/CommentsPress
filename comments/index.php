@@ -69,14 +69,18 @@ switch ($action) {
             $errorStatus->response(400, "Page doesn't exist.");
         }
 
-        if(!isset($pageData['id'])){
+        if (!isset($pageData['id'])) {
             // create page
             $newRecord = createPage($slug);
-            if($newRecord == 1){
+            if ($newRecord == 1) {
                 $pageData = getPageStatus($slug);
             } else {
                 $errorStatus->response(500, "Failed to auto create missing page.");
-            }           
+            }
+        }
+
+        if (isset($pageData['lockedComments']) && $pageData['lockedComments'] = 1) {
+            $errorStatus->response(403, "Comments are locked on this page.");
         }
         // echo json_encode($pageData);
         // exit();
@@ -100,7 +104,7 @@ switch ($action) {
         // echo json_encode($pageData);
         // exit();
         // if manual pages enabled then don't auto create page if it doesn't exist
-       
+
         // check config if auto create page
         // echo "test3";
         echo json_encode($pageData);
