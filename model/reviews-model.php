@@ -17,13 +17,27 @@ function getUserReviews($clientId){
  */
 function getPageStatus($slug){
     $db = acmeConnect();
-    $sql = 'select (select c.data from configuration  c where c.name = "manualPages") as "manualPages",
-    (select c.data from configuration  c where c.name = "unlimitedReplies") as "unlimitedReplies",
-    p.id, p.deleted_at, p.lockedcomments from pages p where p.slug = :slug';
+    $sql = 'SELECT (SELECT c.data FROM configuration  c WHERE c.name = "manualPages") as "manualPages",
+    (SELECT c.data FROM configuration  c WHERE c.name = "unlimitedReplies") as "unlimitedReplies",
+    p.id, p.deleted_at, p.lockedcomments FROM pages p WHERE p.slug = :slug';
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':slug', $slug, PDO::PARAM_INT);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
     $stmt->execute();
     $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
+function getPageComments($slug){
+    $db = acmeConnect();
+    $sql = ' SELECT c.* FROM comments c join pages p on c.pageId = p.id WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null and c.approved = 1';
+
+    // echo $sql;
+    // exit;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
+    $stmt->execute();
+    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
     return $prodInfo;
 }

@@ -31,6 +31,14 @@ switch ($action) {
         // include '../view/registration.php';
         break;
     case 'get':
+        $slug = $input['slug'];
+        if (empty($slug)) {
+            $errorStatus->response(400, "page slug field is required");
+        }
+        $comments = getPageComments($slug);
+        // recursively updated comments w/ child comments
+
+        echo json_encode($comments);
 
         break;
     case 'submit':
