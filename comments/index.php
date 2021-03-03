@@ -1,5 +1,8 @@
 <?php
-session_start();
+// session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
     $action = filter_input(INPUT_GET, 'action');
@@ -182,10 +185,6 @@ switch ($action) {
         } else {
             $errorStatus->response(500, "Error saving message");
         }
-
-        break;
-    case 'moderate':
-        include '../view/commentModeration.php';
 
         break;
     default;

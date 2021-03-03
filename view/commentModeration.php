@@ -21,7 +21,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
         <?php if (isset($_SESSION['loggedin'])) { ?>
 
             <section>
-                <h1><?php echo $_SESSION['clientData']['clientFirstname'] . ' ' . $_SESSION['clientData']['clientLastname'] ?></h1>
+                <h1><?php echo $_SESSION['clientData']['displayName'] ?></h1>
                 <?php if (isset($_SESSION['message'])) {
                     echo $_SESSION['message'];
                     // unset message after displaying it

@@ -40,7 +40,7 @@ if (!isset($_SESSION['loggedin'])) {
                 echo '<p><a href="/accounts/?action=updateConfig">Update Configuration</a></p>';
                 echo '<p><a href="/accounts/?action=contactForms">View Messages</a></p>';
                 echo "<p>use the link below to moderate comments.</p>";
-                echo '<p><a href="/comments/?action=moderate">Moderate</a></p>';
+                echo '<p><a href="/accounts/?action=moderate">Moderate</a></p>';
             }
             ?>
 
