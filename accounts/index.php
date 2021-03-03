@@ -87,7 +87,7 @@ switch ($action) {
                 $hashedPassword = password_hash($clientPassword, PASSWORD_DEFAULT);
 
                 // Send the data to the model
-                $regOutcome = regClient($clientEmail, $clientDisplayName,$hashedPassword);
+                $regOutcome = regClient($clientEmail, $clientDisplayName, $hashedPassword);
                 if ($regOutcome === 1) {
                     setcookie('displayName', $clientDisplayName, strtotime('+1 year'), '/');
                     $_SESSION['message'] = "<p>Thanks for registering $clientDisplayName. Please use your  email and password to login.</p>";
@@ -105,6 +105,10 @@ switch ($action) {
                 exit;
             }
         }
+        break;
+    case 'moderate':
+        include '../view/commentModeration.php';
+
         break;
     case 'login':
         include '../view/login.php';

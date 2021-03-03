@@ -184,10 +184,6 @@ switch ($action) {
         }
 
         break;
-    case 'moderate':
-        include '../view/commentModeration.php';
-
-        break;
     default;
         // header('location: /accounts/');
         $errorStatus->response(404, "Method not valid");
