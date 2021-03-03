@@ -17,6 +17,16 @@ Accept: application/json
     "slug": "testa",
     "body": "test comment"
 }
+### create new comment as guest
+POST http://127.0.0.1:8000/comments/?action=submit HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "guest": true,
+    "slug": "testa",
+    "body": "test comment"
+}
 ### delete message
 POST http://127.0.0.1:8000/comments/?action=del HTTP/1.1
 content-type: application/json
@@ -33,8 +43,7 @@ content-type: application/json
 Accept: application/json
 
 {
-    "userId": "85f571b37c3511eb8447    "userId": "xxx",
-0cc47a95a4ec",
+    "userId": "xxx",
     "id": "xxx",
     "body": "test comment25a"
 }
