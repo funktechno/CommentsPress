@@ -56,14 +56,17 @@ function getBearerToken()
     return null;
 }
 
-function getJwtToken($clientData){
+function getJwtToken($clientData)
+{
     $jwt = new JWT(SECRET);
     $token = $jwt->encode($clientData);
     return $token;
 }
 
-function getJwtPayload(){
-    $token = getBearerToken();
+function getJwtPayload($token = null)
+{
+    if ($token == null)
+        $token = getBearerToken();
     $jwt = new JWT(SECRET);
     try {
         $payload = $jwt->decode($token);
