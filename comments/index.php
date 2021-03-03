@@ -43,6 +43,19 @@ switch ($action) {
 
         $result = deleteUserComment($id);
 
+        if ($result === 1 || $result ===0) {
+
+            $statuscode = 204;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+
+            echo json_encode($response);
+        } else {
+            $errorStatus->response(500, "Error updating message");
+        }
+
         break;
     case 'mod':
         $userId = $input['userId'];
