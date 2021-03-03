@@ -73,18 +73,18 @@ switch ($action) {
     case 'profile':
         // get token from user
         $payload = getJwtPayload();
-        // echo json_encode($token);
-        // exit;
-        // $jwt = new JWT(SECRET);
-        // try {
-        //     $payload = $jwt->decode($token);
-        // } catch (\Throwable $th) {
+        $clientData = getClient($payload['email']);
 
-        //     $errorStatus->response(500, json_encode($th));
-        // }
+        if (!isset($clientData) || !isset($clientData['id'])) {
+            $errorStatus->response(400, "Invalid user or password");
+        }
 
-        echo json_encode($payload);
-        // grab user info from db
+        $statuscode = 200;
+
+        header("HTTP/1.1 " . $statuscode);
+        unset($clientData['password']);
+
+        echo json_encode($clientData);
 
         break;
     case 'register':
