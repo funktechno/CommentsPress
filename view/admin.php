@@ -19,7 +19,7 @@ if (!isset($_SESSION['loggedin'])) {
     <?php if (isset($_SESSION['loggedin'])) { ?>
 
         <section>
-            <h1><?php echo $_SESSION['clientData']['clientFirstname'] . ' ' . $_SESSION['clientData']['clientLastname'] ?></h1>
+            <h1><?php echo $_SESSION['clientData']['displayName'] ?></h1>
             <?php if (isset($_SESSION['message'])) {
                 echo $_SESSION['message'];
                 // unset message after displaying it
@@ -33,7 +33,7 @@ if (!isset($_SESSION['loggedin'])) {
             </ul>
 
             <?php
-            echo "<p><a href='/accounts?action=modClient&clientId=" . $_SESSION['clientData']['clientId'] . "'>Update Account Information</a></p>";
+            echo "<p><a href='/accounts?action=modClient&clientId=" . $_SESSION['clientData']['id'] . "'>Update Account Information</a></p>";
             if ($_SESSION['clientData']['clientLevel'] > 1) {
                 echo "<h1>Administrative Functions</h1>";
                 echo '<a href="/accounts/?action=testEmail">Test Email</a>';
