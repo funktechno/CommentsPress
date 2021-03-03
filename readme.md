@@ -1,19 +1,27 @@
 ## getting started
-
 * make sure xamp foulder is working, http://localhost//index.php
   * http://localhost//acme/index.php
   * http://localhost/phpmyadmin/
 * simple server `php -S localhost:8000`
   * open `http://localhost:8000`
+  * need a mysql running, can use docker or one from a shared host
 * restart data
-  * run `sql/acme-db.sql` then `sql/inventory.sql`
-* acme-db.sql setup
-  Uncomment the following lines:
-    Lines 125 through 134
-    Lines 141 and 142
-    Lines 147 and 148
-* extensions
-  * [Web Developer](https://chrome.google.com/webstore/detail/web-developer/bfbameneiokkgbdmiekhjnmfkcnldhhm?hl=en-US)
+  * run `sql/acme-db.sql`
+  * may want to comment dummy data at the bottom
+
+## features
+* configuration flags
+* comment moderation
+* receive contact us as rest api and view messages
+* basic user management
+  * reset password
+  * change password
+  * update display name
+  * register user
+  * login user
+  * view own comments
+  * all other functions require a clientLevel > 1, e.g. review comments see messages
+* plans for sso (facebook, google)
 
 * uploads folder:
 

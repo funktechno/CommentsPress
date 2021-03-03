@@ -1,5 +1,7 @@
 <?php
-
+// debug options
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 /**
  * account controller
  */
@@ -17,6 +19,7 @@ require_once '../library/functions.php';
 // require_once '../model/acme-model.php';
 require_once '../model/accounts-model.php';
 require_once '../model/reviews-model.php';
+require_once '../model/configuration-model.php';
 
 
 // Get the array of categories
@@ -35,7 +38,7 @@ $directoryURI = $_SERVER['REQUEST_URI'];
 //     include 'view/home.php';
 //     exit;
 // }
-// echo $action;
+echo $action;
 // exit();
 
 switch ($action) {
@@ -179,7 +182,7 @@ switch ($action) {
         $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_NUMBER_INT);
         if (empty($clientDisplayName) || empty($clientEmail)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
-            include '../client-update.php';
+            include '../view/client-update.php';
             exit;
         }
 
@@ -200,11 +203,23 @@ switch ($action) {
             exit;
         } else {
             $message = "<p class='notice'>Error. $clientDisplayName was not updated.</p>";
-            include '../client-update.php';
+            include '../view/client-update.php';
             exit;
         }
         break;
-
+    case 'testEmail':
+        // echo 'test55';
+        $formEmails = getContactFormEmails();
+        echo 'test2';
+        // exit;
+        $sentEmail = sentTestEmail($formEmails);
+        echo $sentEmail;
+        // send email
+        include '../view/admin.php';
+        break;
+    case 'contactForms':
+        include '../view/contactForms.php';
+        break;
     case 'updatePassword':
         // $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
         // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);

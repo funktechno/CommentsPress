@@ -1,2 +1,4 @@
 library/connections.php
 .DS_Store
+vendor
+mail/mailConfig.php
