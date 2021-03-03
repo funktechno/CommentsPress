@@ -5,5 +5,5 @@ content-type: application/json
 {
     "subject": "test",
     "body": "message",
-    "email": "email"
+    "email": "test@me.com"
 }

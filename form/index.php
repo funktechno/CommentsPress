@@ -15,13 +15,39 @@ $errorStatus = App\errorStatus::getInstance();
 
 $directoryURI = $_SERVER['REQUEST_URI'];
 switch ($action) {
-    // case 'submit':
-    //     // include '../view/registration.php';
-    //     break;
-    default;
-        
-        $errorStatus->response(404, "Method not valid");
-        // include '../view/admin.php';
+    case 'submit':
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
+        $body = filter_input(INPUT_POST, 'body', FILTER_SANITIZE_EMAIL);
+        $subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
+
+        $checkEmail = checkEmail($email);
+
+        if (empty($checkEmail)) {
+            $errorStatus->response(400, "Please provide valid email");
+        }
+
+        if (empty($email) || empty($body) || empty($subject)) {
+            $errorStatus->response(400, "email, body, subject fields are required");
+        }
+
+
+        $regOutcome = submitForm($subject, $body, $email);
+        if ($regOutcome === 1) {
+
+            $statuscode = 201;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+
+
+            echo json_encode(json_decode($response));
+        } else {
+            $errorStatus->response(500, "Error saving message");
+        }
         break;
-        // include '../view/404.php';
+    default;
+
+        $errorStatus->response(404, "Method not valid");
+        break;
 }
