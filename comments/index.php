@@ -24,7 +24,7 @@ if (!isset($input)) // if null then set to $_POST for simple posts
 
 $directoryURI = $_SERVER['REQUEST_URI'];
 switch ($action) {
-    case 'mod':
+    case 'del':
         $userId = $input['userId'];
         $id = $input['id'];
 
@@ -37,8 +37,14 @@ switch ($action) {
             $errorStatus->response(404, "Comment doesn't exist.");
         }
 
+        if ($comment['userId'] != $userId) {
+            $errorStatus->response(403, "You are not the creator of this comment.");
+        }
+
+        $result = deleteUserComment($id);
+
         break;
-    case 'del':
+    case 'mod':
         $userId = $input['userId'];
         $id = $input['id'];
         $body = $input['body'];
@@ -50,6 +56,25 @@ switch ($action) {
         $comment = getComment($id);
         if (!isset($comment['id'])) {
             $errorStatus->response(404, "Comment doesn't exist.");
+        }
+
+        if ($comment['userId'] != $userId) {
+            $errorStatus->response(403, "You are not the creator of this comment.");
+        }
+
+        $result = updateUserComment($id, $body);
+        // echo $result;
+        if ($result === 1 || $result ===0) {
+
+            $statuscode = 200;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+
+            echo json_encode($response);
+        } else {
+            $errorStatus->response(500, "Error updating message");
         }
 
         break;
