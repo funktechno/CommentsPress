@@ -61,6 +61,7 @@ switch ($action) {
 
         // check if page locked
         $pageData = getPageStatus($slug);
+        // if manual pages enabled then don't auto create page if it doesn't exist
         if (
             isset($pageData['manualPages']) &&
             $pageData['manualPages'] == 'true' &&
@@ -82,36 +83,47 @@ switch ($action) {
         if (isset($pageData['lockedComments']) && $pageData['lockedComments'] = 1) {
             $errorStatus->response(403, "Comments are locked on this page.");
         }
-        // echo json_encode($pageData);
-        // exit();
-
+        // if not unlimited and parentid passed check existing comment if it has a parent id
         if (
-            isset($parentId) &&
-            (!isset($pageData['unlimitedReplies']) ||
-                $pageData['unlimitedReplies'] != 'true')
+            isset($parentId)
         ) {
             // echo $parentId;
             // grab comment and check that it doesn't have a parent id
             $parentComment = getComment($parentId);
-            if (isset($parentComment['parentId'])) {
-                $errorStatus->response(400, "Unlimited replies are disabled. Only one level reply is permitted.");
+            // check that pageid matches
+            if ($parentComment['pageId'] != $pageData['id']) {
+                $errorStatus->response(400, "Parent comment must be of the same page.");
             }
-
-            // echo json_encode($parentComment);
-            // exit();
-            // if()
+            if ((!isset($pageData['unlimitedReplies']) ||
+                $pageData['unlimitedReplies'] != 'true')) {
+                if (isset($parentComment['parentId'])) {
+                    $errorStatus->response(400, "Unlimited replies are disabled. Only one level reply is permitted.");
+                }
+            }
         }
+
+        // check
         // echo json_encode($pageData);
         // exit();
-        // if manual pages enabled then don't auto create page if it doesn't exist
 
         // check config if auto create page
         // echo "test3";
-        echo json_encode($pageData);
-        // if not unlimited and parentid passed check existing comment if it has a parent id
+        // echo json_encode($pageData);
         // getComment()
-        exit();
-        $resut = createComment($userId, $pageId, $parentId, $body);
+        // exit();
+        $regOutcome = createComment($userId, $pageData['id'], $parentId, $body);
+        if ($regOutcome === 1) {
+
+            $statuscode = 201;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+
+            echo json_encode($response);
+        } else {
+            $errorStatus->response(500, "Error saving message");
+        }
 
         break;
     case 'moderate':

@@ -77,12 +77,19 @@ function createPage($slug){
  */
 function createComment($userId,$pageId,$parentId,$body){
     $db = acmeConnect();
-    $sql = 'INSERT INTO contactForms(email,subject,message)
-    VALUES(:email,:subject,:body)';
+    $sql = 'INSERT INTO comments(commentText, userId,pageId, parentId)
+    VALUES(:body,:userId, :pageId, :parentId)';
+    // echo $sql . ":::";
+    // echo "userId:".$userId;
+    // echo "pageId:".$pageId;
+    // echo "parentId:".$parentId;
+    // echo "body:".$body;
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
-    $stmt->bindValue(':subject', $subject, PDO::PARAM_STR);
     $stmt->bindValue(':body', $body, PDO::PARAM_STR);
+    $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+    $stmt->bindValue(':pageId', $pageId, PDO::PARAM_STR);
+    $stmt->bindValue(':parentId', $parentId, PDO::PARAM_STR);
+
     $stmt->execute();
     // Ask how many rows changed as a result of our insert
     $rowsChanged = $stmt->rowCount();
