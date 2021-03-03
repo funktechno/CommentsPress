@@ -1,7 +1,8 @@
 <?php
 
 require_once './mailConfig.php';
-
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 // standard mail from server
 
 // use wordwrap() if lines are longer than 70 characters
