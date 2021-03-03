@@ -180,11 +180,8 @@ switch ($action) {
         // $existingEmail = checkExistingEmail($clientEmail);
 
         $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
-        // echo $clientId;
-        // echo $clientEmail;
         // exit();
         if (empty($clientDisplayName) || empty($clientEmail)) {
-            // echo "test3";
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
             include '../view/client-update.php';
             exit;
@@ -203,7 +200,7 @@ switch ($action) {
             array_pop($clientData);
             // Store the array into the session
             $_SESSION['clientData'] = $clientData;
-            // header('location: /acme/accounts/');
+            header('location: /accounts/');
             exit;
         } else {
             $message = "<p class='notice'>Error. $clientDisplayName was not updated.</p>";
