@@ -1,0 +1,20 @@
+### get a page comments
+POST http://127.0.0.1:8000/comments/?action=get HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "slug": "test"
+}
+### create new message
+# userid will need to be replaced with jwt header
+POST http://127.0.0.1:8000/comments/?action=submit HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "userId": "xxx",
+    "slug": "test",
+    "body": "test comment",
+    "parentId": "xxx"
+}
