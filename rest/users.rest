@@ -5,8 +5,8 @@ Accept: application/json
 
 {
     "displayName": "test user",
-    "password": "message",
-    "email": "test@me.com"
+    "password": "2Message!",
+    "email": "test3@me.com"
 }
 ### login user to get jwt
 POST http://127.0.0.1:8000/users/?action=login HTTP/1.1
@@ -14,7 +14,7 @@ content-type: application/json
 Accept: application/json
 
 {
-    "password": "message",
+    "password": "2Manytests!",
     "email": "test@me.com"
 }
 ### sso facebook google?
