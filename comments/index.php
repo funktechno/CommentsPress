@@ -12,6 +12,7 @@ $GLOBALS['root'] = "../";
 require_once '../library/connections.php';
 require_once '../library/functions.php';
 require_once '../model/reviews-model.php';
+require_once '../model/accounts-model.php';
 require_once '../library/error_responses.php';
 header("Access-Control-Allow-Origin: " . Allowed_Origins);
 header("Access-Control-Allow-Methods: " . Allowed_Methods);
@@ -28,7 +29,13 @@ if (!isset($input)) // if null then set to $_POST for simple posts
 $directoryURI = $_SERVER['REQUEST_URI'];
 switch ($action) {
     case 'del':
-        $userId = $input['userId'];
+        $payload = getJwtPayload();
+        $clientData = getClient($payload['email']);
+
+        if (!isset($clientData) || !isset($clientData['id'])) {
+            $errorStatus->response(400, "Invalid user or password");
+        }
+        $userId = $clientData['id'];
         $id = $input['id'];
 
         if (empty($userId) || empty($id)) {
@@ -47,11 +54,11 @@ switch ($action) {
         $result = deleteUserComment($id);
         // echo "test";
         // exit();
-        if ($result === 1 || $result ===0) {
+        if ($result === 1 || $result === 0) {
             // echo "test";
 
             $statuscode = 200;
-                // 204 is different
+            // 204 is different
             header("HTTP/1.1 " . $statuscode);
             // exit;
 
@@ -65,7 +72,13 @@ switch ($action) {
 
         break;
     case 'mod':
-        $userId = $input['userId'];
+        $payload = getJwtPayload();
+        $clientData = getClient($payload['email']);
+
+        if (!isset($clientData) || !isset($clientData['id'])) {
+            $errorStatus->response(400, "Invalid user or password");
+        }
+        $userId = $clientData['id'];
         $id = $input['id'];
         $body = $input['body'];
 
@@ -84,7 +97,7 @@ switch ($action) {
 
         $result = updateUserComment($id, $body);
         // echo $result;
-        if ($result === 1 || $result ===0) {
+        if ($result === 1 || $result === 0) {
 
             $statuscode = 200;
 
@@ -110,12 +123,18 @@ switch ($action) {
 
         break;
     case 'submit':
-        // todo retrieve from jwt
-        $userId = $input['userId'];
+        // TODO guest check
+        $payload = getJwtPayload();
+        $clientData = getClient($payload['email']);
+
+        if (!isset($clientData) || !isset($clientData['id'])) {
+            $errorStatus->response(400, "Invalid user or password");
+        }
+        $userId = $clientData['id'];
 
         $slug = $input['slug'];
         // $pageId = $input['pageId'];
-        $parentId = $input['parentId'];
+        $parentId = isset($input['parentId']) ? $input['parentId'] : null;
         $body = $input['body'];
 
         if (empty($userId) || empty($slug) || empty($body)) {
