@@ -50,6 +50,9 @@ switch ($action) {
 
         header("HTTP/1.1 " . $statuscode);
         // TODO: generate jwt
+        // $jwt = new JWT('secret');
+        unset($clientData['password']);
+        // $token = $jwt->encode($payload, $header);
 
         $response = array('Status' => 'success', 'id' => $clientData['id']);
 
