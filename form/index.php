@@ -10,6 +10,9 @@ require_once '../library/connections.php';
 require_once '../library/functions.php';
 require_once '../model/reviews-model.php';
 require_once '../library/error_responses.php';
+header("Access-Control-Allow-Origin: " . Allowed_Origins);
+header("Access-Control-Allow-Methods: " . Allowed_Methods);
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 $errorStatus = App\errorStatus::getInstance();
 

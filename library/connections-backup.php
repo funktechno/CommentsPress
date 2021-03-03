@@ -5,11 +5,12 @@ $GLOBALS['documentRoot'] = '/';
 $GLOBALS['email_from '] = 'support@me.com';
 
 // run composer require phpmailer/phpmailer
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
-require '../vendor/autoload.php';
-
+// use PHPMailer\PHPMailer\SMTP;
+// use PHPMailer\PHPMailer\Exception;
+// use PHPMailer\PHPMailer\PHPMailer;
+// require '../vendor/autoload.php';
+define('Allowed_Origins','*');
+define('Allowed_Methods','GET,POST');
 
 // http://localhost/acme/library/connections.php
 function acmeConnect()
