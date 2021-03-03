@@ -2,7 +2,7 @@
 * make sure xamp foulder is working, http://localhost//index.php
   * http://localhost//acme/index.php
   * http://localhost/phpmyadmin/
-* simple server `php -S localhost:8000`
+* simple server `php -S 127.0.0.1:8000`
   * open `http://localhost:8000`
   * need a mysql running, can use docker or one from a shared host
 * restart data
