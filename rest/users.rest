@@ -18,3 +18,9 @@ Accept: application/json
     "email": "test@me.com"
 }
 ### sso facebook google?
+GET http://127.0.0.1:8000/users/?action=profile HTTP/1.1
+Authorization: Bearer {{token}}
+content-type: application/json
+Accept: application/json
+
+###

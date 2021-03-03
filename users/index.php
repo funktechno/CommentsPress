@@ -11,14 +11,13 @@ $GLOBALS['root'] = "../";
 require_once '../library/connections.php';
 require_once '../library/functions.php';
 
-require_once '../library/jwt/ValidatesJWT.php';
-require_once '../library/jwt/JWTException.php';
-require_once '../library/jwt/JWT.php';
+// require_once '../library/jwt/ValidatesJWT.php';
+// require_once '../library/jwt/JWTException.php';
+// require_once '../library/jwt/JWT.php';
 
 require_once '../model/accounts-model.php';
 require_once '../library/error_responses.php';
 
-use Ahc\Jwt\JWT;
 
 header("Access-Control-Allow-Origin: " . Allowed_Origins);
 header("Access-Control-Allow-Methods: " . Allowed_Methods);
@@ -58,10 +57,9 @@ switch ($action) {
 
         header("HTTP/1.1 " . $statuscode);
         // generate jwt
-        $jwt = new JWT(SECRET);
         unset($clientData['password']);
         // $token = $jwt->encode($payload, $header);
-        $token = $jwt->encode($clientData);
+        $token = getJwtToken($clientData);
 
         $response = array('Status' => 'success', 'id' => $clientData['id'], 'token' => $token);
 
@@ -70,6 +68,23 @@ switch ($action) {
         // $payload = $jwt->decode($token);
 
         // echo json_encode($payload);
+
+        break;
+    case 'profile':
+        // get token from user
+        $payload = getJwtPayload();
+        // echo json_encode($token);
+        // exit;
+        // $jwt = new JWT(SECRET);
+        // try {
+        //     $payload = $jwt->decode($token);
+        // } catch (\Throwable $th) {
+
+        //     $errorStatus->response(500, json_encode($th));
+        // }
+
+        echo json_encode($payload);
+        // grab user info from db
 
         break;
     case 'register':
@@ -111,17 +126,12 @@ switch ($action) {
                     exit;
                 }
             } catch (\Throwable $th) {
-                $_SESSION['message'] = '<p class="error">' . $th . '.</p>';
-                include '../view/registration.php';
-                exit;
+                $errorStatus->response(500, json_encode($th));
             }
         }
 
         break;
     default;
-        // header('location: /accounts/');
         $errorStatus->response(404, "Method not valid");
-        // include '../view/admin.php';
         break;
-        // include '../view/404.php';
 }
