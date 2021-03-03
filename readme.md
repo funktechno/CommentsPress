@@ -16,6 +16,19 @@
        * tables: `users,comments,pages,contactForms,configuration`
   * may want to comment dummy data at the bottom
 
+## deploying
+* run `sql/acme-db.sql` against chosen mysql db
+  * may want to change the admin user w/ your email
+* copy all most files excluding `assets,rest` folders
+* copy `cp ./library/connections-backup.php ./library/connections.php`
+  * fill out database settings, mail provider, jwt secret
+* navigate to the website
+  * register a new account or user the existing ones
+  * if new account change your clientLevel in the users table to 2 or above for admin access
+
+## documentation
+* see `rest` folder for api endpoints on creating comments and registering
+
 ## dependencies
 * no composer
 * mail
@@ -23,6 +36,7 @@
 * mysql database
   * can configure for other providers or replace
 * php 7
+
 
 ## features
 * jwt
