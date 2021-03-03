@@ -14,7 +14,27 @@ Accept: application/json
 
 {
     "userId": "xxx",
-    "slug": "test",
-    "body": "test comment",
-    "parentId": "xxx"
+    "slug": "testa",
+    "body": "test comment"
+}
+### delete message
+POST http://127.0.0.1:8000/comments/?action=del HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "userId": "xxx",
+    "id": "xxx"
+}
+
+### mod message
+POST http://127.0.0.1:8000/comments/?action=mod HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "userId": "85f571b37c3511eb8447    "userId": "xxx",
+0cc47a95a4ec",
+    "id": "xxx",
+    "body": "test comment25a"
 }

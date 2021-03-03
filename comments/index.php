@@ -42,12 +42,16 @@ switch ($action) {
         }
 
         $result = deleteUserComment($id);
-
+        // echo "test";
+        // exit();
         if ($result === 1 || $result ===0) {
+            // echo "test";
 
-            $statuscode = 204;
-
+            $statuscode = 200;
+                // 204 is different
             header("HTTP/1.1 " . $statuscode);
+            // exit;
+
 
             $response = array('Status' => 'success');
 

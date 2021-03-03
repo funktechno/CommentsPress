@@ -171,11 +171,12 @@ function deleteUserComment($id){
     $db = acmeConnect();
     // The SQL statement to be used with the database
     $sql = '
-    UPDATE `comments` SET `deleted_at`=:deleted_at WHERE id = :reviewId';
+    UPDATE `comments` SET `deleted_at`=NOW() WHERE id = :reviewId';
     // echo $sql;
+    // exit();
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':reviewId', $id, PDO::PARAM_STR);
-    $stmt->bindParam(':deleted_at', NOW(), PDO::PARAM_STR);
+    // $stmt->bindParam(':deleted_at', NOW(), PDO::PARAM_STR);
 
     // $stmt->bindValue(':reviewText', $body, PDO::PARAM_STR);
     $stmt->execute();
