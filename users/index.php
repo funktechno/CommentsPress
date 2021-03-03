@@ -1,5 +1,7 @@
 <?php
-session_start();
+// session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
     $action = filter_input(INPUT_GET, 'action');
@@ -8,10 +10,16 @@ $GLOBALS['root'] = "../";
 // Get the database connection file
 require_once '../library/connections.php';
 require_once '../library/functions.php';
-require_once '../model/accounts-model.php';
 
-// require_once '../model/reviews-model.php';
+require_once '../library/jwt/ValidatesJWT.php';
+require_once '../library/jwt/JWTException.php';
+require_once '../library/jwt/JWT.php';
+
+require_once '../model/accounts-model.php';
 require_once '../library/error_responses.php';
+
+use Ahc\Jwt\JWT;
+
 header("Access-Control-Allow-Origin: " . Allowed_Origins);
 header("Access-Control-Allow-Methods: " . Allowed_Methods);
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
@@ -49,14 +57,19 @@ switch ($action) {
         $statuscode = 200;
 
         header("HTTP/1.1 " . $statuscode);
-        // TODO: generate jwt
-        // $jwt = new JWT('secret');
+        // generate jwt
+        $jwt = new JWT(SECRET);
         unset($clientData['password']);
         // $token = $jwt->encode($payload, $header);
+        $token = $jwt->encode($clientData);
 
-        $response = array('Status' => 'success', 'id' => $clientData['id']);
+        $response = array('Status' => 'success', 'id' => $clientData['id'], 'token' => $token);
 
         echo json_encode($response);
+
+        // $payload = $jwt->decode($token);
+
+        // echo json_encode($payload);
 
         break;
     case 'register':

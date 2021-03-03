@@ -11,6 +11,8 @@ $GLOBALS['email_from '] = 'support@me.com';
 // require '../vendor/autoload.php';
 define('Allowed_Origins','*');
 define('Allowed_Methods','GET,POST');
+// jwt secret
+define('SECRET','SECRET');
 
 // http://localhost/acme/library/connections.php
 function acmeConnect()

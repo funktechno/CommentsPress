@@ -1,3 +1,7 @@
+# Comments Administration PHP
+* a php application for serving comments
+* very jamstack friendly
+
 ## getting started
 * make sure xamp foulder is working, http://localhost//index.php
   * http://localhost//acme/index.php
@@ -6,13 +10,28 @@
   * open `http://localhost:8000`
   * need a mysql running, can use docker or one from a shared host
 * restart data
-  * run `sql/acme-db.sql`
+  * run `sql/acme-db.sql` CAREFUL TO NOT RESET EXISTING DATA
+     * if your schema doesn't match manually fix the table columns
+     * simple db
+       * tables: `users,comments,pages,contactForms,configuration`
   * may want to comment dummy data at the bottom
 
+## dependencies
+* no composer
+* mail
+  * you choose
+* mysql database
+  * can configure for other providers or replace
+* php 7
+
 ## features
+* jwt
+  * from https://github.com/adhocore/php-jwt
 * configuration flags
 * comment moderation
-* receive contact us as rest api and view messages
+* contact form support
+  * send contact us messages as api
+  * view messages
 * basic user management
   * reset password
   * change password
