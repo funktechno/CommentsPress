@@ -61,22 +61,48 @@ switch ($action) {
 
         // check if page locked
         $pageData = getPageStatus($slug);
+        if (
+            isset($pageData['manualPages']) &&
+            $pageData['manualPages'] == 'true' &&
+            !isset($pageData['id'])
+        ) {
+            $errorStatus->response(400, "Page doesn't exist.");
+        }
+
+        if(!isset($pageData['id'])){
+            // create page
+            $newRecord = createPage($slug);
+            if($newRecord == 1){
+                $pageData = getPageStatus($slug);
+            } else {
+                $errorStatus->response(500, "Failed to auto create missing page.");
+            }           
+        }
+        // echo json_encode($pageData);
+        // exit();
 
         if (
             isset($parentId) &&
             (!isset($pageData['unlimitedReplies']) ||
                 $pageData['unlimitedReplies'] != 'true')
         ) {
-            echo $parentId;
+            // echo $parentId;
             // grab comment and check that it doesn't have a parent id
-            // $parentComment = getComment($parentId);
+            $parentComment = getComment($parentId);
+            if (isset($parentComment['parentId'])) {
+                $errorStatus->response(400, "Unlimited replies are disabled. Only one level reply is permitted.");
+            }
 
             // echo json_encode($parentComment);
-            exit();
+            // exit();
             // if()
         }
+        // echo json_encode($pageData);
+        // exit();
+        // if manual pages enabled then don't auto create page if it doesn't exist
+       
         // check config if auto create page
-
+        // echo "test3";
         echo json_encode($pageData);
         // if not unlimited and parentid passed check existing comment if it has a parent id
         // getComment()

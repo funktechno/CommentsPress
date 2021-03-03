@@ -19,7 +19,9 @@ function getPageStatus($slug){
     $db = acmeConnect();
     $sql = 'SELECT (SELECT c.data FROM configuration  c WHERE c.name = "manualPages") as "manualPages",
     (SELECT c.data FROM configuration  c WHERE c.name = "unlimitedReplies") as "unlimitedReplies",
-    p.id, p.deleted_at, p.lockedcomments FROM pages p WHERE p.slug = :slug';
+    (SELECT p.id FROM pages p WHERE p.slug = :slug) as id,
+    (SELECT p.deleted_at FROM pages p WHERE p.slug = :slug) as deleted_at,
+    (SELECT p.lockedcomments FROM pages p WHERE p.slug = :slug) as lockedcomments';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
     $stmt->execute();
@@ -45,13 +47,29 @@ function getPageComments($slug){
 function getComment($reviewId)
 {
     $db = acmeConnect();
-    $sql = 'SELECT c.* FROM comments WHERE id = :reviewId';
+    $sql = 'SELECT c.* FROM comments c WHERE c.id = :reviewId';
+    // echo $sql;
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':reviewId', $reviewId, PDO::PARAM_STR);
     $stmt->execute();
     $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
     return $prodInfo;
+}
+
+function createPage($slug){
+    $db = acmeConnect();
+    $sql = 'INSERT INTO pages(slug,lockedComments)
+    VALUES(:slug,0)';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
+    $stmt->execute();
+    // Ask how many rows changed as a result of our insert
+    $rowsChanged = $stmt->rowCount();
+    // Close the database interaction
+    $stmt->closeCursor();
+    // Return the indication of success (rows changed)
+    return $rowsChanged;
 }
 
 /**
