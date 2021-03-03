@@ -128,7 +128,8 @@ VALUES('manualPages','false')
 -- test insert data, password 2Manytests!
 -- update your user client level to 2 or above for admin
 INSERT INTO users(email, displayName, password)
-VALUES('test@me.com','testuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu');
+VALUES('test@me.com','testuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu'),
+('guest','guestuser','shouldnotworktologin');
 ;;
 INSERT INTO users(email,displayName, password,clientLevel)
 VALUES('admin@me.com','adminuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu', 3);

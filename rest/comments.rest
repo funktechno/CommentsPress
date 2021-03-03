@@ -6,14 +6,23 @@ Accept: application/json
 {
     "slug": "test"
 }
+### get a page comments with user comments
+POST http://127.0.0.1:8000/comments/?action=get HTTP/1.1
+content-type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "slug": "test"
+}
 ### create new message
 # userid will need to be replaced with jwt header
 POST http://127.0.0.1:8000/comments/?action=submit HTTP/1.1
 content-type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
-    "userId": "xxx",
     "slug": "testa",
     "body": "test comment"
 }
@@ -31,6 +40,7 @@ Accept: application/json
 POST http://127.0.0.1:8000/comments/?action=del HTTP/1.1
 content-type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
     "userId": "xxx",
@@ -41,6 +51,7 @@ Accept: application/json
 POST http://127.0.0.1:8000/comments/?action=mod HTTP/1.1
 content-type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
     "userId": "xxx",
