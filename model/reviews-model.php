@@ -30,6 +30,9 @@ function getPageStatus($slug){
     return $prodInfo;
 }
 
+/**
+ * grab a pages reviews, maybe also grab unapproved one that user owns
+ */
 function getPageComments($slug){
     $db = acmeConnect();
     $sql = ' SELECT c.* FROM comments c join pages p on c.pageId = p.id WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null and c.approved = 1';
@@ -134,15 +137,53 @@ function getReview($reviewId)
 function deleteReview($reviewId)
 {
     $db = acmeConnect();
-    $sql = 'DELETE FROM `reviews` WHERE reviewId = :reviewId';
+    $sql = 'DELETE FROM `comments` WHERE id = :reviewId';
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':reviewId', $reviewId, PDO::PARAM_INT);
+    $stmt->bindValue(':reviewId', $reviewId, PDO::PARAM_STR);
     $stmt->execute();
     $rowsChanged = $stmt->rowCount();
     $stmt->closeCursor();
     return $rowsChanged;
 }
 
+/**
+ * update body of a comment
+ */
+function updateUserComment($id, $body){
+    $db = acmeConnect();
+    // The SQL statement to be used with the database
+    $sql = '
+    UPDATE `comments` SET `commentText`=:reviewText WHERE id = :reviewId';
+    // echo $sql;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':reviewId', $id, PDO::PARAM_STR);
+    $stmt->bindValue(':reviewText', $body, PDO::PARAM_STR);
+    $stmt->execute();
+    $rowsChanged = $stmt->rowCount();
+    $stmt->closeCursor();
+    return $rowsChanged;
+}
+
+/**
+ * set delete_at to date value
+ */
+function deleteUserComment($id){
+    $db = acmeConnect();
+    // The SQL statement to be used with the database
+    $sql = '
+    UPDATE `comments` SET `deleted_at`=NOW() WHERE id = :reviewId';
+    // echo $sql;
+    // exit();
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':reviewId', $id, PDO::PARAM_STR);
+    // $stmt->bindParam(':deleted_at', NOW(), PDO::PARAM_STR);
+
+    // $stmt->bindValue(':reviewText', $body, PDO::PARAM_STR);
+    $stmt->execute();
+    $rowsChanged = $stmt->rowCount();
+    $stmt->closeCursor();
+    return $rowsChanged;
+}
 /**
  * Update a review
  */

@@ -24,11 +24,76 @@ if (!isset($input)) // if null then set to $_POST for simple posts
 
 $directoryURI = $_SERVER['REQUEST_URI'];
 switch ($action) {
-    case 'mod':
-        // include '../view/registration.php';
-        break;
     case 'del':
-        // include '../view/registration.php';
+        $userId = $input['userId'];
+        $id = $input['id'];
+
+        if (empty($userId) || empty($id)) {
+            $errorStatus->response(400, "comment id field is required");
+        }
+
+        $comment = getComment($id);
+        if (!isset($comment['id'])) {
+            $errorStatus->response(404, "Comment doesn't exist.");
+        }
+
+        if ($comment['userId'] != $userId) {
+            $errorStatus->response(403, "You are not the creator of this comment.");
+        }
+
+        $result = deleteUserComment($id);
+        // echo "test";
+        // exit();
+        if ($result === 1 || $result ===0) {
+            // echo "test";
+
+            $statuscode = 200;
+                // 204 is different
+            header("HTTP/1.1 " . $statuscode);
+            // exit;
+
+
+            $response = array('Status' => 'success');
+
+            echo json_encode($response);
+        } else {
+            $errorStatus->response(500, "Error updating message");
+        }
+
+        break;
+    case 'mod':
+        $userId = $input['userId'];
+        $id = $input['id'];
+        $body = $input['body'];
+
+        if (empty($userId) || empty($id) || empty($body)) {
+            $errorStatus->response(400, "comment id and body fields are required");
+        }
+
+        $comment = getComment($id);
+        if (!isset($comment['id'])) {
+            $errorStatus->response(404, "Comment doesn't exist.");
+        }
+
+        if ($comment['userId'] != $userId) {
+            $errorStatus->response(403, "You are not the creator of this comment.");
+        }
+
+        $result = updateUserComment($id, $body);
+        // echo $result;
+        if ($result === 1 || $result ===0) {
+
+            $statuscode = 200;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+
+            echo json_encode($response);
+        } else {
+            $errorStatus->response(500, "Error updating message");
+        }
+
         break;
     case 'get':
         $slug = $input['slug'];
@@ -90,6 +155,9 @@ switch ($action) {
             // echo $parentId;
             // grab comment and check that it doesn't have a parent id
             $parentComment = getComment($parentId);
+            if (!isset($parentComment['id'])) {
+                $errorStatus->response(404, "Parent comment doesn't exist.");
+            }
             // check that pageid matches
             if ($parentComment['pageId'] != $pageData['id']) {
                 $errorStatus->response(400, "Parent comment must be of the same page.");
@@ -101,16 +169,6 @@ switch ($action) {
                 }
             }
         }
-
-        // check
-        // echo json_encode($pageData);
-        // exit();
-
-        // check config if auto create page
-        // echo "test3";
-        // echo json_encode($pageData);
-        // getComment()
-        // exit();
         $regOutcome = createComment($userId, $pageData['id'], $parentId, $body);
         if ($regOutcome === 1) {
 
