@@ -64,12 +64,14 @@ END
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
   `id` varchar(32) NOT NULL,
-  `slug` varchar(255) NOT NULL ,
+  -- max unique length on mysql 5.6 is 191
+  `slug` varchar(191) NOT NULL ,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME NULL,
   `lockedcomments` TINYINT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pages_slug_unique` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ;;
 DELIMITER ;;

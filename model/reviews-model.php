@@ -12,6 +12,93 @@ function getUserReviews($clientId){
     return $prodInfo;
 }
 
+/**
+ * get config data options and current page status
+ */
+function getPageStatus($slug){
+    $db = acmeConnect();
+    $sql = 'SELECT (SELECT c.data FROM configuration  c WHERE c.name = "manualPages") as "manualPages",
+    (SELECT c.data FROM configuration  c WHERE c.name = "unlimitedReplies") as "unlimitedReplies",
+    (SELECT p.id FROM pages p WHERE p.slug = :slug) as id,
+    (SELECT p.deleted_at FROM pages p WHERE p.slug = :slug) as deleted_at,
+    (SELECT p.lockedcomments FROM pages p WHERE p.slug = :slug) as lockedcomments';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
+    $stmt->execute();
+    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
+function getPageComments($slug){
+    $db = acmeConnect();
+    $sql = ' SELECT c.* FROM comments c join pages p on c.pageId = p.id WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null and c.approved = 1';
+
+    // echo $sql;
+    // exit;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
+    $stmt->execute();
+    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
+function getComment($reviewId)
+{
+    $db = acmeConnect();
+    $sql = 'SELECT c.* FROM comments c WHERE c.id = :reviewId';
+    // echo $sql;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':reviewId', $reviewId, PDO::PARAM_STR);
+    $stmt->execute();
+    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
+function createPage($slug){
+    $db = acmeConnect();
+    $sql = 'INSERT INTO pages(slug,lockedComments)
+    VALUES(:slug,0)';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
+    $stmt->execute();
+    // Ask how many rows changed as a result of our insert
+    $rowsChanged = $stmt->rowCount();
+    // Close the database interaction
+    $stmt->closeCursor();
+    // Return the indication of success (rows changed)
+    return $rowsChanged;
+}
+
+/**
+ * create a comment
+ */
+function createComment($userId,$pageId,$parentId,$body){
+    $db = acmeConnect();
+    $sql = 'INSERT INTO comments(commentText, userId,pageId, parentId)
+    VALUES(:body,:userId, :pageId, :parentId)';
+    // echo $sql . ":::";
+    // echo "userId:".$userId;
+    // echo "pageId:".$pageId;
+    // echo "parentId:".$parentId;
+    // echo "body:".$body;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':body', $body, PDO::PARAM_STR);
+    $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+    $stmt->bindValue(':pageId', $pageId, PDO::PARAM_STR);
+    $stmt->bindValue(':parentId', $parentId, PDO::PARAM_STR);
+
+    $stmt->execute();
+    // Ask how many rows changed as a result of our insert
+    $rowsChanged = $stmt->rowCount();
+    // Close the database interaction
+    $stmt->closeCursor();
+    // Return the indication of success (rows changed)
+    return $rowsChanged;
+}
+
 function getUnapprovedReviews(){
     $db = acmeConnect();
     $sql = 'SELECT c.*, p.slug FROM comments as c join pages as p on c.pageId = p.id  WHERE c.approved is null or c.approved != 1;';
