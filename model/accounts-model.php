@@ -26,7 +26,7 @@ function getClientReviews($clientId)
     $sql = '
     SELECT `reviewId`, `reviewText`, `reviewDate`, inventory.invName as `invName`, `clientId` FROM `reviews` JOIN inventory ON reviews.invId = inventory.invId WHERE clientId = :clientId';
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_INT);
+    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_STR);
     $stmt->execute();
     $imageArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
@@ -42,7 +42,7 @@ function checkUpdateExistingEmail($clientId, $clientEmail)
     $sql = 'SELECT email FROM users WHERE email = :email and id = :clientId';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':email', $clientEmail, PDO::PARAM_STR);
-    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_INT);
+    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_STR);
     $stmt->execute();
     $matchEmail = $stmt->fetch(PDO::FETCH_NUM);
     $stmt->closeCursor();
@@ -114,11 +114,12 @@ function updateClient(
     // The SQL statement to be used with the database
     $sql = 'UPDATE users SET displayName = :clientDisplayName, email = :clientEmail WHERE id = :clientId';
     $stmt = $db->prepare($sql);
+    // echo $sql;
 
     $stmt->bindValue(':clientDisplayName', $clientDisplayName, PDO::PARAM_STR);
     $stmt->bindValue(':clientEmail', $clientEmail, PDO::PARAM_STR);
-    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_INT);
-
+    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_STR);
+    // echo $stmt -> queryString;
     // $stmt->bindValue(':clientPassword', $clientPassword, PDO::PARAM_STR);
     $stmt->execute();
     $rowsChanged = $stmt->rowCount();
@@ -142,7 +143,7 @@ function updatePassword(
     // $stmt->bindValue(':clientFirstname', $clientFirstname, PDO::PARAM_STR);
     // $stmt->bindValue(':clientLastname', $clientLastname, PDO::PARAM_STR);
     // $stmt->bindValue(':clientEmail', $clientEmail, PDO::PARAM_STR);
-    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_INT);
+    $stmt->bindValue(':clientId', $clientId, PDO::PARAM_STR);
 
     $stmt->bindValue(':clientPassword', $clientPassword, PDO::PARAM_STR);
     $stmt->execute();
