@@ -33,8 +33,8 @@
           <!-- <button class="btn red" type="submit">Login</button> -->
           <input type="submit" class="btn red" name="submit" id="updatebtn" value="Update Account">
 
-          <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['clientId'])) {
-                                                        echo $_SESSION['clientData']['clientId'];
+          <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['id'])) {
+                                                        echo $_SESSION['clientData']['id'];
                                                       } elseif (isset($clientId)) {
                                                         echo $clientId;
                                                       } ?>">
@@ -46,7 +46,7 @@
       <h2 class="acmeHeader">Password Change</h2>
       <?php
       if (isset($_SESSION['message'])) {
-        echo $_SESSION['message'];
+        echo "<p class='message'>" . $_SESSION['message'] . "</p>";
       }
       ?>
 
@@ -66,8 +66,8 @@
           <!-- <button class="btn red" type="submit">Login</button> -->
           <input type="submit" class="btn red" name="submit" id="pwbtn" value="Change Password">
 
-          <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['clientId'])) {
-                                                        echo $_SESSION['clientData']['clientId'];
+          <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['id'])) {
+                                                        echo $_SESSION['clientData']['id'];
                                                       } elseif (isset($clientId)) {
                                                         echo $clientId;
                                                       } ?>">
