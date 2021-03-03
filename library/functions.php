@@ -72,7 +72,8 @@ function validatePrice($productPrice)
 //     }
 // }
 
-function sentTestEmail($formEmails){
+function sentTestEmail($formEmails)
+{
     // echo json_encode($formEmails);
     echo $formEmails['data'];
 
@@ -82,11 +83,16 @@ function sentTestEmail($formEmails){
 
     $mail = emailConnect();
     echo "return email";
-    $mail->addAddress($formEmails['data']); 
+    $mail->addAddress($formEmails['data']);
     echo "return email2";
-    $mail->send();
+    try {
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
     echo "return email3";
-    
+
 
     // $mail = $smtp->send($formEmails['data'], $headers, 'test message');
     return $mail;

@@ -27,7 +27,8 @@ if (isset($_COOKIE['firstname'])) {
 </div>
 <nav id="bottomNav">
   <div>
-    <?php echo $navList;
+    <?php 
+    // echo $navList;
 
     /*<ul>
     <li><a href="index.php?action=home" class="<?php echo (strpos($directoryURI, 'home') || !strpos($directoryURI, 'action') ? 'active' : '')?>">Home</a></li>
