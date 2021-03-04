@@ -21,7 +21,10 @@ curl_setopt_array($curl, [
     ],
 ]);
 
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
+// exit();
 $response = curl_exec($curl);
 $info = curl_getinfo($curl);
 $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);

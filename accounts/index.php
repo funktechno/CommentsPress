@@ -211,9 +211,11 @@ switch ($action) {
         }
         break;
     case 'testEmail':
+        // echo 'test1';
         // echo 'test55';
         $formEmails = getContactFormEmails();
-        echo 'test2';
+        // echo json_encode($formEmails);
+        // echo 'test2';
         // exit;
         $sentEmail = sentTestEmail($formEmails);
         echo $sentEmail;
