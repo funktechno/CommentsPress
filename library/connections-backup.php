@@ -5,6 +5,7 @@
 // change document root if serving from somewhere else such as /
 // copy this file to connections.php w/ proper info
 $GLOBALS['documentRoot'] = '/';
+require_once 'Core.php';
 
 // run composer require phpmailer/phpmailer
 // use PHPMailer\PHPMailer\SMTP;
