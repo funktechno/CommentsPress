@@ -1,8 +1,4 @@
 <?php
-// session_start();
-
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
     $action = filter_input(INPUT_GET, 'action');
@@ -112,6 +108,20 @@ switch ($action) {
 
         break;
     case 'get':
+        $token = getBearerToken();
+        $userId = null;
+        if (!empty($token)) {
+            $payload = getJwtPayload($token);
+            $clientData = getClient($payload['email']);
+
+            if (!isset($clientData) || !isset($clientData['id'])) {
+                $errorStatus->response(400, "Invalid user or password");
+            }
+            $userId = $clientData['id'];
+        }
+        // echo $payload;
+        // exit;
+
         $slug = $input['slug'];
         if (empty($slug)) {
             $errorStatus->response(400, "page slug field is required");

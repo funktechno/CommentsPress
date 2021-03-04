@@ -23,4 +23,30 @@ Authorization: Bearer {{token}}
 content-type: application/json
 Accept: application/json
 
-###
+### send grid email
+POST https://api.sendgrid.com/v3/mail/send HTTP/1.1
+content-type: application/json
+Accept: application/json
+Authorization: Bearer {{SENDGRID_API_KEY}}
+
+{
+    "personalizations": [
+        {
+            "to": [
+                {
+                    "email": "test@example.com"
+                }
+            ]
+        }
+    ],
+    "from": {
+        "email": "test@example.com"
+    },
+    "subject": "Sending with SendGrid is Fun",
+    "content": [
+        {
+            "type": "text/plain",
+            "value": "and easy to do anywhere, even with cURL"
+        }
+    ]
+}

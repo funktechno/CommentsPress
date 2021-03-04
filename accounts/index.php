@@ -1,7 +1,4 @@
 <?php
-// debug options
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
 /**
  * account controller
  */
@@ -16,7 +13,6 @@ $GLOBALS['root'] = "../";
 require_once '../library/connections.php';
 require_once '../library/functions.php';
 // Get the acme model for use as needed
-// require_once '../model/acme-model.php';
 require_once '../model/accounts-model.php';
 require_once '../model/reviews-model.php';
 require_once '../model/configuration-model.php';
@@ -214,9 +210,11 @@ switch ($action) {
         }
         break;
     case 'testEmail':
+        // echo 'test1';
         // echo 'test55';
         $formEmails = getContactFormEmails();
-        echo 'test2';
+        // echo json_encode($formEmails);
+        // echo 'test2';
         // exit;
         $sentEmail = sentTestEmail($formEmails);
         echo $sentEmail;

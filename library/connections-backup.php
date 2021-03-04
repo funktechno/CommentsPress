@@ -1,4 +1,7 @@
 <?php
+// debug options uncomment
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
 // change document root if serving from somewhere else such as /
 // copy this file to connections.php w/ proper info
 $GLOBALS['documentRoot'] = '/';
@@ -38,43 +41,18 @@ function acmeConnect()
         exit;
     }
 }
-function emailConnect()
-{
-    $host = "ssl://smtp.dreamhost.com";
-    $username = "youremail@example.com";
-    $password = "your email password";
-    $port = "465";
-    $mail->Host       = "mail.example.com"; // SMTP server example
-    $mail->SMTPDebug  = 0;                     // enables SMTP debug information (for testing)
-    $mail->SMTPAuth   = true;                  // enable SMTP authentication
-    $mail->Port       = 25;                    // set the SMTP port for the GMAIL server
-    $mail->Username   = "username"; // SMTP account username example
-    $mail->Password   = "password";        // SMTP account password example
-
-    // Content
-    $mail->isHTML(true);                                  // Set email format to HTML
-    $mail->Subject = 'Here is the subject';
-    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-    return $mail;
-
-    // $to = "address_form_will_send_TO@example.com";
-    // $email_from = "youremail@example.com";
-    // $email_subject = "Subject Line Here:";
-    // // $email_body = "whatever you like";
-    // $email_address = "reply-to@example.com";
-    // $headers = array('From' => $email_from, 'To' => $to, 'Subject' => $email_subject, 'Reply-To' => $email_address);
-    // try {
-    //     $smtp = Mail::factory('smtp', array('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
-    //     // echo 'link works!!';
-    //     return $smtp;
-    // } catch (Exception $e) {
-    //     // echo $e;
-    //     $error = $e;
-    //     // echo 'Sorry, the connection failed';
-    //     // header('location: /view/500.php');
-    //     include $GLOBALS['root'] . 'view/500.php';
-    //     exit;
-    // }
+function getMailConfig(){
+    $mailConfig = array(
+        'From' => 'sender@example.com',
+        'To' => 'recipient@example.com',
+        'Subject' => 'test subject',
+        'Reply-To' => 'sender@example.com',
+        'Msg' => 'test message',
+        'Host' => 'smtp.gmail.com',
+        'Port' => '465',
+        'SendGridKey' => 'xxx',
+        'Password' => 'pw',
+        'Username' => 'user'
+    );
+    return $mailConfig;
 }
-// createConnection();

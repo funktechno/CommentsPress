@@ -3,6 +3,7 @@ require_once 'error_responses.php';
 require_once 'jwt/ValidatesJWT.php';
 require_once 'jwt/JWTException.php';
 require_once 'jwt/JWT.php';
+require_once 'mailFunctions.php';
 
 use Ahc\Jwt\JWT;
 
@@ -56,14 +57,17 @@ function getBearerToken()
     return null;
 }
 
-function getJwtToken($clientData){
+function getJwtToken($clientData)
+{
     $jwt = new JWT(SECRET);
     $token = $jwt->encode($clientData);
     return $token;
 }
 
-function getJwtPayload(){
-    $token = getBearerToken();
+function getJwtPayload($token = null)
+{
+    if ($token == null)
+        $token = getBearerToken();
     $jwt = new JWT(SECRET);
     try {
         $payload = $jwt->decode($token);
@@ -134,28 +138,10 @@ function validatePrice($productPrice)
 
 function sentTestEmail($formEmails)
 {
-    // echo json_encode($formEmails);
-    echo $formEmails['data'];
-
-    // $headers = array ('From' => $GLOBALS['email_from'], 'To' => $formEmails['data'], 'Subject' => 'test email', 'Reply-To' => $GLOBALS['email_from']);
-    // echo json_encode($headers);
-    // exit;
-
-    $mail = emailConnect();
-    echo "return email";
-    $mail->addAddress($formEmails['data']);
-    echo "return email2";
-    try {
-        $mail->send();
-        echo 'Message has been sent';
-    } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    }
-    echo "return email3";
+    $result = sendEmail('test email',$formEmails['data'], 'test email successful');
 
 
-    // $mail = $smtp->send($formEmails['data'], $headers, 'test message');
-    return $mail;
+    return $result;
 }
 /* * ********************************
 *  Functions for working with images

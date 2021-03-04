@@ -13,7 +13,6 @@ $GLOBALS['root'] = "";
 require_once 'library/connections.php';
 require_once 'library/functions.php';
 // Get the acme model for use as needed
-require_once 'model/acme-model.php';
 
 // Get the array of categories
 // $categories = getCategories();
