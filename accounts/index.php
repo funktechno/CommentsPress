@@ -1,4 +1,5 @@
 <?php
+
 /**
  * account controller
  */
@@ -158,7 +159,9 @@ switch ($action) {
 
         //     break;
     case 'modClient':
-        $clientId = filter_input(INPUT_GET, 'clientId', FILTER_VALIDATE_INT);
+        // $clientId = filter_input(INPUT_GET, 'clientId', FILTER_VALIDATE_INT);
+        $clientId = $_SESSION['clientData']['id'];
+
         // $prodInfo = getProductInfo($invId);
         // if (count($prodInfo) < 1) {
         //     $_SESSION['message'] = '<p class="error">Sorry, no product information could be found.</p>';
@@ -168,6 +171,10 @@ switch ($action) {
         include '../view/client-update.php';
         break;
     case 'updateClient':
+        if (!IsLoggedInAndHasAccess()) {
+            include '../view/client-update.php';
+            exit();
+        }
         $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
         // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
         $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
@@ -179,7 +186,9 @@ switch ($action) {
 
         // $existingEmail = checkExistingEmail($clientEmail);
 
-        $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
+        // $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
+        $clientId = $_SESSION['clientData']['id'];
+
         // exit();
         if (empty($clientDisplayName) || empty($clientEmail)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
@@ -210,6 +219,10 @@ switch ($action) {
         }
         break;
     case 'testEmail':
+        if (!IsLoggedInAndHasAccess(2)) {
+            include '../view/admin.php';
+            exit();
+        }
         // echo 'test1';
         // echo 'test55';
         $formEmails = getContactFormEmails();
@@ -223,13 +236,46 @@ switch ($action) {
         break;
     case 'updateConfig':
         // load config data
-        
+        include '../view/updateConfig.php';
+        break;
+    case 'updateConfigData':
+        // don't do any actions if not valid access
+        if (!IsLoggedInAndHasAccess(2)) {
+            include '../view/updateConfig.php';
+            exit();
+        }
+        $configInput = [];
+        $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
+        $configInput['userId'] = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
+        $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+        $updateResult = updateConfig(
+            $configInput
+        );
+
+        if ($updateResult) {
+            $message = "<p class='notice'>Config " . $configInput['id'] . " was updated successfuly.</p>";
+            $_SESSION['message'] = $message;
+            header('location: /acme/accounts/');
+            exit;
+        } else {
+            $message = "<p class='notice'>Error. Updating config " . $configInput['id'] . ".</p>";
+        }
+
         include '../view/updateConfig.php';
         break;
     case 'contactForms':
         include '../view/contactForms.php';
         break;
+    case 'managePages':
+        include '../view/managePages.php';
+        break;
     case 'updatePassword':
+        if (!IsLoggedInAndHasAccess()) {
+            include '../view/client-update.php';
+            exit();
+        }
         // $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
         // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
         // $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
@@ -240,8 +286,8 @@ switch ($action) {
         $checkPassword = checkPassword($clientPassword);
 
         // $existingEmail = checkExistingEmail($clientEmail);
-
-        $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
+        // $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
+        $clientId = $_SESSION['clientData']['id'];
         if (empty($checkPassword)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
             include '../client-update.php';
@@ -258,7 +304,7 @@ switch ($action) {
         if ($updateResult) {
             $message = "<p class='notice'>Your password update was successful.</p>";
             $_SESSION['message'] = $message;
-            header('location: /acme/accounts/');
+            header('location: /accounts/');
             exit;
         } else {
             $message = "<p class='notice'>Error. Password was not updated.</p>";

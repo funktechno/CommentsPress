@@ -32,13 +32,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                         <?php foreach ($rows as $row) { ?>
                             <form action="/accounts/" method="post">
                                 <div><strong><?= $row['id'] ?></strong> (Created on <?php echo date("d F, Y", strtotime($row['created_at'])) ?>):
-                                    <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['id'])) {
-                                                                                    echo $_SESSION['clientData']['id'];
-                                                                                } elseif (isset($clientId)) {
-                                                                                    echo $clientId;
-                                                                                } ?>">
 
-                                    <input type="hidden" name="clientId" value="<? $row['id'] ?>" />
+                                    <input type="hidden" name="id" value="<? $row['id'] ?>" />
                                     <br />
                                     <label>Name:</label>
                                     <br />

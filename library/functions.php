@@ -57,6 +57,34 @@ function getBearerToken()
     return null;
 }
 
+/**
+ * 
+ */
+function IsLoggedInAndHasAccess($clientLevel = null)
+{
+    if (!isset($_SESSION['loggedin'])) {
+        $message = "<p class='notice'>Must be loggedin.</p>";
+        $_SESSION['message'] = $message;
+        return false;
+    }
+    if (isset($_SESSION['clientData']) && isset($_SESSION['clientData']['id'])) {
+
+        // check client level
+        if (
+            $clientLevel != null &&
+            $_SESSION['clientData']['clientLevel'] < $clientLevel
+        ) {
+            $message = "<p class='notice'>User does not have access to this page.</p>";
+            $_SESSION['message'] = $message;
+            return false;
+        }
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
 function getJwtToken($clientData)
 {
     $jwt = new JWT(SECRET);
@@ -138,7 +166,7 @@ function validatePrice($productPrice)
 
 function sentTestEmail($formEmails)
 {
-    $result = sendEmail('test email',$formEmails['data'], 'test email successful');
+    $result = sendEmail('test email', $formEmails['data'], 'test email successful');
 
 
     return $result;

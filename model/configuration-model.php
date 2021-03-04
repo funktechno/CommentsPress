@@ -13,6 +13,10 @@ function getContactFormEmails(){
     // return 'play'
 }
 
+function updateConfig($input){
+    
+}
+
 function getConfig(){
     $db = acmeConnect();
     // echo 'test33';
