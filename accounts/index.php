@@ -221,6 +221,11 @@ switch ($action) {
         // send email
         include '../view/admin.php';
         break;
+    case 'updateConfig':
+        // load config data
+        
+        include '../view/updateConfig.php';
+        break;
     case 'contactForms':
         include '../view/contactForms.php';
         break;

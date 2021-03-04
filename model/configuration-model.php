@@ -12,3 +12,15 @@ function getContactFormEmails(){
     return $prodInfo;
     // return 'play'
 }
+
+function getConfig(){
+    $db = acmeConnect();
+    // echo 'test33';
+    $sql = 'SELECT * FROM configuration';
+    // echo $sql;
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
