@@ -251,10 +251,21 @@ switch ($action) {
         $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
         // echo json_encode($configInput);
         // exit();
-
-        $updateResult = updateConfig(
-            $configInput
-        );
+        try {
+            $updateResult = updateConfig(
+                $configInput
+            );
+        } catch (\Throwable $th) {
+            if (isset($th->errorInfo)) {
+                $message = "<p class='notice'>Error. Updating config " . $configInput['id'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                $_SESSION['message'] = $message;
+            } else {
+                $message = "<p class='notice'>Error. Updating config " . $configInput['id'] . ".</p>";
+                $_SESSION['message'] = $message;
+            }
+            include '../view/updateConfig.php';
+            exit();
+        }
 
         if ($updateResult) {
             $message = "<p class='notice'>Config " . $configInput['id'] . " was updated successfuly.</p>";
@@ -275,10 +286,21 @@ switch ($action) {
         $configInput = [];
         $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
-
-        $updateResult = addConfig(
-            $configInput
-        );
+        try {
+            $updateResult = addConfig(
+                $configInput
+            );
+        } catch (\Throwable $th) {
+            if (isset($th->errorInfo)) {
+                $message = "<p class='notice'>Error. Adding config " . $configInput['name'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                $_SESSION['message'] = $message;
+            } else {
+                $message = "<p class='notice'>Error. Adding config " . $configInput['name'] . ".</p>";
+                $_SESSION['message'] = $message;
+            }
+            include '../view/updateConfig.php';
+            exit();
+        }
 
         if ($updateResult) {
             $message = "<p class='notice'>Config " . $configInput['name'] . " was added successfuly.</p>";
@@ -286,7 +308,8 @@ switch ($action) {
             // header('location: /acme/accounts/');
             // exit;
         } else {
-            $message = "<p class='notice'>Error. Adding config " . $configInput['id'] . ".</p>";
+            $message = "<p class='notice'>Error. Adding config " . $configInput['name'] . ".</p>";
+            $_SESSION['message'] = $message;
         }
         include '../view/updateConfig.php';
         break;
