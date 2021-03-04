@@ -10,14 +10,14 @@
   * open `http://localhost:8000`
   * need a mysql running, can use docker or one from a shared host
 * restart data
-  * run `sql/acme-db.sql` CAREFUL TO NOT RESET EXISTING DATA
+  * run `sql/acme-db.sql`, then `sql/acme-data.sql` if you want the dummy data CAREFUL TO NOT RESET EXISTING DATA
      * if your schema doesn't match manually fix the table columns
      * simple db
        * tables: `users,comments,pages,contactForms,configuration`
   * may want to comment dummy data at the bottom
 
 ## deploying
-* run `sql/acme-db.sql` against chosen mysql db
+* run `sql/acme-db.sql` CAREFUL TO NOT RESET EXISTING DATA against chosen mysql db
   * may want to change the admin user w/ your email
 * copy all most files excluding `assets,rest,mail` folders
 * copy `cp ./library/connections-backup.php ./library/connections.php`
@@ -26,7 +26,7 @@
   * copy `mailConfig-back.php mailConfig.php`
   * copy a working mail provider method in the library folder e.g. `cp library/mailFunctions-sendGrid.php library/mailFunctions.php`
 * navigate to the website
-  * register a new account or user the existing ones
+  * register a new account or use the existing ones
   * if new account change your clientLevel in the users table to 2 or above for admin access
 
 ## documentation
@@ -42,22 +42,28 @@
 
 
 ## features
-* jwt
+* [x] jwt
   * from https://github.com/adhocore/php-jwt
-* configuration flags
-* comment moderation
-* contact form support
+* [x] configuration flags
+* [ ]comment moderation
+* [ ]contact form support
   * send contact us messages as api
   * view messages
+* [x] api
+  * login, register
+  * comments
+  * form submission
 * basic user management
   * reset password
-  * change password
-  * update display name
-  * register user
-  * login user
-  * view own comments
+  * [x] change password
+  * [x] update display name
+  * [x] register user
+  * [x] login user
+  * [x] view own comments
   * all other functions require a clientLevel > 1, e.g. review comments see messages
 * plans for sso (facebook, google)
+* [ ] comment filter
+  * flagging system?
 
 * uploads folder:
 

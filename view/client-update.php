@@ -21,14 +21,14 @@
         <div class="red-border">
           <label>Display Name:</label>
           <br>
-          <input name="clientDisplayName" id="clientDisplayName" type="text" <?php echo (isset($_SESSION['clientData']['clientDisplayName'])) ? "value='" . $_SESSION['clientData']['clientDisplayName'] . "'" : "" ?> required>
+          <input name="clientDisplayName" id="clientDisplayName" type="text" <?php echo (isset($_SESSION['clientData']['displayName'])) ? "value='" . $_SESSION['clientData']['displayName'] . "'" : "" ?> required>
 
           <label>Email Address:</label>
 
           <br>
 
 
-          <input name="clientEmail" class="long" id="clientEmail" type="email" <?php echo (isset($_SESSION['clientData']['clientEmail'])) ? "value='" . $_SESSION['clientData']['clientEmail'] . "'" : "" ?> required>
+          <input name="clientEmail" class="long" id="clientEmail" type="email" <?php echo (isset($_SESSION['clientData']['email'])) ? "value='" . $_SESSION['clientData']['email'] . "'" : "" ?> required>
           <br>
           <!-- <button class="btn red" type="submit">Login</button> -->
           <input type="submit" class="btn red" name="submit" id="updatebtn" value="Update Account">

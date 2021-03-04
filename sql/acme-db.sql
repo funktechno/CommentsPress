@@ -33,6 +33,9 @@ DROP TABLE IF EXISTS `contactForms`;
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+DROP TABLE IF EXISTS `flaggedComment`;
+
 DROP TABLE IF EXISTS `comments`;
 DROP TABLE IF EXISTS `users`;
  CREATE TABLE `users` (
@@ -60,6 +63,7 @@ BEGIN
    SET new.emailCode = replace(uuid(),'-','');
 END
 ;;
+DELIMITER ;
 
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
@@ -82,6 +86,7 @@ BEGIN
    SET new.id = replace(uuid(),'-','');
 END
 ;;
+DELIMITER ;
 
 CREATE TABLE `comments` (
   `id` varchar(32) NOT NULL,
@@ -108,67 +113,24 @@ BEGIN
    SET new.id = replace(uuid(),'-','');
 END
 ;;
+DELIMITER ;
 
--- ALTER TABLE `comments` 
--- ADD CONSTRAINT `FK_user_comment` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+-- do I need a type
+CREATE TABLE `flaggedComment` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `commentId` varchar(32) NULL,
+  `userId` varchar(32) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `type` enum('spam','offensive') NOT NULL DEFAULT 'spam',
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT FK_flaggedComment_reportingUser FOREIGN KEY (userId) REFERENCES users(id),
+  CONSTRAINT FK_flaggedComment_comment FOREIGN KEY (commentId) REFERENCES comments(id)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ALTER TABLE `comments` 
--- ADD CONSTRAINT `FK_comment_parentComment` FOREIGN KEY (`parentId`) REFERENCES `comments`(`id`);
-
--- ALTER TABLE `comments` 
--- ADD CONSTRAINT `FK_comment_page` FOREIGN KEY (`pageId`) REFERENCES `pages`(`id`);
---
 INSERT INTO configuration(name, data)
 VALUES('manualPages','false')
 ,('moderateComments','false')
 ,('contactFormEmails','admin@me.com,test@me.com')
 ,('unlimitedReplies','false')	
 ,('facebookToken','');
-;;
--- test insert data, password 2Manytests!
--- update your user client level to 2 or above for admin
-INSERT INTO users(email, displayName, password)
-VALUES('test@me.com','testuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu'),
-('guest','guestuser','shouldnotworktologin');
-;;
-INSERT INTO users(email,displayName, password,clientLevel)
-VALUES('admin@me.com','adminuser','$2y$10$tRt6YXsazkoiEdF572xmeeKXPNjvBTbdR8cSj8hK7zwI5mWN5OFMu', 3);
-;;
-INSERT INTO pages(slug,lockedComments)
-VALUES('test',0);
-;;
-INSERT INTO contactForms(email,subject,message)
-VALUES('test@me.com','test sub', 'test message');
-;;
-
--- select top 1 * from pages;
-SELECT @pageId:=id FROM pages LIMIT 1;
-SELECT @userId:=id FROM users LIMIT 1;
-INSERT INTO comments(commentText, userId,pageId)
-VALUES('teset text',@userId, @pageId);
-
-SELECT @parentId:=id FROM comments LIMIT 1;
-
-INSERT INTO comments(commentText, userId,pageId, parentId)
-VALUES('child text',@userId, @pageId, @parentId);
-
--- select @pageId
-select * from comments
-
--- VALUES(uuid(),'test@me.com','has');
-
--- replace(uuid(),'-','')
--- varchar(32)
--- will wrok w/ binary, but unreadable from db, appears as blob, keep varchar for simplicity
--- unhex(replace(uuid(),'-',''))
-
-;;
-select * from users;
-;;
-select * from contactForms;
-;;
-select * from pages;
-;;
-select * from comments;
-
-select * from configuration;

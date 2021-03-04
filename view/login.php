@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include '../common/head.php'; ?>
+<?php
+$titleValue = "Login";
+include '../common/head.php';
+?>
 
 <body>
   <header>

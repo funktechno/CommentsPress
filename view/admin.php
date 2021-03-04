@@ -1,7 +1,7 @@
 <?php
-if (!isset($_SESSION['loggedin'])) {
+if (isset($_SESSION['loggedin'])) {
     // header('location: /acme/');
-    $clientId = $_SESSION['id'];
+    $clientId = $_SESSION['clientData']['id'];
     $reviewArray = getUserReviews($clientId);
 }
 ?>
@@ -39,6 +39,7 @@ if (!isset($_SESSION['loggedin'])) {
                 echo '<a href="/accounts/?action=testEmail">Test Email</a>';
                 echo '<p><a href="/accounts/?action=updateConfig">Update Configuration</a></p>';
                 echo '<p><a href="/accounts/?action=contactForms">View Messages</a></p>';
+                echo '<p><a href="/accounts/?action=managePages">Manage Pages</a></p>';
                 echo "<p>use the link below to moderate comments.</p>";
                 echo '<p><a href="/accounts/?action=moderate">Moderate</a></p>';
             }
