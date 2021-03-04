@@ -60,21 +60,6 @@ function getComment($reviewId)
     return $prodInfo;
 }
 
-function createPage($slug){
-    $db = acmeConnect();
-    $sql = 'INSERT INTO pages(slug,lockedComments)
-    VALUES(:slug,0)';
-    $stmt = $db->prepare($sql);
-    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
-    $stmt->execute();
-    // Ask how many rows changed as a result of our insert
-    $rowsChanged = $stmt->rowCount();
-    // Close the database interaction
-    $stmt->closeCursor();
-    // Return the indication of success (rows changed)
-    return $rowsChanged;
-}
-
 /**
  * create a comment
  */
