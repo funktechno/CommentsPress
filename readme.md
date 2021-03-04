@@ -19,9 +19,12 @@
 ## deploying
 * run `sql/acme-db.sql` against chosen mysql db
   * may want to change the admin user w/ your email
-* copy all most files excluding `assets,rest` folders
+* copy all most files excluding `assets,rest,mail` folders
 * copy `cp ./library/connections-backup.php ./library/connections.php`
   * fill out database settings, mail provider, jwt secret
+* test working mail form server in `mail` folder
+  * copy `mailConfig-back.php mailConfig.php`
+  * copy a working mail provider method in the library folder e.g. `cp library/mailFunctions-sendGrid.php library/mailFunctions.php`
 * navigate to the website
   * register a new account or user the existing ones
   * if new account change your clientLevel in the users table to 2 or above for admin access
