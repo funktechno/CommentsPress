@@ -29,19 +29,48 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                 <?php if (isset($rows) && count($rows)) { ?>
                     <h3>Config</h3>
                     <div class="userReviewList">
-                        <ul>
-                            <?php foreach ($rows as $row) { ?>
-                                <li><strong><?= $row['id'] ?></strong> (Recieved on <?php echo date("d F, Y", strtotime($row['created_at'])) ?>):
-                                    <br />
-                                    <strong>Name:</strong>
-                                    <?= $row['data'] ?>
-                                    <br />
-                                    <strong>Data:</strong>
-                                    <?= $row['name'] ?>
-                                </li>
+                        <?php foreach ($rows as $row) { ?>
+                            <form action="/accounts/" method="post">
+                                <div><strong><?= $row['id'] ?></strong> (Created on <?php echo date("d F, Y", strtotime($row['created_at'])) ?>):
+                                    <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['id'])) {
+                                                                                    echo $_SESSION['clientData']['id'];
+                                                                                } elseif (isset($clientId)) {
+                                                                                    echo $clientId;
+                                                                                } ?>">
 
-                            <?php } ?>
-                        </ul>
+                                    <input type="hidden" name="clientId" value="<? $row['id'] ?>" />
+                                    <br />
+                                    <label>Name:</label>
+                                    <br />
+                                    <input name="name" class="long" type="text" value="<?php echo $row['name'] ?>" required>
+                                    <br />
+                                    <label>Data:</label>
+                                    <br />
+                                    <input name="data" class="long" type="text" value="<?php echo $row['data'] ?>">
+                                    <input type="hidden" name="action" value="updateConfigData">
+                                    <input type="submit" class="btn red" name="submit" id="updatebtn" value="Update Data">
+                                </div>
+                            </form>
+                        <?php } ?>
+                        <form action="/accounts/" method="post">
+                            <div>
+                                <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['id'])) {
+                                                                                echo $_SESSION['clientData']['id'];
+                                                                            } elseif (isset($clientId)) {
+                                                                                echo $clientId;
+                                                                            } ?>">
+                                <br />
+                                <label>Name:</label>
+                                <br />
+                                <input name="name" class="long" type="text" value="" required>
+                                <br />
+                                <label>Data:</label>
+                                <br />
+                                <input name="data" class="long" type="text" value="">
+                                <input type="hidden" name="action" value="addConfigData">
+                                <input type="submit" class="btn red" name="submit" id="updatebtn" value="New Data">
+                            </div>
+                        </form>
                     </div>
                 <?php } ?>
                 <hr>
