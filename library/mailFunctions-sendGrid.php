@@ -23,7 +23,7 @@ function sendEmail($subject, $to, $msg)
 
     $mailConfig = getMailConfig();
     $curl = curl_init();
-    $postfields = "{\"personalizations\": [{\"to\": [" . $toEmailFields . "]}],\"from\": {\"email\": \"" . $mailConfig['From'] . "\"},\"subject\": \"" . $subject . "\",\"content\": [{\"type\": \"text/plain\",\"value\": \"" . $msg . "\"}]}";
+    $postfields = "{\"personalizations\": [{\"to\": [" . $toEmailFields . "]}],\"from\": {\"email\": \"" . $mailConfig['From'] . "\"},\"subject\": \"" . $subject . "\",\"content\": [{\"type\": \"text/html\",\"value\": \"" . $msg . "\"}]}";
     // echo json_encode($postfields);
     // exit();
 

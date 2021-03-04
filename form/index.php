@@ -55,7 +55,7 @@ switch ($action) {
 
             // maybe disable or comment out?
             // send email
-            $result = sendEmail('[Contact Form]' . $subject, $formEmails['data'], $body . "\nFrom:" . $email);
+            $result = sendEmail('[Contact Form]' . $subject, $formEmails['data'], $body . "<br>From:" . $email);
 
             echo json_encode($response);
         } else {
