@@ -267,6 +267,29 @@ switch ($action) {
 
         include '../view/updateConfig.php';
         break;
+    case 'addConfigData':
+        if (!IsLoggedInAndHasAccess(2)) {
+            include '../view/updateConfig.php';
+            exit();
+        }
+        $configInput = [];
+        $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
+
+        $updateResult = addConfig(
+            $configInput
+        );
+
+        if ($updateResult) {
+            $message = "<p class='notice'>Config " . $configInput['name'] . " was added successfuly.</p>";
+            $_SESSION['message'] = $message;
+            // header('location: /acme/accounts/');
+            // exit;
+        } else {
+            $message = "<p class='notice'>Error. Adding config " . $configInput['id'] . ".</p>";
+        }
+        include '../view/updateConfig.php';
+        break;
     case 'contactForms':
         include '../view/contactForms.php';
         break;

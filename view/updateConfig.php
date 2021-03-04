@@ -31,7 +31,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                     <p>Edit and add configuration values. Check docs for what each value does.</p>
                     <div class="userReviewList">
                         <?php foreach ($rows as $row) { ?>
-                            <form action="/accounts/" method="post">
+                            <form action="/accounts/?action=updateConfig" method="post">
                                 <div><strong><?= $row['id'] ?></strong> (Created on <?php echo date("d F, Y", strtotime($row['created_at'])) ?>):
 
                                     <input type="hidden" name="id" value="<?= $row['id'] ?>" />
@@ -48,14 +48,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                                 </div>
                             </form>
                         <?php } ?>
-                        <form action="/accounts/" method="post">
+                        <form action="/accounts/?action=updateConfig" method="post">
                             <div>
-                                <input type="hidden" name="clientId" value="<?php if (isset($_SESSION['clientData']['id'])) {
-                                                                                echo $_SESSION['clientData']['id'];
-                                                                            } elseif (isset($clientId)) {
-                                                                                echo $clientId;
-                                                                            } ?>">
-                                <br />
                                 <label>Name:</label>
                                 <br />
                                 <input name="name" class="long" type="text" value="" required>
