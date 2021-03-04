@@ -1,4 +1,7 @@
 <?php
+// debug options uncomment
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
 // change document root if serving from somewhere else such as /
 // copy this file to connections.php w/ proper info
 $GLOBALS['documentRoot'] = '/';

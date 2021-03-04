@@ -2,9 +2,6 @@
  require 'Mail.php';
  require_once './mailConfig.php';
 //  ini_set("include_path", 'localpath' . ini_get("include_path") );
-
- error_reporting(E_ALL);
- ini_set('display_errors', '1');
  // Define basic e-mail parameters:
  $recipient = $mailConfig['To'];
  $headers['From'] = $mailConfig['From'];
