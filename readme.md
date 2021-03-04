@@ -10,6 +10,8 @@
 * simple server `php -S 127.0.0.1:8000`
   * open `http://localhost:8000`
   * need a mysql running, can use docker or one from a shared host
+* docker mysql
+ `docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql:5.7.29` user: root
 * restart data
   * run `sql/acme-db.sql`, then `sql/acme-data.sql` if you want the dummy data CAREFUL TO NOT RESET EXISTING DATA
      * if your schema doesn't match manually fix the table columns

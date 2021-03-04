@@ -15,6 +15,7 @@ require_once '../library/connections.php';
 require_once '../library/functions.php';
 // Get the acme model for use as needed
 require_once '../model/accounts-model.php';
+require_once '../model/pages-model.php';
 require_once '../model/reviews-model.php';
 require_once '../model/configuration-model.php';
 
