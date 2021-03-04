@@ -34,7 +34,7 @@ $directoryURI = $_SERVER['REQUEST_URI'];
 //     include 'view/home.php';
 //     exit;
 // }
-echo $action;
+// echo $action;
 // exit();
 
 switch ($action) {
