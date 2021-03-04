@@ -1,5 +1,6 @@
 # Comments Administration PHP
-* a php application for serving comments
+* An opensourced software to administer commentsa 
+* php application for serving comments
 * very jamstack friendly
 
 ## getting started
