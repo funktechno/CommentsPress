@@ -14,7 +14,19 @@ function getContactFormEmails(){
 }
 
 function updateConfig($input){
-    
+    $db = acmeConnect();
+    // The SQL statement to be used with the database
+    $sql = '
+    UPDATE `configuration` SET `data`=:data, `name`=:name WHERE id = :id';
+    // echo $sql;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':id', $input['id'] , PDO::PARAM_STR);
+    $stmt->bindValue(':data', $input['data'], PDO::PARAM_STR);
+    $stmt->bindValue(':name', $input['name'], PDO::PARAM_STR);
+    $stmt->execute();
+    $rowsChanged = $stmt->rowCount();
+    $stmt->closeCursor();
+    return $rowsChanged;
 }
 
 function getConfig(){

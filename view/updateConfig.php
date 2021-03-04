@@ -28,12 +28,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
 
                 <?php if (isset($rows) && count($rows)) { ?>
                     <h3>Config</h3>
+                    <p>Edit and add configuration values. Check docs for what each value does.</p>
                     <div class="userReviewList">
                         <?php foreach ($rows as $row) { ?>
                             <form action="/accounts/" method="post">
                                 <div><strong><?= $row['id'] ?></strong> (Created on <?php echo date("d F, Y", strtotime($row['created_at'])) ?>):
 
-                                    <input type="hidden" name="id" value="<? $row['id'] ?>" />
+                                    <input type="hidden" name="id" value="<?= $row['id'] ?>" />
                                     <br />
                                     <label>Name:</label>
                                     <br />

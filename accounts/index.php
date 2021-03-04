@@ -247,8 +247,10 @@ switch ($action) {
         $configInput = [];
         $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
-        $configInput['userId'] = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
+        // $configInput['userId'] = $_SESSION['clientData']['id'];
         $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+        // echo json_encode($configInput);
+        // exit();
 
         $updateResult = updateConfig(
             $configInput
@@ -257,8 +259,8 @@ switch ($action) {
         if ($updateResult) {
             $message = "<p class='notice'>Config " . $configInput['id'] . " was updated successfuly.</p>";
             $_SESSION['message'] = $message;
-            header('location: /acme/accounts/');
-            exit;
+            // header('location: /acme/accounts/');
+            // exit;
         } else {
             $message = "<p class='notice'>Error. Updating config " . $configInput['id'] . ".</p>";
         }
