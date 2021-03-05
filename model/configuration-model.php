@@ -57,6 +57,22 @@ function addConfig($input)
     return $rowsChanged;
 }
 
+function getConfigData($name)
+{
+    $db = acmeConnect();
+    // echo 'test33';
+    $sql = 'SELECT * FROM configuration WHERE `name`=:name';
+
+    // echo $sql;
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+    $stmt->execute();
+    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}
+
 function getConfig()
 {
     $db = acmeConnect();
