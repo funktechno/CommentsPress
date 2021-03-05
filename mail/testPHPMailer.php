@@ -1,6 +1,8 @@
 <?php
+// will require composer to pull then upload the vendor contents
 use PHPMailer\PHPMailer\PHPMailer;
-require_once './mailConfig.php';
+require_once './library/connectios.php';
+$mailConfig = getMailConfig();
 require '../vendor/autoload.php';
 
 $mail = new PHPMailer();

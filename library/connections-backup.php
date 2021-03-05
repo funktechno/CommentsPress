@@ -21,10 +21,11 @@ define('DEBUG',false);
 // http://localhost/acme/library/connections.php
 function acmeConnect()
 {
+    // same config from docker
     $server = 'localhost';
-    $dbname = 'acme';
-    $password = 'acme';
-    $username = 'acme';
+    $dbname = 'testcomments';
+    $password = 'my-secret-pw';
+    $username = 'root';
     $dsn = 'mysql:host=' . $server . ';dbname=' . $dbname;
     $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     // Create the actual connection object and assign it to a variable

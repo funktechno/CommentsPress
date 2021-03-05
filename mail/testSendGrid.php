@@ -1,6 +1,11 @@
 <?php
+// uses sendgrid api directly using curl method
+// no external library
+// will need an api key from sendgrid
+// also need to verify from email address for the send to work
 $curl = curl_init();
-require_once './mailConfig.php';
+require_once './library/connectios.php';
+$mailConfig = getMailConfig();
 $postfields = "{\"personalizations\": [{\"to\": [{\"email\": \"" . $mailConfig['To'] . "\"}]}],\"from\": {\"email\": \"" . $mailConfig['From'] . "\"},\"subject\": \"" . $mailConfig['Subject'] . 'send grid' . "\",\"content\": [{\"type\": \"text/plain\",\"value\": \"" . $mailConfig['Msg'] . "\"}]}";
 // echo json_encode($postfields);
 
