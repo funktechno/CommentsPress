@@ -7,10 +7,6 @@
 $GLOBALS['documentRoot'] = '/';
 require_once 'Core.php';
 
-// run composer require phpmailer/phpmailer
-// use PHPMailer\PHPMailer\SMTP;
-// use PHPMailer\PHPMailer\Exception;
-// use PHPMailer\PHPMailer\PHPMailer;
 // require '../vendor/autoload.php';
 define('Allowed_Origins','*');
 define('Allowed_Methods','GET,POST');
@@ -18,7 +14,6 @@ define('Allowed_Methods','GET,POST');
 define('SECRET','CHANGEME!');
 define('DEBUG',false);
 
-// http://localhost/acme/library/connections.php
 function acmeConnect()
 {
     // same config from docker
@@ -38,6 +33,7 @@ function acmeConnect()
         $error = $e;
         // echo 'Sorry, the connection failed';
         // header('location: /view/500.php');
+        // this will cause issue w/ rest api returns, maybe fine if db connection never fails
         include $GLOBALS['root'] . 'view/500.php';
         exit;
     }
