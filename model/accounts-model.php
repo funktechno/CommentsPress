@@ -106,18 +106,17 @@ function regClient($clientEmail, $clientDisplayName, $hashedPassword)
  */
 function updateClient(
     $clientDisplayName,
-    $clientEmail,
     $clientId
 ) {
     // Create a connection
     $db = acmeConnect();
     // The SQL statement to be used with the database
-    $sql = 'UPDATE users SET displayName = :clientDisplayName, email = :clientEmail WHERE id = :clientId';
+    $sql = 'UPDATE users SET displayName = :clientDisplayName WHERE id = :clientId';
     $stmt = $db->prepare($sql);
     // echo $sql;
 
     $stmt->bindValue(':clientDisplayName', $clientDisplayName, PDO::PARAM_STR);
-    $stmt->bindValue(':clientEmail', $clientEmail, PDO::PARAM_STR);
+    // $stmt->bindValue(':clientEmail', $clientEmail, PDO::PARAM_STR);
     $stmt->bindValue(':clientId', $clientId, PDO::PARAM_STR);
     // echo $stmt -> queryString;
     // $stmt->bindValue(':clientPassword', $clientPassword, PDO::PARAM_STR);

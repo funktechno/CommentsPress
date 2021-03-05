@@ -41,9 +41,13 @@ include '../common/head.php';
 
         <!-- Add the action name - value pair -->
         <input type="hidden" name="action" value="login_user">
+        <br />
+        <a href="/accounts/?action=forgotPassword" class="btn">Forgot Password</a>
+
       </form>
       <h2>Not a member?</h2>
       <a href="/accounts/?action=registration" class="btn red big">Create an Account</a>
+
       <br>
       <br>
       <hr>

@@ -108,6 +108,15 @@ switch ($action) {
         include '../view/commentModeration.php';
 
         break;
+    case 'confirmEmail':
+        include '../view/confirmEmail.php';
+        break;
+    case 'resetPassword':
+        include '../view/changePassword.php';
+        break;
+    case 'forgotPassword':
+        include '../view/forgotPassword.php';
+        break;
     case 'login':
         include '../view/login.php';
         break;
@@ -178,11 +187,11 @@ switch ($action) {
         }
         $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
         // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
-        $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
+        // $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
         // $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
 
         // validate
-        $clientEmail = checkEmail($clientEmail);
+        // $clientEmail = checkEmail($clientEmail);
         // $checkPassword = checkPassword($clientPassword);
 
         // $existingEmail = checkExistingEmail($clientEmail);
@@ -199,7 +208,6 @@ switch ($action) {
 
         $updateResult = updateClient(
             $clientDisplayName,
-            $clientEmail,
             $clientId
         );
 
