@@ -3,3 +3,4 @@ library/connections.php
 vendor
 mail/mailConfig.php
 library/mailFunctions.php
+library/connections-*.php
