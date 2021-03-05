@@ -1,7 +1,8 @@
 <?php
 // reviews model
 
-function getUserReviews($clientId){
+function getUserReviews($clientId)
+{
     $db = acmeConnect();
     $sql = 'SELECT c.* FROM comments c WHERE c.userId = :clientId';
     $stmt = $db->prepare($sql);
@@ -15,7 +16,8 @@ function getUserReviews($clientId){
 /**
  * get config data options and current page status
  */
-function getPageStatus($slug){
+function getPageStatus($slug)
+{
     $db = acmeConnect();
     $sql = 'SELECT (SELECT c.data FROM configuration  c WHERE c.name = "manualPages") as "manualPages",
     (SELECT c.data FROM configuration  c WHERE c.name = "unlimitedReplies") as "unlimitedReplies",
@@ -33,7 +35,8 @@ function getPageStatus($slug){
 /**
  * grab a pages reviews, maybe also grab unapproved one that user owns
  */
-function getPageComments($slug){
+function getPageComments($slug)
+{
     $db = acmeConnect();
     $sql = ' SELECT c.* FROM comments c join pages p on c.pageId = p.id WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null and c.approved = 1';
 
@@ -63,7 +66,8 @@ function getComment($reviewId)
 /**
  * create a comment
  */
-function createComment($userId,$pageId,$parentId,$body){
+function createComment($userId, $pageId, $parentId, $body)
+{
     $db = acmeConnect();
     $sql = 'INSERT INTO comments(commentText, userId,pageId, parentId)
     VALUES(:body,:userId, :pageId, :parentId)';
@@ -87,7 +91,8 @@ function createComment($userId,$pageId,$parentId,$body){
     return $rowsChanged;
 }
 
-function getUnapprovedReviews(){
+function getUnapprovedReviews()
+{
     $db = acmeConnect();
     $sql = 'SELECT c.*, p.slug FROM comments as c join pages as p on c.pageId = p.id  WHERE c.approved is null or c.approved != 1;';
     $stmt = $db->prepare($sql);
@@ -97,7 +102,8 @@ function getUnapprovedReviews(){
     return $prodInfo;
 }
 
-function getContactForms(){
+function getContactForms()
+{
     $db = acmeConnect();
     $sql = 'SELECT f.* FROM contactForms as f;';
     $stmt = $db->prepare($sql);
@@ -134,7 +140,8 @@ function deleteReview($reviewId)
 /**
  * update body of a comment
  */
-function updateUserComment($id, $body){
+function updateUserComment($id, $body)
+{
     $db = acmeConnect();
     // The SQL statement to be used with the database
     $sql = '
@@ -149,10 +156,12 @@ function updateUserComment($id, $body){
     return $rowsChanged;
 }
 
+
 /**
  * set delete_at to date value
  */
-function deleteUserComment($id){
+function deleteUserComment($id)
+{
     $db = acmeConnect();
     // The SQL statement to be used with the database
     $sql = '
@@ -164,6 +173,25 @@ function deleteUserComment($id){
     // $stmt->bindParam(':deleted_at', NOW(), PDO::PARAM_STR);
 
     // $stmt->bindValue(':reviewText', $body, PDO::PARAM_STR);
+    $stmt->execute();
+    $rowsChanged = $stmt->rowCount();
+    $stmt->closeCursor();
+    return $rowsChanged;
+}
+/**
+ * change a comment approved number, id, approved, reviewed at changed
+ */
+function moderateComment($input)
+{
+    $db = acmeConnect();
+    // The SQL statement to be used with the database
+    $sql = '
+    UPDATE `comments` SET  `reviewed_at`=NOW(), `approved`=:approved WHERE id=:id';
+
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':id', $input['id'], PDO::PARAM_STR);
+    $stmt->bindValue(':approved', $input['approved'], PDO::PARAM_STR);
     $stmt->execute();
     $rowsChanged = $stmt->rowCount();
     $stmt->closeCursor();

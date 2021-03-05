@@ -247,6 +247,50 @@ switch ($action) {
         // load config data
         include '../view/updateConfig.php';
         break;
+    case 'moderateComment':
+        if (!IsLoggedInAndHasAccess(2)) {
+            include '../view/managePages.php';
+            exit();
+        }
+        $configInput = [];
+        $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
+        $approvedStatus = null;
+        // null or 0 isunapproved if moderated
+        // 2 is blocked
+        if (isset($_POST['approve'])) {
+            $approvedStatus = 1;
+        }
+        if ($approvedStatus != null) {
+            $configInput['approved'] = $approvedStatus;
+            try {
+                $updateResult = moderateComment(
+                    $configInput
+                );
+            } catch (\Throwable $th) {
+                if (isset($th->errorInfo)) {
+                    $message = "<p class='notice'>Error. Moderating comment " . $configInput['id'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                    $_SESSION['message'] = $message;
+                } else {
+                    $message = "<p class='notice'>Error. Moderating comment " . $configInput['id'] . ".</p>";
+                    $_SESSION['message'] = $message;
+                }
+                include '../view/commentModeration.php';
+                exit();
+            }
+
+
+            if ($updateResult) {
+                $message = "<p class='notice'>Comment " . $configInput['id'] . " was moderated successfuly.</p>";
+                // header('location: /acme/accounts/');
+                // exit;
+            } else {
+                $message = "<p class='notice'>Error. Moderating comment " . $configInput['id'] . ".</p>";
+            }
+            $_SESSION['message'] = $message;
+        }
+
+        include '../view/commentModeration.php';
+        break;
     case 'deleteUpdatePage':
         // don't do any actions if not valid access
         if (!IsLoggedInAndHasAccess(2)) {

@@ -33,20 +33,27 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                     <div class="userReviewList">
                         <ul>
                             <?php foreach ($reviewArray as $review) { ?>
-                                <li><strong><?= $review['id'] ?></strong> (Updated on <?php echo date("d F, Y", strtotime($review['updated_at'])) ?>):
-                                    <a href='/comments?action=approve&reviewId=<?php echo $review['id'] ?>' title='Click to approve'>Approve</a>
-                                    <br />
-                                    <strong>Page:</strong>
-                                    <?= $review['slug'] ?>
-                                    <br/>
-                                    <strong>Parent Comment:</strong>
-                                    <?= $review['parentId'] ?>
-                                    <br/>
+                                <li>
+                                    <form action="/accounts/?action=moderate" method="post">
+                                        <strong><?= $review['id'] ?></strong> (Updated on <?php echo date("d F, Y", strtotime($review['updated_at'])) ?>):
+                                        <input type="hidden" name="id" value="<?= $review['id'] ?>" />
+                                        <input type="hidden" name="action" value="moderateComment">
 
-                                    <strong>Message:</strong>
-                                    <p>
-                                        <?= $review['commentText'] ?>
-                                    </p>
+                                        <input type="submit" name="approve" class="btn red" name="submit" id="updatebtn" value="Approve">
+
+                                        <br />
+                                        <strong>Page:</strong>
+                                        <?= $review['slug'] ?>
+                                        <br />
+                                        <strong>Parent Comment:</strong>
+                                        <?= $review['parentId'] ?>
+                                        <br />
+
+                                        <strong>Message:</strong>
+                                        <p>
+                                            <?= $review['commentText'] ?>
+                                        </p>
+                                    </form>
                                 </li>
 
                             <?php } ?>
