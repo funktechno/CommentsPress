@@ -37,10 +37,10 @@ switch ($action) {
     //     include 'view/registration.php';
 
     //     break;
-    case 'login':
-        include 'view/login.php';
+    // case 'login':
+    //     include 'view/login.php';
 
-        break;
+        // break;
     case 'home':
         include 'view/home.php';
         break;

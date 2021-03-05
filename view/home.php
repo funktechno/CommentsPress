@@ -21,10 +21,14 @@ include 'common/head.php';
           <!-- Hero Product Review text -->
           <h3>Comment </h3>
           <ul>
+
             <?php if (isset($_SESSION['loggedin'])) { ?>
               <li><a href="/accounts/">Account</a></li>
             <?php } else { ?>
               <li><a href="/accounts/?action=login">Login</a></li>
+            <?php } ?>
+            <?php if (folder_exist('examples')) { ?>
+              <li><a href="/examples/">Examples</a></li>
             <?php } ?>
           </ul>
         </div>

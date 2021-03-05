@@ -37,8 +37,10 @@ function getPageStatus($slug)
  */
 function getPageComments($slug)
 {
+    // TODO: see a logged in users unapproved comments, maybe separate call
+    // see the logged in users deleted comments
     $db = acmeConnect();
-    $sql = ' SELECT c.* FROM comments c join pages p on c.pageId = p.id WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null and c.approved = 1';
+    $sql = 'SELECT c.id, c.commentText, c.parentId, u.displayName, c.created_at, c.updated_at, c.reviewed_at FROM comments c join pages p on c.pageId = p.id join users u on u.id = c.userId WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null and c.approved = 1';
 
     // echo $sql;
     // exit;
@@ -144,8 +146,9 @@ function updateUserComment($id, $body)
 {
     $db = acmeConnect();
     // The SQL statement to be used with the database
+    // reset approved if it's been updated
     $sql = '
-    UPDATE `comments` SET `commentText`=:reviewText WHERE id = :reviewId';
+    UPDATE `comments` SET `commentText`=:reviewText, `approved`=0, `deleted_at`=NOW() WHERE id = :reviewId';
     // echo $sql;
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':reviewId', $id, PDO::PARAM_STR);
