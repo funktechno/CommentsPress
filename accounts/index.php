@@ -239,42 +239,55 @@ switch ($action) {
         // load config data
         include '../view/updateConfig.php';
         break;
-    case 'updatePage':
+    case 'deleteUpdatePage':
         // don't do any actions if not valid access
         if (!IsLoggedInAndHasAccess(2)) {
             include '../view/managePages.php';
             exit();
         }
         $configInput = [];
-        $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_STRING);
-        $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_STRING);
-        // $configInput['userId'] = $_SESSION['clientData']['id'];
         $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
-        // echo json_encode($configInput);
-        // exit();
-        try {
-            $updateResult = updatePage(
-                $configInput
-            );
-        } catch (\Throwable $th) {
-            if (isset($th->errorInfo)) {
-                $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+
+        if (isset($_POST['update'])) {
+            $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_STRING);
+            $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_STRING);
+            // $configInput['userId'] = $_SESSION['clientData']['id'];
+
+            // echo json_encode($configInput);
+            // exit();
+            try {
+                $updateResult = updatePage(
+                    $configInput
+                );
+            } catch (\Throwable $th) {
+                if (isset($th->errorInfo)) {
+                    $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                    $_SESSION['message'] = $message;
+                } else {
+                    $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".</p>";
+                    $_SESSION['message'] = $message;
+                }
+                include '../view/managePages.php';
+                exit();
+            }
+
+
+            if ($updateResult) {
+                $message = "<p class='notice'>Page " . $configInput['id'] . " was updated successfuly.</p>";
                 $_SESSION['message'] = $message;
+                // header('location: /acme/accounts/');
+                // exit;
             } else {
                 $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".</p>";
-                $_SESSION['message'] = $message;
             }
-            include '../view/managePages.php';
-            exit();
-        }
-
-        if ($updateResult) {
-            $message = "<p class='notice'>Page " . $configInput['id'] . " was updated successfuly.</p>";
+        } elseif (isset($_POST['delete'])) {
+            $result = deletePage($configInput['id']);
+            if ($result === 1 || $result === 0) {
+                $message = "<p class='notice'>Page " . $configInput['id'] . " was deleted successfuly.</p>";
+            } else {
+                $message = "<p class='notice'>Error. Deleting page " . $configInput['id'] . ".</p>";
+            }
             $_SESSION['message'] = $message;
-            // header('location: /acme/accounts/');
-            // exit;
-        } else {
-            $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".</p>";
         }
 
         include '../view/managePages.php';

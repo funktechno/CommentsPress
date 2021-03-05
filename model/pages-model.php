@@ -5,7 +5,9 @@ function getPages()
 {
     $db = acmeConnect();
     // echo 'test33';
-    $sql = 'SELECT * FROM pages';
+    $sql = 'SELECT p.*, IFNULL(COUNT(c.id), 0) as "TotalComments" FROM pages p LEFT OUTER JOIN comments c ON p.id = c.pageId
+    GROUP BY p.id
+    ORDER BY p.slug;';
     // echo $sql;
     $stmt = $db->prepare($sql);
     $stmt->execute();
@@ -60,13 +62,34 @@ function addPage($slug, $lockedComments)
     return $rowsChanged;
 }
 
+/**
+ * set delete_at to date value
+ */
+function deletePage($id){
+    $db = acmeConnect();
+    // The SQL statement to be used with the database
+    $sql = '
+    UPDATE `pages` SET `deleted_at`=NOW() WHERE id = :id';
+    // echo $sql;
+    // exit();
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+    // $stmt->bindParam(':deleted_at', NOW(), PDO::PARAM_STR);
+
+    // $stmt->bindValue(':reviewText', $body, PDO::PARAM_STR);
+    $stmt->execute();
+    $rowsChanged = $stmt->rowCount();
+    $stmt->closeCursor();
+    return $rowsChanged;
+}
+
 function updatePage($input)
 {
     // Create a connection object using the acme connection function
     $db = acmeConnect();
     // The SQL statement
     $sql = '
-    UPDATE `pages` SET `slug`=:slug, `lockedComments`=:lockedComments WHERE id = :id';
+    UPDATE `pages` SET `slug`=:slug, `lockedComments`=:lockedComments, `deleted_at`=null WHERE id = :id';
 
     // Create the prepared statement using the acme connection
     $stmt = $db->prepare($sql);
