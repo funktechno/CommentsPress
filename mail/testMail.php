@@ -1,6 +1,7 @@
 <?php
-
-require_once './mailConfig.php';
+// use server built in mail function
+require_once './library/connectios.php';
+$mailConfig = getMailConfig();
 // standard mail from server
 
 // use wordwrap() if lines are longer than 70 characters
