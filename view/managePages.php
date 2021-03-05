@@ -31,7 +31,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                     <p>Edit, add pages, lock comments or update slug name.</p>
                     <div class="userReviewList">
                         <?php foreach ($rows as $row) { ?>
-                            <form action="/accounts/?action=updateConfig" method="post">
+                            <form action="/accounts/?action=managePages" method="post">
                                 <div><strong><?= $row['id'] ?></strong> (Created on <?php echo date("d F, Y", strtotime($row['created_at'])) ?>):
 
                                     <input type="hidden" name="id" value="<?= $row['id'] ?>" />
@@ -42,13 +42,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                                     <br />
                                     <label>LockedComments:</label>
                                     <br />
-                                    <input name="lockedComments" class="long" type="checkbox" value="<?php echo $row['lockedcomments'] ?>">
+                                    <input name="lockedComments" class="long" type="checkbox" <?php echo $row['lockedcomments'] == 1 ? 'checked' : '' ?> value="1">
                                     <input type="hidden" name="action" value="updatePage">
                                     <input type="submit" class="btn red" name="submit" id="updatebtn" value="Update Data">
                                 </div>
                             </form>
                         <?php } ?>
-                        <form action="/accounts/?action=updateConfig" method="post">
+                        <form action="/accounts/?action=managePages" method="post">
                             <div>
                                 <label>Page slug:</label>
                                 <br />
