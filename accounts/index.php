@@ -239,6 +239,46 @@ switch ($action) {
         // load config data
         include '../view/updateConfig.php';
         break;
+    case 'updatePage':
+        // don't do any actions if not valid access
+        if (!IsLoggedInAndHasAccess(2)) {
+            include '../view/managePages.php';
+            exit();
+        }
+        $configInput = [];
+        $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_STRING);
+        $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_STRING);
+        // $configInput['userId'] = $_SESSION['clientData']['id'];
+        $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
+        // echo json_encode($configInput);
+        // exit();
+        try {
+            $updateResult = updatePage(
+                $configInput
+            );
+        } catch (\Throwable $th) {
+            if (isset($th->errorInfo)) {
+                $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                $_SESSION['message'] = $message;
+            } else {
+                $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".</p>";
+                $_SESSION['message'] = $message;
+            }
+            include '../view/managePages.php';
+            exit();
+        }
+
+        if ($updateResult) {
+            $message = "<p class='notice'>Page " . $configInput['id'] . " was updated successfuly.</p>";
+            $_SESSION['message'] = $message;
+            // header('location: /acme/accounts/');
+            // exit;
+        } else {
+            $message = "<p class='notice'>Error. Updating page " . $configInput['id'] . ".</p>";
+        }
+
+        include '../view/managePages.php';
+        break;
     case 'updateConfigData':
         // don't do any actions if not valid access
         if (!IsLoggedInAndHasAccess(2)) {
@@ -278,6 +318,42 @@ switch ($action) {
         }
 
         include '../view/updateConfig.php';
+        break;
+    case 'addPage':
+        if (!IsLoggedInAndHasAccess(2)) {
+            include '../view/managePage.php';
+            exit();
+        }
+        $configInput = [];
+        $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_STRING);
+        $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_STRING);
+        try {
+            $updateResult = addPage(
+                $configInput['slug'],
+                $configInput['lockedComments']
+            );
+        } catch (\Throwable $th) {
+            if (isset($th->errorInfo)) {
+                $message = "<p class='notice'>Error. Adding page " . $configInput['name'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                $_SESSION['message'] = $message;
+            } else {
+                $message = "<p class='notice'>Error. Adding page " . $configInput['name'] . ".</p>";
+                $_SESSION['message'] = $message;
+            }
+            include '../view/managePage.php';
+            exit();
+        }
+
+        if ($updateResult) {
+            $message = "<p class='notice'>Config " . $configInput['slug'] . " was added successfuly.</p>";
+            $_SESSION['message'] = $message;
+            // header('location: /acme/accounts/');
+            // exit;
+        } else {
+            $message = "<p class='notice'>Error. Adding page " . $configInput['slug'] . ".</p>";
+            $_SESSION['message'] = $message;
+        }
+        include '../view/managePages.php';
         break;
     case 'addConfigData':
         if (!IsLoggedInAndHasAccess(2)) {

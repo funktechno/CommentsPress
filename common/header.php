@@ -20,6 +20,8 @@ if (isset($_COOKIE['firstname'])) {
     if (!isset($_SESSION['loggedin'])) {
       echo '<a href="/accounts/?action=login" id="folder"><img src="' . $GLOBALS['documentRoot'] . 'images/site/account.gif" title="folder" alt="Image of red folder"> My account </a>';
     } else {
+      echo '<a href="/accounts/" id="folder"><img src="' . $GLOBALS['documentRoot'] . 'images/site/account.gif" title="folder" alt="Image of red folder"> My account </a>';
+
       echo '<a href="/accounts/?action=logout" id="folder">Log out</a>';
     }
     ?>

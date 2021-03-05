@@ -42,7 +42,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                                     <br />
                                     <label>LockedComments:</label>
                                     <br />
-                                    <input name="data" class="long" type="checkbox" value="<?php echo $row['lockedcomments'] ?>">
+                                    <input name="lockedComments" class="long" type="checkbox" value="<?php echo $row['lockedcomments'] ?>">
                                     <input type="hidden" name="action" value="updatePage">
                                     <input type="submit" class="btn red" name="submit" id="updatebtn" value="Update Data">
                                 </div>
@@ -56,7 +56,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                                 <br />
                                 <label>LockedComments:</label>
                                 <br />
-                                <input name="data" class="long" type="checkbox" value="1">
+                                <input name="lockedComments" class="long" type="checkbox" value="1">
                                 <input type="hidden" name="action" value="addPage">
                                 <input type="submit" class="btn red" name="submit" id="updatebtn" value="New Page">
                             </div>
