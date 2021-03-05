@@ -28,8 +28,8 @@
           <br>
 
 
-          <input name="clientEmail" class="long" id="clientEmail" type="email" <?php echo (isset($_SESSION['clientData']['email'])) ? "value='" . $_SESSION['clientData']['email'] . "'" : "" ?> required>
-          <br>
+          <!-- <input name="clientEmail" class="long" id="clientEmail" type="email" <?php echo (isset($_SESSION['clientData']['email'])) ? "value='" . $_SESSION['clientData']['email'] . "'" : "" ?> required> -->
+          <!-- <br> -->
           <!-- <button class="btn red" type="submit">Login</button> -->
           <input type="submit" class="btn red" name="submit" id="updatebtn" value="Update Account">
 

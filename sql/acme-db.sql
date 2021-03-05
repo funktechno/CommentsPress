@@ -88,6 +88,39 @@ END
 ;;
 DELIMITER ;
 
+DROP TABLE IF EXISTS `conversations`;
+DROP TABLE IF EXISTS `threads`;
+CREATE TABLE `threads` (
+  `id` varchar(32) NOT NULL,
+  `email` varchar(191) NULL ,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+;;
+DELIMITER ;;
+CREATE TRIGGER before_insert_threads
+BEFORE INSERT ON threads
+FOR EACH ROW
+BEGIN
+   SET new.id = replace(uuid(),'-','');
+END
+;;
+DELIMITER ;
+
+-- user will never have id from chat since these messages are not editable, they will jus be displayed by created at 
+CREATE TABLE `conversations` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `userId` varchar(32) NULL,
+  `threadId` varchar(32) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `subject` varchar(50) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT FK_conversations_replyUser FOREIGN KEY (userId) REFERENCES users(id),
+    CONSTRAINT FK_conversations_thread FOREIGN KEY (threadId) REFERENCES threads(id),
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE `comments` (
   `id` varchar(32) NOT NULL,
   `parentId` varchar(32) NULL,
