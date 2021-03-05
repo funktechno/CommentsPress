@@ -9,6 +9,7 @@ require_once '../library/connections.php';
 require_once '../library/functions.php';
 require_once '../model/reviews-model.php';
 require_once '../model/accounts-model.php';
+require_once '../model/configuration-model.php';
 require_once '../model/pages-model.php';
 require_once '../library/error_responses.php';
 header("Access-Control-Allow-Origin: " . Allowed_Origins);
@@ -127,7 +128,16 @@ switch ($action) {
         if (empty($slug)) {
             $errorStatus->response(400, "page slug field is required");
         }
-        $comments = getPageComments($slug);
+        $configCondition = getConfigData('moderateComments');
+
+        $moderatedComments = true;
+        if ($configCondition && $configCondition['data']!= 'true') {
+            $moderatedComments = false;
+        } 
+        // check if moderate
+        // echo json_encode($configCondition);
+        // exit();
+        $comments = getPageComments($slug, $moderatedComments);
         // recursively updated comments w/ child comments
 
         echo json_encode($comments);
