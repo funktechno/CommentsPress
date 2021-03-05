@@ -53,7 +53,8 @@
                                 </svg>
                             </div>
                         </button>
-                        <div v-if="modal.signIn" class="auth-dropdown auth-module__dropdown_cf466">
+                        <div v-show="modal.signIn" class="auth-dropdown auth-module__dropdown_cf466"
+                            style="display: none;">
                             <h5 class="auth-form-title auth-module__title_f76db">Use Social Network</h5>
                             <ul class="oauth oauth-module__root_c133c">
                                 <li class="oauth-item oauth-module__item_3b36c"><a target="_blank"
@@ -110,6 +111,34 @@
                                 target="_blank" href="markdown-help.html">Markdown</a> is supported</div> -->
                 </div>
                 <div class="root__pinned-comments" role="region" aria-label="Pinned comments">
+                    <article
+                        class="comment comment_disabled comment_pinned comment_guest comment_view_admin comment_theme_light root__pinned-comment">
+                        <div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar"
+                                src="https://demo.remark42.com/api/v1/avatar/cb42ff493ade696d88a3a590f136ae9e34de7c1b.image"
+                                alt=""><span role="button" tabindex="0" class="comment__username"
+                                title="github_ef0f706a79cc24b17bbbb374cd234a691d034128">funktechno</span><span
+                                title="Verified user"
+                                class="comment__verification comment__verification_active"></span><a
+                                href="https://github.com/funktechno" class="comment__time">5/11/2018 at 5:40 PM</a><span
+                                class="comment__score comment__score_view_positive"><span
+                                    class="comment__vote comment__vote_type_up comment__vote_disabled"
+                                    aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span
+                                    class="comment__score-value" title="Controversy: 1.92">+184</span><span
+                                    class="comment__vote comment__vote_type_down comment__vote_disabled"
+                                    aria-disabled="true" role="button" title="Sign in to vote">Vote down</span></span>
+                        </div>
+                        <div class="comment__body">
+                            <div class="comment__text raw-content raw-content_theme_light">
+                                <p>If you see a bug pls <a href="https://github.com/funktechno/CommentsPress/issues/new"
+                                        rel="nofollow">report</a></p>
+                            </div>
+                            <div class="comment__actions"><span class="comment__controls"><button
+                                        class="button button_kind_link comment__control" type="button" role="button"
+                                        tabindex="0">Hide</button></span></div>
+                        </div>
+                    </article>
+                </div>
+                <div class="root__threads" role="list">
                     <div class="thread thread_theme_light root__thread" role="listitem list" aria-expanded="true">
                         <article id="remark42__comment-515e3434-4161-4c55-8ee9-2752673c17d7" style=""
                             class="comment comment_guest comment_theme_light">
