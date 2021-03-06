@@ -24,6 +24,10 @@ var app = new Vue({
         newComment: {},
         comments: [],
         loading: false,
+        loading: {
+            general: false,
+            comments: false
+        },
         userForm: {},
         modal: {
             type: 'email',
@@ -53,14 +57,35 @@ var app = new Vue({
                 this.isGuest = true;
             } else {
                 console.log(this.userForm)
+                let request = {
+                    email: this.userForm.email,
+                    password: this.userForm.password
+                }
+                this.loading.general = true;
+                this.$http.post("/comments/?action=login", request).then((response) => {
+                    this.loading.general = false;
+                    console.log(response)
+                    // this.message = response.data.message;
+                    if (response.status == 200) {
+                        console.log(response.data)
+                        this.userData = response.data;
+                    } else {
+                        this.errors = "Failed to login"
+                    }
+                }).catch((error) => {
+                    this.errors = "Failed to login"
+                    console.log(error)
+                    this.loading.general = null;
+
+                });
             }
             this.modal.signIn = false;
         },
         getComments() {
-            this.loading = true;
+            this.loading.comments = true;
             this.errors = null;
             this.$http.post("/comments/?action=get", { "slug": "test" }).then((response) => {
-                this.loading = false;
+                this.loading.comments = false;
                 console.log(response)
                 // this.message = response.data.message;
                 if (response.status == 200) {
@@ -72,7 +97,7 @@ var app = new Vue({
             }).catch((error) => {
                 this.errors = "Failed to get comments"
                 console.log(error)
-                this.loading = null;
+                this.loading.comments = null;
 
             });
         }

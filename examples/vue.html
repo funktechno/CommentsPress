@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/mobile.css" media="screen and (max-width: 585px)">
     <link rel="stylesheet" href="./css/remark.css">
+    <link rel="stylesheet" href="./css/styles.css">
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
@@ -160,6 +161,11 @@
                                         tabindex="0">Hide</button></span></div>
                         </div>
                     </article>
+                    <div class="lds-facebook" v-show="loading.comments" style="display: none;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <div class="root__threads" role="list">
                     <comment-thread v-show="comments.length > 0" v-for="c in comments" :comment="c" level=0
