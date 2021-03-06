@@ -21,6 +21,7 @@ var app = new Vue({
     data: {
         pageSlug: "test",
         newComment: {},
+        chat: {},
         comments: [],
         example: "comments",
         status: null,

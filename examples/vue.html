@@ -187,11 +187,16 @@
             <!-- end root main -->
             <!-- chat popup -->
             <div class="intercom-lightweight-app" aria-live="polite">
-                <div class="intercom-namespace">
+                <div v-show="modal.chat" class="intercom-namespace" style="display: none">
                     <div class="intercom-messenger-frame intercom-1k5islr e52psle0 intercom-messenger-frame-enter-done">
                         <div id="intercom-container" class="intercom-namespace" role="main" aria-live="polite">
                             <div tabindex="-1" role="region">
-                                <div>
+                                <ul>
+                                    <li>message</li>
+                                </ul>
+                                <textarea v-model="chat.message"></textarea>
+                                <button>Send</button>
+                                <!-- <div>
                                     <div class="intercom-1xha1pw e16fp1gy0">
                                         <div class="intercom-messenger intercom-messenger-new-conversation intercom-k9lbvn e16fp1gy1 intercom-messenger-main-animated-appear-done intercom-messenger-main-animated-enter-done" tabindex="0">
                                             <div tabindex="-1" aria-label="Close" aria-hidden="true" role="button" class="intercom-1r9pix7 euc31aa0">
@@ -361,7 +366,7 @@
                                     <div class="intercom-mlalzq edndopr1">
                                         <div></div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 
