@@ -15,6 +15,7 @@ define('SECRET','CHANGEME!');
 define('DEBUG',false);
 // disabled, sendgrid, default, mail, phpmailer
 define('MAILMETHOD','disabled');
+define('DEMO',false);
 
 function acmeConnect()
 {

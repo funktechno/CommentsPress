@@ -31,6 +31,14 @@ include 'common/head.php';
               <li><a href="/examples/vue.html">Examples</a></li>
             <?php } ?>
           </ul>
+          <?php if (DEMO) { ?>
+            <h3>Demo</h3>
+            <p>Some demo users or you can register a new account. Data is periodically reset</p>
+            <ul>
+              <li>test@me.com 2Manytests!</li>
+              <li>admin@me.com 2Manytests!</li>
+            </ul>
+          <?php } ?>
         </div>
 
       </div>
