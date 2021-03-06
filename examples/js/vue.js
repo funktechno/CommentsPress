@@ -11,7 +11,7 @@ Vue.component('comment-thread', {
         }
     },
     template: `
-    <div :class="level == 0 ? 'root__thread' : 'thread_level_' + level" class="thread thread_theme_light thread_indented" role="listitem" aria-expanded="true"><article id="remark42__comment-01281c83-af78-455e-880b-dabe74fce317" :class="level == 0 ? '' :  'comment_level_' + level" class="comment comment_guest comment_theme_light " style=""><div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar" src="/images/no-image.png" alt=""><span role="button" tabindex="0" class="comment__username" title="anonymous_55d448b815f9829dd31c4f14dad3285350207118">serg</span><a href="https://remark42.com/demo/#remark42__comment-01281c83-af78-455e-880b-dabe74fce317" class="comment__time">{{comment.updated_at}}</a><a class="comment__link-to-parent" href="https://remark42.com/demo/#remark42__comment-7591be8c-a247-400f-b318-49210d04cb56" aria-label="Go to parent comment" title="Go to parent comment"> </a><span class="comment__score"><span class="comment__vote comment__vote_type_up comment__vote_disabled" aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span class="comment__score-value" title="Controversy: 0.00">0</span><span class="comment__vote comment__vote_type_down comment__vote_disabled" aria-disabled="true" role="button" title="Sign in to vote">Vote down</span></span></div><div class="comment__body"><div class="comment__text raw-content raw-content_theme_light" v-html="comment.commentText">
+    <div :class="level == 0 ? 'root__thread' : 'thread_level_' + level" class="thread thread_theme_light thread_indented" role="listitem" aria-expanded="true"><article id="remark42__comment-01281c83-af78-455e-880b-dabe74fce317" :class="level == 0 ? '' :  'comment_level_' + level" class="comment comment_guest comment_theme_light " style=""><div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar" src="/images/no-image.png" alt=""><span role="button" tabindex="0" class="comment__username" title="anonymous_55d448b815f9829dd31c4f14dad3285350207118">{{ comment.displayName }}</span><a href="https://remark42.com/demo/#remark42__comment-01281c83-af78-455e-880b-dabe74fce317" class="comment__time">{{comment.updated_at}}</a><a class="comment__link-to-parent" href="https://remark42.com/demo/#remark42__comment-7591be8c-a247-400f-b318-49210d04cb56" aria-label="Go to parent comment" title="Go to parent comment"> </a><span class="comment__score"><span class="comment__vote comment__vote_type_up comment__vote_disabled" aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span class="comment__score-value" title="Controversy: 0.00">0</span><span class="comment__vote comment__vote_type_down comment__vote_disabled" aria-disabled="true" role="button" title="Sign in to vote">Vote down</span></span></div><div class="comment__body"><div class="comment__text raw-content raw-content_theme_light" v-html="comment.commentText">
 </div><div class="comment__actions"><button class="button button_kind_link comment__action" type="button" role="button" tabindex="0">Reply</button><span v-if="comment.children && comment.children.length > 1" class="comment__controls"><button class="button button_kind_link comment__control" type="button" role="button" tabindex="0" v-on:click="showChildren = !showChildren">{{showChildren ? 'Hide': 'Show'}}</button></span></div></div></article>
 <comment-thread v-if="showChildren" v-for="c in comment.children" :comment="c" :level='level+1'/>
 <div class="thread__collapse" role="button" tabindex="0"><div></div></div></div>
@@ -21,7 +21,7 @@ Vue.component('comment-thread', {
 var app = new Vue({
     el: '#comments',
     data: {
-        pageSlug = "test",
+        pageSlug: "test",
         newComment: {},
         comments: [],
         loading: false,
@@ -74,7 +74,7 @@ var app = new Vue({
                 this.loading.comments = false;
                 console.log(response)
                 // this.message = response.data.message;
-                if (response.status == 200) {
+                if (response.status == 201) {
                     console.log(response.data)
                     this.comments = response.data;
                 } else {
@@ -123,7 +123,7 @@ var app = new Vue({
         getComments() {
             this.loading.comments = true;
             this.errors = null;
-            this.$http.post("/comments/?action=get", { "slug": pageSlug }).then((response) => {
+            this.$http.post("/comments/?action=get", { "slug": this.pageSlug }).then((response) => {
                 this.loading.comments = false;
                 console.log(response)
                 // this.message = response.data.message;

@@ -37,11 +37,11 @@
             </div>
             <div class="auth-panel auth-panel_theme_light auth-panel_logged-in" v-show="userData!=null || isGuest"
                 style="display: none;">
-                <div class="auth-panel__column">You logged in as <div class="dropdown dropdown_theme_light">
+                <div class="auth-panel__column" v-if="userData!=null || isGuest">You logged in as <div class="dropdown dropdown_theme_light">
                         <span v-if="isGuest">Guest</span>
                         <button v-else
                             class="button button_kind_link button_theme_light dropdown__title auth-panel__user-dropdown-title"
-                            type="button" aria-haspopup="listbox" aria-expanded="false">testguest</button>
+                            type="button" aria-haspopup="listbox" aria-expanded="false">{{ userData.userInfo.displayName }}</button>
                     </div> <button class="button button_kind_link button_theme_light" type="button"
                         v-on:click="logout()">Logout?</button></div>
                 <div class="auth-panel__column"><button class="button button_kind_link auth-panel__admin-action"
