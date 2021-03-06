@@ -38,7 +38,8 @@ include 'common/head.php';
               <li>test@me.com 2Manytests!</li>
               <li>admin@me.com 2Manytests!</li>
             </ul>
-          <?php } ?>
+            <p>Test <a href="/sso/?action=test">SSO</a>
+            <?php } ?>
         </div>
 
       </div>
