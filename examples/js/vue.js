@@ -24,10 +24,12 @@ var app = new Vue({
         pageSlug: "test",
         newComment: {},
         comments: [],
-        loading: false,
+        example: "comments",
+        form: {},
         loading: {
             general: false,
-            comments: false
+            comments: false,
+            form: false
         },
         userForm: {},
         modal: {
