@@ -31,7 +31,6 @@
         <h2>Comment Press Vue Example</h2>
         <a href=. />home</a>
         <div id="comments">
-            {{ message }}
             <div class="root__main">
                 <div class="comment-form__control-panel">
 
@@ -139,15 +138,18 @@
                     </article>
                 </div>
                 <div class="root__threads" role="list">
-                    <div class="thread thread_theme_light root__thread" role="listitem list" aria-expanded="true">
+                    <div v-show="comments.length > 0" class="thread thread_theme_light root__thread" v-for="c in comments" role="listitem list"
+                        aria-expanded="true"
+                        style="display: none;"
+                        >
                         <article id="remark42__comment-515e3434-4161-4c55-8ee9-2752673c17d7" style=""
                             class="comment comment_guest comment_theme_light">
                             <div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar"
                                     src="https://demo.remark42.com/api/v1/avatar/373820495cd26d40c26b6ffd0786b65c230238e2.image"
                                     alt=""><span role="button" tabindex="0" class="comment__username"
-                                    title="anonymous_55d448b815f9829dd31c4f14dad3285350207118">serg</span><a
+                                    title="anonymous_55d448b815f9829dd31c4f14dad3285350207118">{{c.displayName}}</span><a
                                     href="https://remark42.com/demo/#remark42__comment-515e3434-4161-4c55-8ee9-2752673c17d7"
-                                    class="comment__time">2/27/2021 at 5:46 AM</a><span class="comment__score"><span
+                                    class="comment__time">{{c.updated_at | date}}</a><span class="comment__score"><span
                                         class="comment__vote comment__vote_type_up comment__vote_disabled"
                                         aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span
                                         class="comment__score-value" title="Controversy: 0.00">0</span><span
@@ -155,9 +157,7 @@
                                         aria-disabled="true" role="button" title="Sign in to vote">Vote
                                         down</span></span></div>
                             <div class="comment__body">
-                                <div class="comment__text raw-content raw-content_theme_light">
-                                    <pre class="chroma"><span class="p">{</span><span class="nt">"code"</span><span class="p">:</span> <span class="mi">123</span><span class="p">}</span>
-                    </pre>
+                                <div class="comment__text raw-content raw-content_theme_light" v-html="c.commentText">
                                 </div>
                                 <div class="comment__actions"><button class="button button_kind_link comment__action"
                                         type="button" role="button" tabindex="0">Reply</button><span
@@ -167,7 +167,7 @@
                             </div>
                         </article>
                         <div class="thread thread_level_1 thread_theme_light thread_indented" role="listitem list"
-                            aria-expanded="true">
+                            style="display: none;" aria-expanded="true">
                             <article id="remark42__comment-7591be8c-a247-400f-b318-49210d04cb56" style=""
                                 class="comment comment_guest comment_theme_light comment_level_1">
                                 <div class="comment__info"><img
@@ -222,9 +222,7 @@
                                                 down</span></span></div>
                                     <div class="comment__body">
                                         <div class="comment__text raw-content raw-content_theme_light">
-                                            <p>here is the duck <img
-                                                    src="https://lilalu-shop.com/media/image/35/9c/a5/lilalu-quietscheente-gelb-yellow-rubber-duck-HL.png"
-                                                    alt="duck" loading="lazy"></p>
+                                            <p>here is the duck</p>
                                         </div>
                                         <div class="comment__actions"><button
                                                 class="button button_kind_link comment__action" type="button"
@@ -245,37 +243,6 @@
                         <div class="thread__collapse" role="button" tabindex="0">
                             <div></div>
                         </div>
-                    </div>
-                    <article
-                        class="comment comment_disabled comment_pinned comment_guest comment_view_admin comment_theme_light root__pinned-comment">
-                        <div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar"
-                                src="https://demo.remark42.com/api/v1/avatar/cb42ff493ade696d88a3a590f136ae9e34de7c1b.image"
-                                alt=""><span role="button" tabindex="0" class="comment__username"
-                                title="github_ef0f706a79cc24b17bbbb374cd234a691d034128">Umputun</span><span
-                                title="Verified user"
-                                class="comment__verification comment__verification_active"></span><a
-                                href="https://remark42.com/demo/#remark42__comment-e16b71cc-5d02-48b3-b033-258e0252c02c"
-                                class="comment__time">5/11/2018 at 5:40 PM</a><span
-                                class="comment__score comment__score_view_positive"><span
-                                    class="comment__vote comment__vote_type_up comment__vote_disabled"
-                                    aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span
-                                    class="comment__score-value" title="Controversy: 1.92">+184</span><span
-                                    class="comment__vote comment__vote_type_down comment__vote_disabled"
-                                    aria-disabled="true" role="button" title="Sign in to vote">Vote down</span></span>
-                        </div>
-                        <div class="comment__body">
-                            <div class="comment__text raw-content raw-content_theme_light">
-                                <p>If you see a bug pls <a href="https://github.com/umputun/remark/issues"
-                                        rel="nofollow">report</a></p>
-                            </div>
-                            <div class="comment__actions"><span class="comment__controls"><button
-                                        class="button button_kind_link comment__control" type="button" role="button"
-                                        tabindex="0">Hide</button></span></div>
-                        </div>
-                    </article>
-                    <div class="root__threads" role="list">
-
-
                     </div>
                 </div>
 
