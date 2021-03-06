@@ -22,3 +22,23 @@ if (!isset($input)) // if null then set to $_POST for simple posts
 }
 
 $directoryURI = $_SERVER['REQUEST_URI'];
+
+switch ($action) {
+    case 'get':
+        $threadId = $input['threadId'];
+        if (empty($threadId)) {
+            $errorStatus->response(400, "threadId field is required");
+        }
+
+        $comments = getConversation($threadId);
+        // recursively updated comments w/ child comments
+
+        echo json_encode($comments);
+        break;
+    default;
+        // header('location: /accounts/');
+        $errorStatus->response(404, "Method not valid");
+        // include '../view/admin.php';
+        break;
+        // include '../view/404.php';
+}

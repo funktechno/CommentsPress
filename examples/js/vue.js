@@ -29,7 +29,8 @@ var app = new Vue({
         loading: {
             general: false,
             comments: false,
-            form: false
+            form: false,
+            chat: false
         },
         userForm: {},
         modal: {
@@ -156,6 +157,29 @@ var app = new Vue({
             }
             this.modal.signIn = false;
         },
+        getConversation() {
+            // check from cookie for conversation id
+            let threadId = "effba2487ece11eb8e3a0242ac110002"
+            this.loading.chat = true;
+            this.errors = null;
+            this.$http.post("/conversations/?action=get", { "threadId": threadId }).then((response) => {
+                this.loading.chat = false;
+                console.log(response)
+                    // this.message = response.data.message;
+                if (response.status == 200) {
+                    console.log(response.data)
+                    this.conversations = response.data;
+                } else {
+                    this.errors = "Failed to load chat"
+                }
+            }).catch((error) => {
+                this.errors = "Failed to get chat"
+                console.log(error)
+                this.loading.chat = null;
+
+            });
+
+        },
         getComments() {
             this.loading.comments = true;
             this.errors = null;
@@ -179,5 +203,6 @@ var app = new Vue({
     },
     mounted() {
         this.getComments();
+        this.getConversation();
     }
 })

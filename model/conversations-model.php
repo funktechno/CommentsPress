@@ -4,7 +4,7 @@
 function getConversation($conversationId)
 {
     $db = acmeConnect();
-    $sql = 'SELECT c.* FROM conversations c WHERE c.id = :id';
+    $sql = 'SELECT c.* FROM conversations c WHERE c.threadId = :id';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':id', $conversationId, PDO::PARAM_STR);
     $stmt->execute();
@@ -17,10 +17,10 @@ function addMessage($input){
     // Create a connection object using the acme connection function
     $db = acmeConnect();
     // The SQL statement
-    // $sql = 'INSERT INTO `reviews` (`reviewText`, `reviewDate`, `invId`, `clientId`) VALUES (:reviewText, :reviewDate, :invId, :clientId)';
+    $sql = 'INSERT INTO `reviews` (`reviewText`, `reviewDate`, `invId`, `clientId`) VALUES (:reviewText, :reviewDate, :invId, :clientId)';
 
     // // Create the prepared statement using the acme connection
-    // $stmt = $db->prepare($sql);
+    $stmt = $db->prepare($sql);
     // // The next four lines replace the placeholders in the SQL
     // // statement with the actual values in the variables
     // // and tells the database the type of data it is
