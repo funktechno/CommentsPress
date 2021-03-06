@@ -26,6 +26,7 @@ var app = new Vue({
         example: "comments",
         status: null,
         form: {},
+        threadId: null,
         conversations: [],
         loading: {
             general: false,
@@ -88,7 +89,10 @@ var app = new Vue({
             if (this.loading.chat)
                 return;
             // retrieve from cookie
-            let threadId = "effba2487ece11eb8e3a0242ac110002"
+            // will start from
+
+            // let threadId = "effba2487ece11eb8e3a0242ac110002"
+            let threadId = this.threadId;
             let config = {}
             let request = {
                 threadId: threadId,
@@ -103,6 +107,8 @@ var app = new Vue({
                 if (response.status == 201) {
                     this.chat.message = "";
                     console.log(response.data);
+                    this.threadId = response.data.threadId;
+                    Cookies.set('thread', this.threadId, { expires: 7, path: '' })
                     this.conversations.push(response.data);
                     // this.$set()
                     // this.comments = response.data;
@@ -192,7 +198,8 @@ var app = new Vue({
         },
         getConversation() {
             // check from cookie for conversation id
-            let threadId = "effba2487ece11eb8e3a0242ac110002"
+            let threadId = this.threadId;
+            // "effba2487ece11eb8e3a0242ac110002"
             this.loading.chat = true;
             this.errors = null;
             this.$http.post("/conversations/?action=get", { "threadId": threadId }).then((response) => {
@@ -236,6 +243,8 @@ var app = new Vue({
     },
     mounted() {
         this.getComments();
-        this.getConversation();
+        this.threadId = Cookies.get('thread');
+        if (this.threadId)
+            this.getConversation();
     }
 })

@@ -25,6 +25,31 @@ function getMessage($id)
     return $prodInfo;
 }
 
+function startThread(){
+    $id = generateUuid();
+    // Create a connection object using the acme connection function
+    $db = acmeConnect();
+    // The SQL statement
+    $sql = 'INSERT INTO threads(id)
+    values(:id);';
+    // echo $sql;
+    $stmt = $db->prepare($sql);
+
+    // $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+    $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+
+    // // Create the prepared statement using the acme connection
+
+    // Insert the data
+    $stmt->execute();
+    // Ask how many rows changed as a result of our insert
+    $rowsChanged = $stmt->rowCount();
+    // Close the database interaction
+    $stmt->closeCursor();
+    // Return the indication of success (rows changed)
+    $result = array('rowsChanged' => $rowsChanged, 'lastId' => $id);
+    return $result;
+}
 function sendMessage($conversationId, $message)
 {
     // $id = generateUuid();
