@@ -31,6 +31,29 @@
         <h2>Comment Press Vue Example</h2>
         <a href=. />home</a>
         <div id="comments">
+            <div class="auth-panel auth-panel_theme_light auth-panel_logged-in" v-if="userData!=null || isGuest">
+                <div class="auth-panel__column">You logged in as <div class="dropdown dropdown_theme_light">
+                        <span v-if="isGuest">Guest</span>
+                        <button v-else
+                            class="button button_kind_link button_theme_light dropdown__title auth-panel__user-dropdown-title"
+                            type="button" aria-haspopup="listbox" aria-expanded="false">testguest</button>
+                    </div> <button class="button button_kind_link button_theme_light" type="button"
+                        v-on:click="logout()">Logout?</button></div>
+                <div class="auth-panel__column"><button class="button button_kind_link auth-panel__admin-action"
+                        type="button" role="link" tabindex="0">Show settings</button> • <span
+                        class="auth-panel__sort">Sort by <span class="auth-panel__select-label"><span
+                                class="auth-panel__select-label-value">Recently updated</span><select
+                                class="auth-panel__select">
+                                <option value="-score">Best</option>
+                                <option value="+score">Worst</option>
+                                <option value="-time">Newest</option>
+                                <option value="+time">Oldest</option>
+                                <option value="-active">Recently updated</option>
+                                <option value="+active">Least recently updated</option>
+                                <option value="-controversy">Most controversial</option>
+                                <option value="+controversy">Least controversial</option>
+                            </select></span></span></div>
+            </div>
             <div class="root__main">
                 <div class="comment-form__control-panel">
 

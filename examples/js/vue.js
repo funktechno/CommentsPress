@@ -44,6 +44,7 @@ var app = new Vue({
     methods: {
         logout() {
             this.userData = null
+            this.isGuest = false
         },
         login() {
             if (this.isGuest || this.userData != null)
