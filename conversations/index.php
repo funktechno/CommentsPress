@@ -35,6 +35,28 @@ switch ($action) {
 
         echo json_encode($comments);
         break;
+    case 'submit':
+        $threadId = $input['threadId'];
+        $message = $input['message'];
+        if (empty($threadId) || empty($message)) {
+            $errorStatus->response(400, "threadId, message field(s) are required");
+        }
+        $regOutcome = sendMessage($threadId, $message);
+        if ($regOutcome['rowsChanged'] === 1) {
+            $result = getMessage($regOutcome['lastId']);
+
+            $statuscode = 201;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+
+            echo json_encode($result);
+        } else {
+            $errorStatus->response(500, "Error saving message");
+        }
+
+        break;
     default;
         // header('location: /accounts/');
         $errorStatus->response(404, "Method not valid");

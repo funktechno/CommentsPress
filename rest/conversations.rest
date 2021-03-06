@@ -1,0 +1,19 @@
+### get thread
+POST http://127.0.0.1:8000/conversations/?action=get HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "threadId": "xxx"
+}
+
+### send charset
+POST http://127.0.0.1:8000/conversations/?action=submit HTTP/1.1
+content-type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "threadId": "xxx",
+    "message": "test comment"
+}
