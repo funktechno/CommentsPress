@@ -100,32 +100,47 @@ function getComment($reviewId)
     return $prodInfo;
 }
 
+function generateUuid()
+{
+    $db = acmeConnect();
+    $sql = "SELECT replace(uuid(),'-','') as 'id';";
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo['id'];
+}
+
 /**
- * create a comment
+ * create a comment and return new uuid
  */
 function createComment($userId, $pageId, $parentId, $body)
 {
     $db = acmeConnect();
-    $sql = 'INSERT INTO comments(commentText, userId,pageId, parentId)
-    VALUES(:body,:userId, :pageId, :parentId)';
+    $id = generateUuid();
+    $sql = "
+    INSERT INTO comments(id, commentText, userId,pageId, parentId)
+    VALUES(:id, :body,:userId, :pageId, :parentId);";
     // echo $sql . ":::";
     // echo "userId:".$userId;
     // echo "pageId:".$pageId;
     // echo "parentId:".$parentId;
     // echo "body:".$body;
     $stmt = $db->prepare($sql);
+    $stmt->bindValue(':id', $id, PDO::PARAM_STR);
     $stmt->bindValue(':body', $body, PDO::PARAM_STR);
     $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
     $stmt->bindValue(':pageId', $pageId, PDO::PARAM_STR);
     $stmt->bindValue(':parentId', $parentId, PDO::PARAM_STR);
-
     $stmt->execute();
     // Ask how many rows changed as a result of our insert
     $rowsChanged = $stmt->rowCount();
+
     // Close the database interaction
     $stmt->closeCursor();
     // Return the indication of success (rows changed)
-    return $rowsChanged;
+    $result = array('rowsChanged' => $rowsChanged, 'lastId' => $id);
+    return $result;
 }
 
 function getUnapprovedReviews()
@@ -143,9 +158,9 @@ function getUnapprovedReviews()
 function getReview($reviewId)
 {
     $db = acmeConnect();
-    $sql = 'SELECT reviews.*, inventory.invName as `invName` FROM reviews JOIN inventory ON reviews.invId = inventory.invId WHERE reviewId = :reviewId';
+    $sql = 'SELECT c.id, c.commentText, c.parentId, u.displayName, c.created_at, c.updated_at, c.reviewed_at FROM comments c join pages p on c.pageId = p.id join users u on u.id = c.userId WHERE p.deleted_at  is null and c.deleted_at is null AND c.id = :reviewId';
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':reviewId', $reviewId, PDO::PARAM_INT);
+    $stmt->bindValue(':reviewId', $reviewId, PDO::PARAM_STR);
     $stmt->execute();
     $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();

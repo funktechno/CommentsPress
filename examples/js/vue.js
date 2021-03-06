@@ -21,6 +21,7 @@ Vue.component('comment-thread', {
 var app = new Vue({
     el: '#comments',
     data: {
+        pageSlug = "test",
         newComment: {},
         comments: [],
         loading: false,
@@ -49,6 +50,42 @@ var app = new Vue({
         logout() {
             this.userData = null
             this.isGuest = false
+        },
+        addComment() {
+            if (!this.isGuest && this.userData == null)
+                return;
+            let config = {}
+            let request = {
+                slug: this.pageSlug, text,
+                body: this.newComment.body
+            }
+            if (this.userData) {
+                config = {
+                    headers: {
+                        Authorization: "Bearer " + this.userData.token
+                    }
+                };
+            }
+            if (this.isGuest) {
+                request.guest = true;
+            }
+
+            this.$http.post("/comments/?action=submit", request, config).then((response) => {
+                this.loading.comments = false;
+                console.log(response)
+                // this.message = response.data.message;
+                if (response.status == 200) {
+                    console.log(response.data)
+                    this.comments = response.data;
+                } else {
+                    this.errors = "Failed to load comments"
+                }
+            }).catch((error) => {
+                this.errors = "Failed to get comments"
+                console.log(error)
+                this.loading.comments = null;
+
+            });
         },
         login() {
             if (this.isGuest || this.userData != null)
@@ -86,7 +123,7 @@ var app = new Vue({
         getComments() {
             this.loading.comments = true;
             this.errors = null;
-            this.$http.post("/comments/?action=get", { "slug": "test" }).then((response) => {
+            this.$http.post("/comments/?action=get", { "slug": pageSlug }).then((response) => {
                 this.loading.comments = false;
                 console.log(response)
                 // this.message = response.data.message;
