@@ -13,6 +13,8 @@ define('Allowed_Methods','GET,POST');
 // jwt secret
 define('SECRET','CHANGEME!');
 define('DEBUG',false);
+// disabled, sendgrid, default, mail, phpmailer
+define('MAILMETHOD','disabled');
 
 function acmeConnect()
 {

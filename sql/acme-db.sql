@@ -1,5 +1,6 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+-- USE commentspresstest;
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -118,7 +119,7 @@ CREATE TABLE `conversations` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     CONSTRAINT FK_conversations_replyUser FOREIGN KEY (userId) REFERENCES users(id),
-    CONSTRAINT FK_conversations_thread FOREIGN KEY (threadId) REFERENCES threads(id),
+    CONSTRAINT FK_conversations_thread FOREIGN KEY (threadId) REFERENCES threads(id)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `comments` (
