@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS `contactForms`;
 
 
 DROP TABLE IF EXISTS `flaggedComment`;
-
+DROP TABLE IF EXISTS `conversations`;
 DROP TABLE IF EXISTS `comments`;
 DROP TABLE IF EXISTS `users`;
  CREATE TABLE `users` (
@@ -60,8 +60,11 @@ CREATE TRIGGER before_insert_users
 BEFORE INSERT ON users
 FOR EACH ROW
 BEGIN
-   SET new.id = replace(uuid(),'-','');
-   SET new.emailCode = replace(uuid(),'-','');
+  IF new.id is null or new.id = '' THEN  
+		SET new.id = replace(uuid(),'-','');
+  END IF;
+  SET new.emailCode = replace(uuid(),'-','');
+  SET @last_uuid = new.id; 
 END
 ;;
 DELIMITER ;
@@ -84,12 +87,14 @@ CREATE TRIGGER before_insert_pages
 BEFORE INSERT ON pages
 FOR EACH ROW
 BEGIN
-   SET new.id = replace(uuid(),'-','');
+  IF new.id is null or new.id = '' THEN  
+		SET new.id = replace(uuid(),'-','');
+  END IF;
+  SET @last_uuid = new.id; 
 END
 ;;
 DELIMITER ;
 
-DROP TABLE IF EXISTS `conversations`;
 DROP TABLE IF EXISTS `threads`;
 CREATE TABLE `threads` (
   `id` varchar(32) NOT NULL,
@@ -103,7 +108,10 @@ CREATE TRIGGER before_insert_threads
 BEFORE INSERT ON threads
 FOR EACH ROW
 BEGIN
-   SET new.id = replace(uuid(),'-','');
+  IF new.id is null or new.id = '' THEN  
+		SET new.id = replace(uuid(),'-','');
+  END IF;
+  SET @last_uuid = new.id; 
 END
 ;;
 DELIMITER ;
@@ -144,7 +152,10 @@ CREATE TRIGGER before_insert_comments
 BEFORE INSERT ON comments
 FOR EACH ROW
 BEGIN
-   SET new.id = replace(uuid(),'-','');
+  IF new.id is null or new.id = '' THEN  
+		SET new.id = replace(uuid(),'-','');
+  END IF;
+  SET @last_uuid = new.id; 
 END
 ;;
 DELIMITER ;

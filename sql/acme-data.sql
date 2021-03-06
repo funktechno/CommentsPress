@@ -1,4 +1,3 @@
-
 -- test insert data, password 2Manytests!
 -- update your user client level to 2 or above for admin
 INSERT INTO users(email, displayName, password)
@@ -24,26 +23,36 @@ VALUES('teset text',@userId, @pageId)
 ,('teset text3',@userId, @pageId)
 ,('teset text4',@userId, @pageId)
 ,('teset text5',@userId, @pageId);
-
+-- stagger created date
+DO SLEEP(5);
 SELECT @parentId:=id FROM comments LIMIT 1;
 
 INSERT INTO comments(commentText, userId,pageId, parentId)
 VALUES('child text',@userId, @pageId, @parentId)
 ,('child text1',@userId, @pageId, @parentId)
-,('child text2',@userId, @pageId, @parentId)
-,('child text3',@userId, @pageId, @parentId)
+,('child text2',@userId, @pageId, @parentId);
+
+DO SLEEP(6);
+INSERT INTO comments(commentText, userId,pageId, parentId)
+VALUES('child text3',@userId, @pageId, @parentId)
 ,('child text4',@userId, @pageId, @parentId);
 
 
 
-SELECT @parentId:=id FROM comments wHERE commentText = 'child text' LIMIT 1;
+SELECT @parentId:=id FROM comments WHERE commentText = 'child text' LIMIT 1;
+SELECT @parentId1:=id FROM comments wHERE commentText = 'child text1' LIMIT 1;
 
+-- stagger created date
+DO SLEEP(5);
 INSERT INTO comments(commentText, userId,pageId, parentId)
 VALUES('child child text',@userId, @pageId, @parentId)
 ,('child child text1',@userId, @pageId, @parentId)
 ,('child child text2',@userId, @pageId, @parentId)
-,('child child text3',@userId, @pageId, @parentId)
-,('child child text4',@userId, @pageId, @parentId)
+,('child child text3',@userId, @pageId, @parentId1);
+    
+DO SLEEP(5);
+INSERT INTO comments(commentText, userId,pageId, parentId)
+VALUES('child child text4',@userId, @pageId, @parentId)
 ,('child child text5',@userId, @pageId, @parentId)
 ,('child child text6',@userId, @pageId, @parentId);
 
@@ -51,22 +60,22 @@ INSERT INTO flaggedComment(commentId, userId, message, type)
 VALUES(@parentId, @userId, 'message is spam','spam');
 
 -- select @pageId
-select * from comments;
+-- select * from comments;
 
--- VALUES(uuid(),'test@me.com','has');
+-- -- VALUES(uuid(),'test@me.com','has');
 
--- replace(uuid(),'-','')
--- varchar(32)
--- will wrok w/ binary, but unreadable from db, appears as blob, keep varchar for simplicity
--- unhex(replace(uuid(),'-',''))
+-- -- replace(uuid(),'-','')
+-- -- varchar(32)
+-- -- will wrok w/ binary, but unreadable from db, appears as blob, keep varchar for simplicity
+-- -- unhex(replace(uuid(),'-',''))
 
 
-select * from users;
+-- select * from users;
 
-select * from contactForms;
+-- select * from contactForms;
 
-select * from pages;
+-- select * from pages;
 
-select * from comments;
+-- select * from comments;
 
-select * from configuration;
+-- select * from configuration;

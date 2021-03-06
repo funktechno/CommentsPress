@@ -51,8 +51,10 @@
 * [x] jwt
   * from https://github.com/adhocore/php-jwt
 * [x] configuration flags
-* [ ]comment moderation
-* [ ]contact form support
+* [ ] comment moderation
+ * [x] approve comments
+ * [x] change if moderation needed
+* [x] contact form support
   * send contact us messages as api
   * view messages
 * [x] api

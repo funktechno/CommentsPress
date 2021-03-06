@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/mobile.css" media="screen and (max-width: 585px)">
     <link rel="stylesheet" href="./css/remark.css">
+    <link rel="stylesheet" href="./css/styles.css">
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
@@ -31,16 +32,52 @@
         <h2>Comment Press Vue Example</h2>
         <a href=. />home</a>
         <div id="comments">
+            <div v-show="errors" style="display: none;">
+                {{ errors }}
+            </div>
+            <div class="auth-panel auth-panel_theme_light auth-panel_logged-in" v-show="userData!=null || isGuest"
+                style="display: none;">
+                <div class="auth-panel__column" v-if="userData!=null || isGuest">You logged in as <div class="dropdown dropdown_theme_light">
+                        <span v-if="isGuest">Guest</span>
+                        <button v-else
+                            class="button button_kind_link button_theme_light dropdown__title auth-panel__user-dropdown-title"
+                            type="button" aria-haspopup="listbox" aria-expanded="false">{{ userData.userInfo.displayName }}</button>
+                    </div> <button class="button button_kind_link button_theme_light" type="button"
+                        v-on:click="logout()">Logout?</button></div>
+                <div class="auth-panel__column"><button class="button button_kind_link auth-panel__admin-action"
+                        type="button" role="link" tabindex="0">Show settings</button> • <span
+                        class="auth-panel__sort">Sort by <span class="auth-panel__select-label"><span
+                                class="auth-panel__select-label-value">Recently updated</span><select
+                                class="auth-panel__select">
+                                <option value="-score">Best</option>
+                                <option value="+score">Worst</option>
+                                <option value="-time">Newest</option>
+                                <option value="+time">Oldest</option>
+                                <option value="-active">Recently updated</option>
+                                <option value="+active">Least recently updated</option>
+                                <option value="-controversy">Most controversial</option>
+                                <option value="+controversy">Least controversial</option>
+                            </select></span></span></div>
+            </div>
             <div class="root__main">
                 <div class="comment-form__control-panel">
 
                 </div>
                 <div class="comment-form__field-wrapper">
-                    <textarea id="textarea_1" class="comment-form__field" v-model="newComment.text"
+                    <textarea id="textarea_1" class="comment-form__field"
+                        :readonly="loading.general || loading.comments" v-model="newComment.text"
                         placeholder="Your comment here" spellcheck="true" style="height: 109px;"></textarea>
                 </div>
                 <div class="comment-form__actions">
-                    <div class="auth auth-module__root_641f4">
+                    <div v-show="isGuest || userData != null" style="display: none;">
+                        <button style="display: none;"
+                            class="button button_kind_secondary button_size_large button_theme_light comment-form__button"
+                            type="button">Preview</button>
+                        <button class="button button_kind_primary button_size_large comment-form__button"
+                        v-on:click="addComment"
+                            type="submit">Send</button>
+                    </div>
+                    <div class="auth auth-module__root_641f4" v-show="!(isGuest || userData != null)">
                         <button v-on:click="modal.signIn = !modal.signIn"
                             class="auth-button button-module__button_b7044">Sign
                             In
@@ -87,23 +124,24 @@
                             </ul>
                             <div class="auth-divider auth-module__divider_1fe73" title="or"></div>
                             <div class="auth-tabs auth-module__tabs_c4203"><input class="auth-module__radio_02e79"
-                                    type="radio" id="form-provider-email" name="form-provider" value="email"><label
+                                    type="radio" id="form-provider-email" v-model="modal.type" name="form-provider"
+                                    value="email"><label class="auth-tabs-item auth-module__provider_89bc0"
+                                    for="form-provider-email">email</label><input v-model="modal.type"
+                                    class="auth-module__radio_02e79" type="radio" id="form-provider-anonymous"
+                                    name="form-provider" value="anonymous"><label
                                     class="auth-tabs-item auth-module__provider_89bc0"
-                                    for="form-provider-email">email</label><input class="auth-module__radio_02e79"
-                                    type="radio" id="form-provider-anonymous" name="form-provider"
-                                    value="anonymous"><label class="auth-tabs-item auth-module__provider_89bc0"
                                     for="form-provider-anonymous">anonym</label></div>
-                            <div class="auth-row auth-module__row_1b3b9"><input
-                                    class="auth-input-username input-module__input_f6995" type="text" required=""
-                                    name="username" minlength="3" pattern="^[\p{L}\d_]+$"
-                                    title="Username must contain only letters, numbers, underscores or spaces"
-                                    placeholder="Username"></div>
-                            <div class="auth-row auth-module__row_1b3b9"><input
-                                    class="auth-input-email input-module__input_f6995" type="email" required=""
-                                    name="email" placeholder="Email Address"></div><input
-                                class="auth-module__honeypot_7ea53" type="checkbox" tabindex="-1"
-                                autocomplete="off"><button class="auth-submit button-module__button_b7044"
-                                type="submit">Submit</button>
+                            <div class="auth-row auth-module__row_1b3b9" v-if="modal.type=='email'">
+                                <input class="auth-input-email input-module__input_f6995" v-model="userForm.email"
+                                    type="email" required="" name="email" placeholder="Email Address">
+                            </div>
+                            <div class="auth-row auth-module__row_1b3b9" v-if="modal.type=='email'">
+                                <input class="auth-input-email input-module__input_f6995" v-model="userForm.password"
+                                    type="password" required="" name="password" placeholder="Password">
+                            </div>
+                            <input class="auth-module__honeypot_7ea53" type="checkbox" tabindex="-1"
+                                autocomplete="off"><button v-on:click="login()"
+                                class="auth-submit button-module__button_b7044" type="submit">Submit</button>
                         </div>
                     </div>
                     <!-- <div class="comment-form__markdown">Styling with <a class="comment-form__markdown-link"
@@ -113,8 +151,8 @@
                     <article
                         class="comment comment_disabled comment_pinned comment_guest comment_view_admin comment_theme_light root__pinned-comment">
                         <div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar"
-                                src="https://demo.remark42.com/api/v1/avatar/cb42ff493ade696d88a3a590f136ae9e34de7c1b.image"
-                                alt=""><span role="button" tabindex="0" class="comment__username"
+                                src="/images/no-image.png" alt=""><span role="button" tabindex="0"
+                                class="comment__username"
                                 title="github_ef0f706a79cc24b17bbbb374cd234a691d034128">funktechno</span><span
                                 title="Verified user"
                                 class="comment__verification comment__verification_active"></span><a
@@ -136,114 +174,21 @@
                                         tabindex="0">Hide</button></span></div>
                         </div>
                     </article>
+                    <div class="lds-facebook" v-show="loading.comments" style="display: none;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="lds-ellipsis" v-show="loading.general" style="display: none;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <div class="root__threads" role="list">
-                    <div v-show="comments.length > 0" class="thread thread_theme_light root__thread" v-for="c in comments" role="listitem list"
-                        aria-expanded="true"
-                        style="display: none;"
-                        >
-                        <article id="remark42__comment-515e3434-4161-4c55-8ee9-2752673c17d7" style=""
-                            class="comment comment_guest comment_theme_light">
-                            <div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar"
-                                    src="https://demo.remark42.com/api/v1/avatar/373820495cd26d40c26b6ffd0786b65c230238e2.image"
-                                    alt=""><span role="button" tabindex="0" class="comment__username"
-                                    title="anonymous_55d448b815f9829dd31c4f14dad3285350207118">{{c.displayName}}</span><a
-                                    href="https://remark42.com/demo/#remark42__comment-515e3434-4161-4c55-8ee9-2752673c17d7"
-                                    class="comment__time">{{c.updated_at | date}}</a><span class="comment__score"><span
-                                        class="comment__vote comment__vote_type_up comment__vote_disabled"
-                                        aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span
-                                        class="comment__score-value" title="Controversy: 0.00">0</span><span
-                                        class="comment__vote comment__vote_type_down comment__vote_disabled"
-                                        aria-disabled="true" role="button" title="Sign in to vote">Vote
-                                        down</span></span></div>
-                            <div class="comment__body">
-                                <div class="comment__text raw-content raw-content_theme_light" v-html="c.commentText">
-                                </div>
-                                <div class="comment__actions"><button class="button button_kind_link comment__action"
-                                        type="button" role="button" tabindex="0">Reply</button><span
-                                        class="comment__controls"><button
-                                            class="button button_kind_link comment__control" type="button" role="button"
-                                            tabindex="0">Hide</button></span></div>
-                            </div>
-                        </article>
-                        <div class="thread thread_level_1 thread_theme_light thread_indented" role="listitem list"
-                            style="display: none;" aria-expanded="true">
-                            <article id="remark42__comment-7591be8c-a247-400f-b318-49210d04cb56" style=""
-                                class="comment comment_guest comment_theme_light comment_level_1">
-                                <div class="comment__info"><img
-                                        class="avatar-icon avatar-icon_theme_light comment__avatar"
-                                        src="https://demo.remark42.com/api/v1/avatar/373820495cd26d40c26b6ffd0786b65c230238e2.image"
-                                        alt=""><span role="button" tabindex="0" class="comment__username"
-                                        title="anonymous_55d448b815f9829dd31c4f14dad3285350207118">serg</span><a
-                                        href="https://remark42.com/demo/#remark42__comment-7591be8c-a247-400f-b318-49210d04cb56"
-                                        class="comment__time">2/27/2021 at 5:46 AM</a><a class="comment__link-to-parent"
-                                        href="https://remark42.com/demo/#remark42__comment-515e3434-4161-4c55-8ee9-2752673c17d7"
-                                        aria-label="Go to parent comment" title="Go to parent comment"> </a><span
-                                        class="comment__score"><span
-                                            class="comment__vote comment__vote_type_up comment__vote_disabled"
-                                            aria-disabled="true" role="button" title="Sign in to vote">Vote
-                                            up</span><span class="comment__score-value"
-                                            title="Controversy: 0.00">0</span><span
-                                            class="comment__vote comment__vote_type_down comment__vote_disabled"
-                                            aria-disabled="true" role="button" title="Sign in to vote">Vote
-                                            down</span></span></div>
-                                <div class="comment__body">
-                                    <div class="comment__text raw-content raw-content_theme_light">
-                                        <p>reply to <strong>my comment</strong></p>
-                                    </div>
-                                    <div class="comment__actions"><button
-                                            class="button button_kind_link comment__action" type="button" role="button"
-                                            tabindex="0">Reply</button><span class="comment__controls"><button
-                                                class="button button_kind_link comment__control" type="button"
-                                                role="button" tabindex="0">Hide</button></span></div>
-                                </div>
-                            </article>
-                            <div class="thread thread_level_2 thread_theme_light thread_indented" role="listitem"
-                                aria-expanded="true">
-                                <article id="remark42__comment-01281c83-af78-455e-880b-dabe74fce317" style=""
-                                    class="comment comment_guest comment_theme_light comment_level_2">
-                                    <div class="comment__info"><img
-                                            class="avatar-icon avatar-icon_theme_light comment__avatar"
-                                            src="https://demo.remark42.com/api/v1/avatar/373820495cd26d40c26b6ffd0786b65c230238e2.image"
-                                            alt=""><span role="button" tabindex="0" class="comment__username"
-                                            title="anonymous_55d448b815f9829dd31c4f14dad3285350207118">serg</span><a
-                                            href="https://remark42.com/demo/#remark42__comment-01281c83-af78-455e-880b-dabe74fce317"
-                                            class="comment__time">2/27/2021 at 5:47 AM</a><a
-                                            class="comment__link-to-parent"
-                                            href="https://remark42.com/demo/#remark42__comment-7591be8c-a247-400f-b318-49210d04cb56"
-                                            aria-label="Go to parent comment" title="Go to parent comment"> </a><span
-                                            class="comment__score"><span
-                                                class="comment__vote comment__vote_type_up comment__vote_disabled"
-                                                aria-disabled="true" role="button" title="Sign in to vote">Vote
-                                                up</span><span class="comment__score-value"
-                                                title="Controversy: 0.00">0</span><span
-                                                class="comment__vote comment__vote_type_down comment__vote_disabled"
-                                                aria-disabled="true" role="button" title="Sign in to vote">Vote
-                                                down</span></span></div>
-                                    <div class="comment__body">
-                                        <div class="comment__text raw-content raw-content_theme_light">
-                                            <p>here is the duck</p>
-                                        </div>
-                                        <div class="comment__actions"><button
-                                                class="button button_kind_link comment__action" type="button"
-                                                role="button" tabindex="0">Reply</button><span
-                                                class="comment__controls"><button
-                                                    class="button button_kind_link comment__control" type="button"
-                                                    role="button" tabindex="0">Hide</button></span></div>
-                                    </div>
-                                </article>
-                                <div class="thread__collapse" role="button" tabindex="0">
-                                    <div></div>
-                                </div>
-                            </div>
-                            <div class="thread__collapse" role="button" tabindex="0">
-                                <div></div>
-                            </div>
-                        </div>
-                        <div class="thread__collapse" role="button" tabindex="0">
-                            <div></div>
-                        </div>
-                    </div>
+                    <comment-thread v-show="comments.length > 0" :isGuest="isGuest" :userData="userData" v-for="c in comments" :comment="c" level=0
+                        style="display: none;" />
                 </div>
 
             </div>
