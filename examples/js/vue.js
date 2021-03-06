@@ -52,12 +52,13 @@ var app = new Vue({
             this.isGuest = false
         },
         addComment() {
-            if (!this.isGuest && this.userData == null)
+            // don't run if not logged in or loading
+            if (!this.isGuest && this.userData == null || this.loading.general)
                 return;
             let config = {}
             let request = {
-                slug: this.pageSlug, text,
-                body: this.newComment.body
+                slug: this.pageSlug,
+                body: this.newComment.text
             }
             if (this.userData) {
                 config = {
@@ -69,21 +70,25 @@ var app = new Vue({
             if (this.isGuest) {
                 request.guest = true;
             }
+            this.loading.general = true;
 
             this.$http.post("/comments/?action=submit", request, config).then((response) => {
-                this.loading.comments = false;
+                this.loading.general = false;
                 console.log(response)
                 // this.message = response.data.message;
                 if (response.status == 201) {
-                    console.log(response.data)
-                    this.comments = response.data;
+                    this.newComment.text = "";
+                    console.log(response.data);
+                    this.comments.push(response.data);
+                    // this.$set()
+                    // this.comments = response.data;
                 } else {
                     this.errors = "Failed to load comments"
                 }
             }).catch((error) => {
                 this.errors = "Failed to get comments"
                 console.log(error)
-                this.loading.comments = null;
+                this.loading.general = null;
 
             });
         },

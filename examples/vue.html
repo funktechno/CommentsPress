@@ -74,6 +74,7 @@
                             class="button button_kind_secondary button_size_large button_theme_light comment-form__button"
                             type="button">Preview</button>
                         <button class="button button_kind_primary button_size_large comment-form__button"
+                        v-on:click="addComment"
                             type="submit">Send</button>
                     </div>
                     <div class="auth auth-module__root_641f4" v-show="!(isGuest || userData != null)">
