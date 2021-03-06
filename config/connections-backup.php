@@ -5,7 +5,7 @@
 // change document root if serving from somewhere else such as /
 // copy this file to connections.php w/ proper info
 $GLOBALS['documentRoot'] = '/';
-require_once 'Core.php';
+require_once $GLOBALS['root'] .'library/Core.php';
 
 // require '../vendor/autoload.php';
 define('Allowed_Origins','*');

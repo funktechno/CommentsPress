@@ -24,10 +24,13 @@ var app = new Vue({
         pageSlug: "test",
         newComment: {},
         comments: [],
-        loading: false,
+        example: "comments",
+        status: null,
+        form: {},
         loading: {
             general: false,
-            comments: false
+            comments: false,
+            form: false
         },
         userForm: {},
         modal: {
@@ -50,6 +53,34 @@ var app = new Vue({
         logout() {
             this.userData = null
             this.isGuest = false
+        },
+        submitMessage() {
+            if (this.loading.form) {
+                return;
+            }
+            this.errors = null;
+            this.status = null;
+            let request = JSON.parse(JSON.stringify(this.form));
+            this.loading.form = true;
+            this.$http.post("/form/?action=submit", request).then((response) => {
+                this.loading.form = false;
+                console.log(response)
+                // this.message = response.data.message;
+                if (response.status == 201) {
+                    this.form = {};
+                    console.log(response.data);
+                    this.status = "Message Sent"
+                } else {
+                    this.errors = "Failed to submit message"
+                }
+            }).catch((error) => {
+                this.errors = error.data
+                console.log(error)
+                this.loading.form = null;
+
+            });
+
+
         },
         addComment() {
             // don't run if not logged in or loading

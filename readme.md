@@ -26,7 +26,7 @@
 * run `sql/acme-db.sql` CAREFUL TO NOT RESET EXISTING DATA against chosen mysql db
   * may want to change the admin user w/ your email
 * copy all most files excluding `assets,rest,mail` folders
-* copy `cp ./library/connections-backup.php ./library/connections.php`
+* copy `cp ./config/connections-backup.php ./config/connections.php`
   * fill out database settings, mail provider, jwt secret
 * test working mail form server in `mail` folder
   * copy `mailConfig-back.php mailConfig.php`

@@ -35,20 +35,54 @@
             <div v-show="errors" style="display: none;">
                 {{ errors }}
             </div>
-            <div class="auth-panel auth-panel_theme_light auth-panel_logged-in" v-show="userData!=null || isGuest"
-                style="display: none;">
-                <div class="auth-panel__column" v-if="userData!=null || isGuest">You logged in as <div class="dropdown dropdown_theme_light">
+            <div v-show="status" style="display: none;">
+                {{ status }}
+            </div>
+            <div v-show="example == 'form'" style="display: none;">
+                <h3>Contact Form Example</h3>
+                <div class="lds-ellipsis" v-show="loading.form" style="display: none;">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <button v-on:click="example = 'comments'">Comments</button>
+
+                <label>Subject</label>
+                <br>
+                <input type="text" v-model="form.subject" name="subject" id="subject" required>
+                <br>
+                <label>Email</label>
+                <br>
+                <input type="email" v-model="form.email" name="email" id="email" required>
+                <br>
+                <label>Message</label>
+                <br>
+                <textarea v-model="form.body" name="message" id="message" required>
+                    </textarea>
+                <br>
+                <button v-on:click="submitMessage()">Submit</button>
+
+            </div>
+            <div v-show="example=='comments' && (userData!=null || isGuest)"
+                class=" auth-panel auth-panel_theme_light auth-panel_logged-in" style="display: none;">
+
+                <div class=" auth-panel__column" v-if="userData!=null || isGuest">You logged in as <div
+                        class="dropdown dropdown_theme_light">
                         <span v-if="isGuest">Guest</span>
                         <button v-else
                             class="button button_kind_link button_theme_light dropdown__title auth-panel__user-dropdown-title"
-                            type="button" aria-haspopup="listbox" aria-expanded="false">{{ userData.userInfo.displayName }}</button>
+                            type="button" aria-haspopup="listbox" aria-expanded="false">
+                            {{ userData.userInfo.displayName }}
+                        </button>
                     </div> <button class="button button_kind_link button_theme_light" type="button"
-                        v-on:click="logout()">Logout?</button></div>
+                        v-on:click="logout()">Logout?</button>
+                </div>
                 <div class="auth-panel__column"><button class="button button_kind_link auth-panel__admin-action"
                         type="button" role="link" tabindex="0">Show settings</button> • <span
-                        class="auth-panel__sort">Sort by <span class="auth-panel__select-label"><span
-                                class="auth-panel__select-label-value">Recently updated</span><select
-                                class="auth-panel__select">
+                        class="auth-panel__sort">Sort
+                        by <span class="auth-panel__select-label"><span class="auth-panel__select-label-value">Recently
+                                updated</span><select class="auth-panel__select">
                                 <option value="-score">Best</option>
                                 <option value="+score">Worst</option>
                                 <option value="-time">Newest</option>
@@ -59,7 +93,9 @@
                                 <option value="+controversy">Least controversial</option>
                             </select></span></span></div>
             </div>
-            <div class="root__main">
+            <div v-show="example=='comments'" class="root__main">
+                <button v-on:click="example = 'form'">Contact Form</button>
+
                 <div class="comment-form__control-panel">
 
                 </div>
@@ -74,8 +110,7 @@
                             class="button button_kind_secondary button_size_large button_theme_light comment-form__button"
                             type="button">Preview</button>
                         <button class="button button_kind_primary button_size_large comment-form__button"
-                        v-on:click="addComment"
-                            type="submit">Send</button>
+                            v-on:click="addComment" type="submit">Send</button>
                     </div>
                     <div class="auth auth-module__root_641f4" v-show="!(isGuest || userData != null)">
                         <button v-on:click="modal.signIn = !modal.signIn"
@@ -145,7 +180,7 @@
                         </div>
                     </div>
                     <!-- <div class="comment-form__markdown">Styling with <a class="comment-form__markdown-link"
-                                target="_blank" href="markdown-help.html">Markdown</a> is supported</div> -->
+                                    target="_blank" href="markdown-help.html">Markdown</a> is supported</div> -->
                 </div>
                 <div class="root__pinned-comments" role="region" aria-label="Pinned comments">
                     <article
@@ -187,11 +222,12 @@
                     </div>
                 </div>
                 <div class="root__threads" role="list">
-                    <comment-thread v-show="comments.length > 0" :isGuest="isGuest" :userData="userData" v-for="c in comments" :comment="c" level=0
-                        style="display: none;" />
+                    <comment-thread v-show="comments.length > 0" :isGuest="isGuest" :userData="userData"
+                        v-for="c in comments" :comment="c" level=0 style="display: none;" />
                 </div>
 
             </div>
+            <!-- end root main -->
         </div>
     </div>
     <script src="./js/vue.js"></script>

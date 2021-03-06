@@ -5,7 +5,7 @@ if ($action == NULL) {
 }
 $GLOBALS['root'] = "../";
 // Get the database connection file
-require_once '../library/connections.php';
+require_once '../config/connections.php';
 require_once '../library/functions.php';
 
 // require_once '../library/jwt/ValidatesJWT.php';
