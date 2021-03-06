@@ -24,10 +24,14 @@ var app = new Vue({
         newComment: {},
         comments: [],
         loading: false,
+        userForm: {},
         modal: {
+            type: 'email',
             signIn: false
         },
-        errors: null
+        errors: null,
+        userData: null,
+        isGuest: false
     },
     filters: {
         date: function (str) {
@@ -38,6 +42,19 @@ var app = new Vue({
         }
     },
     methods: {
+        logout() {
+            this.userData = null
+        },
+        login() {
+            if (this.isGuest || this.userData != null)
+                return;
+            if (this.modal.type == 'anonymous') {
+                this.isGuest = true;
+            } else {
+                console.log(this.userForm)
+            }
+            this.modal.signIn = false;
+        },
         getComments() {
             this.loading = true;
             this.errors = null;
