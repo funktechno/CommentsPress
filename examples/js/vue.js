@@ -1,5 +1,3 @@
-
-
 Vue.component('comment-thread', {
     props: [
         'comment',
@@ -23,6 +21,7 @@ var app = new Vue({
     data: {
         pageSlug: "test",
         newComment: {},
+        chat: {},
         comments: [],
         example: "comments",
         status: null,
@@ -35,14 +34,15 @@ var app = new Vue({
         userForm: {},
         modal: {
             type: 'email',
-            signIn: false
+            signIn: false,
+            chat: true
         },
         errors: null,
         userData: null,
         isGuest: false
     },
     filters: {
-        date: function (str) {
+        date: function(str) {
             if (!str) { return '(n/a)'; }
             str = new Date(str);
             return str.getFullYear() + '-' + ((str.getMonth() < 9) ? '0' : '') + (str.getMonth() + 1) + '-' +
@@ -65,7 +65,7 @@ var app = new Vue({
             this.$http.post("/form/?action=submit", request).then((response) => {
                 this.loading.form = false;
                 console.log(response)
-                // this.message = response.data.message;
+                    // this.message = response.data.message;
                 if (response.status == 201) {
                     this.form = {};
                     console.log(response.data);
@@ -106,7 +106,7 @@ var app = new Vue({
             this.$http.post("/comments/?action=submit", request, config).then((response) => {
                 this.loading.general = false;
                 console.log(response)
-                // this.message = response.data.message;
+                    // this.message = response.data.message;
                 if (response.status == 201) {
                     this.newComment.text = "";
                     console.log(response.data);
@@ -140,7 +140,7 @@ var app = new Vue({
                 this.$http.post("/users/?action=login", request).then((response) => {
                     this.loading.general = false;
                     console.log(response)
-                    // this.message = response.data.message;
+                        // this.message = response.data.message;
                     if (response.status == 200) {
                         console.log(response.data)
                         this.userData = response.data;
@@ -162,7 +162,7 @@ var app = new Vue({
             this.$http.post("/comments/?action=get", { "slug": this.pageSlug }).then((response) => {
                 this.loading.comments = false;
                 console.log(response)
-                // this.message = response.data.message;
+                    // this.message = response.data.message;
                 if (response.status == 200) {
                     console.log(response.data)
                     this.comments = response.data;

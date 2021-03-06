@@ -100,17 +100,6 @@ function getComment($reviewId)
     return $prodInfo;
 }
 
-function generateUuid()
-{
-    $db = acmeConnect();
-    $sql = "SELECT replace(uuid(),'-','') as 'id';";
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-    $stmt->closeCursor();
-    return $prodInfo['id'];
-}
-
 /**
  * create a comment and return new uuid
  */

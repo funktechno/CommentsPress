@@ -21,6 +21,17 @@ function getNavList($categories, $directoryURI)
     return $list;
 }
 
+function generateUuid()
+{
+    $db = acmeConnect();
+    $sql = "SELECT replace(uuid(),'-','') as 'id';";
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $prodInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo['id'];
+}
+
 /**
  * Checks if a folder exist and return canonicalized absolute pathname (sort version)
  * @param string $folder the path being checked.
