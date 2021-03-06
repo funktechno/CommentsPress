@@ -58,7 +58,7 @@ switch ($action) {
         // $token = $jwt->encode($payload, $header);
         $token = getJwtToken($clientData);
 
-        $response = array('Status' => 'success', 'id' => $clientData['id'], 'token' => $token);
+        $response = array('Status' => 'success', 'userInfo' => $clientData, 'token' => $token);
 
         echo json_encode($response);
 
