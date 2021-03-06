@@ -138,7 +138,8 @@
                     </article>
                 </div>
                 <div class="root__threads" role="list">
-                    <div v-show="comments.length > 0" class="thread thread_theme_light root__thread" v-for="c in comments" role="listitem list"
+                    <comment-thread  v-show="comments.length > 0" v-for="c in comments" :comment="c" level=0 style="display: none;"/>
+                    <div v-show="false && comments.length > 0" class="thread thread_theme_light root__thread" v-for="c in comments" role="listitem list"
                         aria-expanded="true"
                         style="display: none;"
                         >
