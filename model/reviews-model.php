@@ -32,6 +32,27 @@ function getPageStatus($slug)
     return $prodInfo;
 }
 
+function buildTree(array $elements, $parentId = 0)
+{
+
+    $branch = array();
+
+    foreach ($elements as $element) {
+        if ($element['parentId'] == $parentId) {
+            $children = buildTree($elements, $element['id']);
+
+            if ($children) {
+                $element['children'] = $children;
+            }
+
+            $branch[] = $element;
+        }
+    }
+
+    return $branch;
+}
+
+
 /**
  * grab a pages reviews, maybe also grab unapproved one that user owns
  */
@@ -44,7 +65,8 @@ function getPageComments($slug, $moderatedComments)
     if ($moderatedComments) {
         $sql .= ' and c.approved = 1';
     }
-    // echo $sql;
+
+    $sql .= ' order by c.created_at asc';
 
     // echo $sql;
     // exit;
@@ -53,6 +75,15 @@ function getPageComments($slug, $moderatedComments)
     $stmt->execute();
     $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
+
+    $tree_1 = buildTree($prodInfo);
+
+    echo json_encode(
+        $tree_1
+    );
+    exit;
+
+
     return $prodInfo;
 }
 
@@ -108,16 +139,6 @@ function getUnapprovedReviews()
     return $prodInfo;
 }
 
-function getContactForms()
-{
-    $db = acmeConnect();
-    $sql = 'SELECT f.* FROM contactForms as f;';
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $stmt->closeCursor();
-    return $prodInfo;
-}
 
 function getReview($reviewId)
 {
