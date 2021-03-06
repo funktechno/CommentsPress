@@ -26,6 +26,7 @@ var app = new Vue({
         example: "comments",
         status: null,
         form: {},
+        conversations: [],
         loading: {
             general: false,
             comments: false,

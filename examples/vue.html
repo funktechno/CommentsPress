@@ -192,7 +192,7 @@
                         <div id="intercom-container" class="intercom-namespace" role="main" aria-live="polite">
                             <div tabindex="-1" role="region">
                                 <ul>
-                                    <li>message</li>
+                                    <li v-for="m in conversations">{{ m.message }}</li>
                                 </ul>
                                 <textarea v-model="chat.message"></textarea>
                                 <button>Send</button>
