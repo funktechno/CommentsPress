@@ -64,7 +64,15 @@
                         placeholder="Your comment here" spellcheck="true" style="height: 109px;"></textarea>
                 </div>
                 <div class="comment-form__actions">
-                    <div class="auth auth-module__root_641f4">
+                    <div v-show="isGuest || userData != null" style="display: none;">
+                        <button
+
+                            class="button button_kind_secondary button_size_large button_theme_light comment-form__button"
+                            type="button">Preview</button>
+                        <button class="button button_kind_primary button_size_large comment-form__button"
+                            type="submit">Send</button>
+                    </div>
+                    <div class="auth auth-module__root_641f4" v-show="!(isGuest || userData != null)">
                         <button v-on:click="modal.signIn = !modal.signIn"
                             class="auth-button button-module__button_b7044">Sign
                             In
@@ -162,6 +170,12 @@
                         </div>
                     </article>
                     <div class="lds-facebook" v-show="loading.comments" style="display: none;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="lds-ellipsis" v-show="loading.general" style="display: none;">
+                        <div></div>
                         <div></div>
                         <div></div>
                         <div></div>
