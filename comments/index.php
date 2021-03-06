@@ -131,9 +131,9 @@ switch ($action) {
         $configCondition = getConfigData('moderateComments');
 
         $moderatedComments = true;
-        if ($configCondition && $configCondition['data']!= 'true') {
+        if ($configCondition && $configCondition['data'] != 'true') {
             $moderatedComments = false;
-        } 
+        }
         // check if moderate
         // echo json_encode($configCondition);
         // exit();
@@ -213,7 +213,8 @@ switch ($action) {
             }
         }
         $regOutcome = createComment($userId, $pageData['id'], $parentId, $body);
-        if ($regOutcome === 1) {
+        if ($regOutcome['rowsChanged'] === 1) {
+            $result = getReview($regOutcome['lastId']);
 
             $statuscode = 201;
 
@@ -221,7 +222,7 @@ switch ($action) {
 
             $response = array('Status' => 'success');
 
-            echo json_encode($response);
+            echo json_encode($result);
         } else {
             $errorStatus->response(500, "Error saving message");
         }
