@@ -1,6 +1,6 @@
-library/connections.php
+config/connections.php
 .DS_Store
 vendor
 mail/mailConfig.php
 library/mailFunctions.php
-library/connections-*.php
+config/connections-*.php

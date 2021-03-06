@@ -11,7 +11,7 @@ if ($action == NULL) {
 }
 $GLOBALS['root'] = "../";
 // Get the database connection file
-require_once '../library/connections.php';
+require_once '../config/connections.php';
 require_once '../library/functions.php';
 // Get the acme model for use as needed
 require_once '../model/accounts-model.php';
