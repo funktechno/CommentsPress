@@ -34,8 +34,7 @@ VALUES('child text',@userId, @pageId, @parentId)
 
 DO SLEEP(6);
 INSERT INTO comments(commentText, userId,pageId, parentId)
-VALUES('child text',@userId, @pageId, @parentId)
-,('child text3',@userId, @pageId, @parentId)
+VALUES('child text3',@userId, @pageId, @parentId)
 ,('child text4',@userId, @pageId, @parentId);
 
 
@@ -53,8 +52,7 @@ VALUES('child child text',@userId, @pageId, @parentId)
     
 DO SLEEP(5);
 INSERT INTO comments(commentText, userId,pageId, parentId)
-VALUES('child child text',@userId, @pageId, @parentId)
-,('child child text4',@userId, @pageId, @parentId)
+VALUES('child child text4',@userId, @pageId, @parentId)
 ,('child child text5',@userId, @pageId, @parentId)
 ,('child child text6',@userId, @pageId, @parentId);
 
