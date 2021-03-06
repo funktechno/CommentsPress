@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS `contactForms`;
 
 
 DROP TABLE IF EXISTS `flaggedComment`;
-
+DROP TABLE IF EXISTS `conversations`;
 DROP TABLE IF EXISTS `comments`;
 DROP TABLE IF EXISTS `users`;
  CREATE TABLE `users` (
@@ -89,7 +89,6 @@ END
 ;;
 DELIMITER ;
 
-DROP TABLE IF EXISTS `conversations`;
 DROP TABLE IF EXISTS `threads`;
 CREATE TABLE `threads` (
   `id` varchar(32) NOT NULL,

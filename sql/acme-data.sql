@@ -24,7 +24,8 @@ VALUES('teset text',@userId, @pageId)
 ,('teset text3',@userId, @pageId)
 ,('teset text4',@userId, @pageId)
 ,('teset text5',@userId, @pageId);
-
+-- stagger created date
+DO SLEEP(5);
 SELECT @parentId:=id FROM comments LIMIT 1;
 
 INSERT INTO comments(commentText, userId,pageId, parentId)
@@ -37,7 +38,8 @@ VALUES('child text',@userId, @pageId, @parentId)
 
 
 SELECT @parentId:=id FROM comments wHERE commentText = 'child text' LIMIT 1;
-
+-- stagger created date
+DO SLEEP(5);
 INSERT INTO comments(commentText, userId,pageId, parentId)
 VALUES('child child text',@userId, @pageId, @parentId)
 ,('child child text1',@userId, @pageId, @parentId)
@@ -51,22 +53,22 @@ INSERT INTO flaggedComment(commentId, userId, message, type)
 VALUES(@parentId, @userId, 'message is spam','spam');
 
 -- select @pageId
-select * from comments;
+-- select * from comments;
 
--- VALUES(uuid(),'test@me.com','has');
+-- -- VALUES(uuid(),'test@me.com','has');
 
--- replace(uuid(),'-','')
--- varchar(32)
--- will wrok w/ binary, but unreadable from db, appears as blob, keep varchar for simplicity
--- unhex(replace(uuid(),'-',''))
+-- -- replace(uuid(),'-','')
+-- -- varchar(32)
+-- -- will wrok w/ binary, but unreadable from db, appears as blob, keep varchar for simplicity
+-- -- unhex(replace(uuid(),'-',''))
 
 
-select * from users;
+-- select * from users;
 
-select * from contactForms;
+-- select * from contactForms;
 
-select * from pages;
+-- select * from pages;
 
-select * from comments;
+-- select * from comments;
 
-select * from configuration;
+-- select * from configuration;
