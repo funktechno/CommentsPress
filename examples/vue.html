@@ -35,8 +35,17 @@
             <div v-show="errors" style="display: none;">
                 {{ errors }}
             </div>
+            <div v-show="status" style="display: none;">
+                {{ status }}
+            </div>
             <div v-show="example == 'form'" style="display: none;">
                 <h3>Contact Form Example</h3>
+                <div class="lds-ellipsis" v-show="loading.form" style="display: none;">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
                 <button v-on:click="example = 'comments'">Comments</button>
 
                 <label>Subject</label>
@@ -49,7 +58,7 @@
                 <br>
                 <label>Message</label>
                 <br>
-                <textarea v-model="form.message" v-model="form.message" name="message" id="message" required>
+                <textarea v-model="form.body" name="message" id="message" required>
                     </textarea>
                 <br>
                 <button v-on:click="submitMessage()">Submit</button>

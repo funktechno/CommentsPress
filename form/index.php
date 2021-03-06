@@ -34,7 +34,7 @@ switch ($action) {
         $checkEmail = checkEmail($email);
 
         if (empty($checkEmail)) {
-            $errorStatus->response(400, "Please provide valid email" . $email);
+            $errorStatus->response(400, "Please provide valid email:" . $email);
         }
 
         if (empty($email) || empty($body) || empty($subject)) {
