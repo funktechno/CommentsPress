@@ -98,7 +98,7 @@ DELIMITER ;
 DROP TABLE IF EXISTS `threads`;
 CREATE TABLE `threads` (
   `id` varchar(32) NOT NULL,
-  `email` varchar(191) NULL ,
+  `email` varchar(191) NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -121,8 +121,6 @@ CREATE TABLE `conversations` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `userId` varchar(32) NULL,
   `threadId` varchar(32) NOT NULL,
-  `email` varchar(40) NOT NULL,
-  `subject` varchar(50) NOT NULL,
   `message` varchar(255) NOT NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),

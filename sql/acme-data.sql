@@ -59,6 +59,13 @@ VALUES('child child text4',@userId, @pageId, @parentId)
 INSERT INTO flaggedComment(commentId, userId, message, type)
 VALUES(@parentId, @userId, 'message is spam','spam');
 
+INSERT INTO threads(id)
+values(replace(uuid(),'-',''));
+
+SELECT @parentId:=id FROM threads LIMIT 1;
+
+INSERT INTO conversations(threadId, message)
+values (@parentId, 'test message')
 -- select @pageId
 -- select * from comments;
 
