@@ -192,10 +192,10 @@
                         <div id="intercom-container" class="intercom-namespace" role="main" aria-live="polite">
                             <div tabindex="-1" role="region">
                                 <ul>
-                                    <li>message</li>
+                                    <li v-for="m in conversations">{{ m.message }}</li>
                                 </ul>
                                 <textarea v-model="chat.message"></textarea>
-                                <button>Send</button>
+                                <button v-on:click="sendMessage()">Send</button>
                                 <!-- <div>
                                     <div class="intercom-1xha1pw e16fp1gy0">
                                         <div class="intercom-messenger intercom-messenger-new-conversation intercom-k9lbvn e16fp1gy1 intercom-messenger-main-animated-appear-done intercom-messenger-main-animated-enter-done" tabindex="0">

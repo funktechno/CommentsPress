@@ -26,10 +26,12 @@ var app = new Vue({
         example: "comments",
         status: null,
         form: {},
+        conversations: [],
         loading: {
             general: false,
             comments: false,
-            form: false
+            form: false,
+            chat: false
         },
         userForm: {},
         modal: {
@@ -81,6 +83,38 @@ var app = new Vue({
             });
 
 
+        },
+        sendMessage() {
+            if (this.loading.chat)
+                return;
+            // retrieve from cookie
+            let threadId = "effba2487ece11eb8e3a0242ac110002"
+            let config = {}
+            let request = {
+                threadId: threadId,
+                message: this.chat.message
+            }
+            this.loading.chat = true;
+
+            this.$http.post("/conversations/?action=submit", request, config).then((response) => {
+                this.loading.chat = false;
+                console.log(response)
+                    // this.message = response.data.message;
+                if (response.status == 201) {
+                    this.chat.message = "";
+                    console.log(response.data);
+                    this.conversations.push(response.data);
+                    // this.$set()
+                    // this.comments = response.data;
+                } else {
+                    this.errors = "Failed to send message"
+                }
+            }).catch((error) => {
+                this.errors = error.data
+                console.log(error)
+                this.loading.chat = null;
+
+            });
         },
         addComment() {
             // don't run if not logged in or loading
@@ -156,6 +190,29 @@ var app = new Vue({
             }
             this.modal.signIn = false;
         },
+        getConversation() {
+            // check from cookie for conversation id
+            let threadId = "effba2487ece11eb8e3a0242ac110002"
+            this.loading.chat = true;
+            this.errors = null;
+            this.$http.post("/conversations/?action=get", { "threadId": threadId }).then((response) => {
+                this.loading.chat = false;
+                console.log(response)
+                    // this.message = response.data.message;
+                if (response.status == 200) {
+                    console.log(response.data)
+                    this.conversations = response.data;
+                } else {
+                    this.errors = "Failed to load chat"
+                }
+            }).catch((error) => {
+                this.errors = "Failed to get chat"
+                console.log(error)
+                this.loading.chat = null;
+
+            });
+
+        },
         getComments() {
             this.loading.comments = true;
             this.errors = null;
@@ -179,5 +236,6 @@ var app = new Vue({
     },
     mounted() {
         this.getComments();
+        this.getConversation();
     }
 })
