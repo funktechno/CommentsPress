@@ -5,17 +5,27 @@
 // change document root if serving from somewhere else such as /
 // copy this file to connections.php w/ proper info
 $GLOBALS['documentRoot'] = '/';
-require_once $GLOBALS['root'] .'library/Core.php';
+require_once $GLOBALS['root'] . 'library/Core.php';
 
 // require '../vendor/autoload.php';
-define('Allowed_Origins','*');
-define('Allowed_Methods','GET,POST');
+define('Allowed_Origins', '*');
+define('Allowed_Methods', 'GET,POST');
 // jwt secret
-define('SECRET','CHANGEME!');
-define('DEBUG',false);
+define('SECRET', 'CHANGEME!');
+define('DEBUG', false);
 // disabled, sendgrid, default, mail, phpmailer
-define('MAILMETHOD','disabled');
-define('DEMO',false);
+define('MAILMETHOD', 'disabled');
+define('DEMO', false);
+function getFacebookSSO()
+{
+    $facebookApp = array(
+        'clientId'          => '{facebook-app-id}',
+        'clientSecret'      => '{facebook-app-secret}',
+        'redirectUri'       => 'https://example.com/callback-url',
+        'graphApiVersion'   => 'v2.10',
+    );
+    return $facebookApp;
+}
 
 function acmeConnect()
 {
@@ -41,7 +51,8 @@ function acmeConnect()
         exit;
     }
 }
-function getMailConfig(){
+function getMailConfig()
+{
     $mailConfig = array(
         'From' => 'sender@example.com',
         'To' => 'recipient@example.com',
