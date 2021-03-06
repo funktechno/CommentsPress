@@ -61,8 +61,10 @@ var app = new Vue({
                     email: this.userForm.email,
                     password: this.userForm.password
                 }
+                this.errors = null;
+                console.log(request)
                 this.loading.general = true;
-                this.$http.post("/comments/?action=login", request).then((response) => {
+                this.$http.post("/users/?action=login", request).then((response) => {
                     this.loading.general = false;
                     console.log(response)
                     // this.message = response.data.message;
@@ -73,7 +75,7 @@ var app = new Vue({
                         this.errors = "Failed to login"
                     }
                 }).catch((error) => {
-                    this.errors = "Failed to login"
+                    this.errors = error.data
                     console.log(error)
                     this.loading.general = null;
 

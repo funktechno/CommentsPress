@@ -32,7 +32,11 @@
         <h2>Comment Press Vue Example</h2>
         <a href=. />home</a>
         <div id="comments">
-            <div class="auth-panel auth-panel_theme_light auth-panel_logged-in" v-if="userData!=null || isGuest">
+            <div v-show="errors" style="display: none;">
+                {{ errors }}
+            </div>
+            <div class="auth-panel auth-panel_theme_light auth-panel_logged-in" v-show="userData!=null || isGuest"
+                style="display: none;">
                 <div class="auth-panel__column">You logged in as <div class="dropdown dropdown_theme_light">
                         <span v-if="isGuest">Guest</span>
                         <button v-else
