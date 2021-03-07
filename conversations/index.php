@@ -38,8 +38,16 @@ switch ($action) {
     case 'submit':
         $threadId = $input['threadId'];
         $message = $input['message'];
-        if (empty($threadId) || empty($message)) {
+        if (empty($message)) {
             $errorStatus->response(400, "threadId, message field(s) are required");
+        }
+        if (empty($threadId)) {
+            $regOutcome = startThread();
+            if ($regOutcome['rowsChanged'] === 1) {
+                $threadId = $regOutcome['lastId'];
+            } else {
+                $errorStatus->response(500, "Error starting thread");
+            }
         }
         $regOutcome = sendMessage($threadId, $message);
         if ($regOutcome['rowsChanged'] === 1) {
