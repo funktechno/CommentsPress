@@ -95,9 +95,10 @@ var app = new Vue({
             let threadId = this.threadId;
             let config = {}
             let request = {
-                threadId: threadId,
+                threadId: threadId || null,
                 message: this.chat.message
             }
+            console.log(request);
             this.loading.chat = true;
 
             this.$http.post("/conversations/?action=submit", request, config).then((response) => {
