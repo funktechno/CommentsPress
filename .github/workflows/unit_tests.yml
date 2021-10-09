@@ -1,4 +1,4 @@
-name: .NET Core
+name: unit tests
 
 # use https://marketplace.visualstudio.com/items?itemName=me-dutour-mathieu.vscode-github-actions to validate yml in vscode
 env:
