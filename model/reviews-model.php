@@ -181,7 +181,7 @@ function updateUserComment($id, $body)
     // The SQL statement to be used with the database
     // reset approved if it's been updated
     $sql = '
-    UPDATE `comments` SET `commentText`=:reviewText, `approved`=0, `deleted_at`=NOW() WHERE id = :reviewId';
+    UPDATE `comments` SET `commentText`=:reviewText, `approved`=0 WHERE id = :reviewId';
     // echo $sql;
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':reviewId', $id, PDO::PARAM_STR);
