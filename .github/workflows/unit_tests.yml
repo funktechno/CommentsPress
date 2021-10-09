@@ -46,7 +46,7 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_DATABASE: "mockDb"
+          MYSQL_DATABASE: "testcomments"
           MYSQL_ROOT_PASSWORD: "mysecretpw"
     steps:
       - uses: actions/checkout@v2

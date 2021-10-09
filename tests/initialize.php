@@ -98,6 +98,6 @@ function initData()
     }
 }
 
-resetDb();
+// resetDb();
 initSchema();
 initData();
