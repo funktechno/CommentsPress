@@ -82,13 +82,7 @@ function getPageComments($slug, $moderatedComments, $userId)
 
     $tree_1 = buildTree($prodInfo, $userId);
 
-    echo json_encode(
-        $tree_1
-    );
-    exit;
-
-
-    return $prodInfo;
+    return $tree_1;
 }
 
 function getComment($reviewId)
