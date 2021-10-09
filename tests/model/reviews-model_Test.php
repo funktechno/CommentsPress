@@ -7,9 +7,9 @@ require_once 'model/reviews-model.php';
 // use drmonkeyninja\Average;
 use PHPUnit\Framework\TestCase;
 
-class AverageTest extends TestCase
+class reviews_modelTest extends TestCase
 {
-    protected $Average;
+    // protected $Average;
 
     public function setUp()
     {
