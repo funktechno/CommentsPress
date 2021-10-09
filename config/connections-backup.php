@@ -34,7 +34,7 @@ function acmeConnect()
 
     // same config from docker
     $server = $config['server'];
-    $dbname = $config['dbname '];
+    $dbname = $config['dbname'];
     $password = $config['password'];
     $username = $config['username'];
     $dsn = 'mysql:host=' . $server . ';dbname=' . $dbname;
