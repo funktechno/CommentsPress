@@ -66,16 +66,17 @@ jobs:
           cp library/mailFunctions-sendGrid.php library/mailFunctions.php
           php ./tests/initialize.php
 
-      - name: enabledb
+      - name: run tests
         run: vendor/bin/phpunit   
 
       # - uses: php-actions/composer@v5
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v2
-        env:
-          TEST_NAME: Scarlett
-        with:
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
-          args: --coverage-text
+      # - name: PHPUnit Tests
+      #   uses: php-actions/phpunit@v2
+      #   env:
+      #     TEST_NAME: Scarlett
+      #   with:
+      #     bootstrap: vendor/autoload.php
+      #     configuration: phpunit.xml
+      # php_version 
+      #     args: --coverage-text
