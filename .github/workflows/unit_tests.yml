@@ -52,7 +52,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: enabledb
-        run: cp ./config/connections-github.php cp ./config/connections.php
+        run: |
+          cp ./config/connections-github.php cp ./config/connections.php
+          php ./tests/initialize.php
 
       - uses: php-actions/composer@v5
 
