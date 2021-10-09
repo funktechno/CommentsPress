@@ -137,7 +137,7 @@ switch ($action) {
         // check if moderate
         // echo json_encode($configCondition);
         // exit();
-        $comments = getPageComments($slug, $moderatedComments);
+        $comments = getPageComments($slug, $moderatedComments, $userId);
         // recursively updated comments w/ child comments
 
         echo json_encode($comments);
