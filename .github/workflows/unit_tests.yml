@@ -1,0 +1,66 @@
+name: .NET Core
+
+# use https://marketplace.visualstudio.com/items?itemName=me-dutour-mathieu.vscode-github-actions to validate yml in vscode
+env:
+  DOCKER_DRIVER: overlay
+  rIds: ${{ secrets.rIds }}
+  phpVersion: 7.1
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  # build:
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - uses: php-actions/composer@v5
+
+  #     - name: PHPUnit Tests
+  #       uses: php-actions/phpunit@v2
+  #       env:
+  #         TEST_NAME: Scarlett
+  #       with:
+  #         bootstrap: vendor/autoload.php
+  #         configuration: test/phpunit.xml
+  #         args: --coverage-text
+
+
+  unit_test_db_mysql:
+    runs-on: ubuntu-latest
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: mysql:5.7.29
+        #
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: "mockDb"
+          MYSQL_ROOT_PASSWORD: "mysecretpw"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: enabledb
+        run: cp ./config/connections-github.php cp ./config/connections.php
+
+      - uses: php-actions/composer@v5
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v2
+        env:
+          TEST_NAME: Scarlett
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: test/phpunit.xml
+          args: --coverage-text
