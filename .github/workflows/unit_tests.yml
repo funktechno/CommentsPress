@@ -53,7 +53,7 @@ jobs:
 
       - name: enabledb
         run: |
-          cp ./config/connections-github.php cp ./config/connections.php
+          cp ./config/connections-github.php ./config/connections.php
           php ./tests/initialize.php
 
       - uses: php-actions/composer@v5
