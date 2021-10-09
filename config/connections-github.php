@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 $GLOBALS['documentRoot'] = '/';
 $GLOBALS['email_from'] = 'xxx@gmail.com';
-require_once $GLOBALS['root'] .'library/Core.php';
+// require_once $GLOBALS['root'] .'library/Core.php';
 
 // use PHPMailer\PHPMailer\SMTP;
 // use PHPMailer\PHPMailer\Exception;

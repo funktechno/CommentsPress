@@ -54,6 +54,7 @@ jobs:
       - name: enabledb
         run: |
           cp ./config/connections-github.php ./config/connections.php
+          cp library/mailFunctions-sendGrid.php library/mailFunctions.php
           php ./tests/initialize.php
 
       - uses: php-actions/composer@v5
