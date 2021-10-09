@@ -50,7 +50,10 @@ function acmeConnect()
         // echo 'Sorry, the connection failed';
         // header('location: /view/500.php');
         // this will cause issue w/ rest api returns, maybe fine if db connection never fails
-        include $GLOBALS['root'] . 'view/500.php';
+        if (isset($GLOBALS['root']))
+            include $GLOBALS['root'] . 'view/500.php';
+        else
+            throw $error;
         exit;
     }
 }

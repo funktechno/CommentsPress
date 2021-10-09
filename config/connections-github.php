@@ -63,7 +63,10 @@ function acmeConnect()
         $error = $e;
         // echo 'Sorry, the connection failed';
         // header('location: /view/500.php');
-        include $GLOBALS['root'] . 'view/500.php';
+        if (isset($GLOBALS['root']))
+            include $GLOBALS['root'] . 'view/500.php';
+        else
+            throw $error;
         exit;
     }
 }

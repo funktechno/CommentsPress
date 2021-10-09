@@ -1,5 +1,5 @@
 <?php
-$GLOBALS['root'] = "";
+// $GLOBALS['root'] = "";
 // run sql files
 require_once 'config/connections.php';
 require_once 'library/functions.php';
