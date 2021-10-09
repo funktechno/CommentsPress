@@ -20,9 +20,10 @@ define('Allowed_Methods', 'GET,POST');
 // jwt secret
 define('SECRET', 'SECRET');
 define('DEBUG', false);
-define('DEMO',true);
+define('DEMO', true);
 
-function getFacebookSSO(){
+function getFacebookSSO()
+{
     $facebookApp = array(
         'clientId'          => 'xxx',
         'clientSecret'      => 'xxx',
@@ -31,9 +32,11 @@ function getFacebookSSO(){
     );
     return $facebookApp;
 }
-function getConnConfig(){
+function getConnConfig()
+{
     $config = array(
-        'server' => "127.0.0.1:3306",
+        'server' => "localhost",
+        'port' => "3306",
         'dbname' => 'testcomments',
         'password' => 'mysecretpw',
         'username' => 'root'
@@ -51,7 +54,8 @@ function acmeConnect()
     $dbname = $config['dbname'];
     $password = $config['password'];
     $username = $config['username'];
-    $dsn = 'mysql:host=' . $server . ';dbname=' . $dbname;
+    $port = $config["port"];
+    $dsn = 'mysql:host=' . $server . ';port=' . $port . ';dbname=' . $dbname;
     $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     // Create the actual connection object and assign it to a variable
     try {
@@ -71,7 +75,8 @@ function acmeConnect()
     }
 }
 
-function getMailConfig(){
+function getMailConfig()
+{
     $mailConfig = array(
         'From' => 'xxx@gmail.com',
         'To' => 'xx@gmail.com',
