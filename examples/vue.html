@@ -143,7 +143,8 @@
                                 <input class="auth-input-email input-module__input_f6995" v-model="userForm.email" type="email" required="" name="email" placeholder="Email Address">
                             </div>
                             <div class="auth-row auth-module__row_1b3b9" v-if="modal.type=='email'">
-                                <input class="auth-input-email input-module__input_f6995" v-model="userForm.password" type="password" required="" name="password" placeholder="Password">
+                                <input class="auth-input-email input-module__input_f6995" v-model="userForm.password" type="password" required="" name="password" placeholder="Password"
+                                @keyup.enter="login">
                             </div>
                             <input class="auth-module__honeypot_7ea53" type="checkbox" tabindex="-1" autocomplete="off"><button v-on:click="login()" class="auth-submit button-module__button_b7044" type="submit">Submit</button>
                         </div>
@@ -181,7 +182,7 @@
                     </div>
                 </div>
                 <div class="root__threads" role="list">
-                    <comment-thread v-show="comments.length > 0" :loading.sync="loading.comments" :isGuest="isGuest" :user_data="userData" v-for="c in comments" :comment.sync="c" :errors.sync="errors" level=0 style="display: none;" />
+                    <comment-thread v-show="comments.length > 0" v-bind:loading.sync="loading.comments" :is_guest="isGuest" :key="c.id" :user_data="userData" v-for="c in comments" v-bind:comment.sync="c" v-bind:errors.sync="errors" level=0 style="display: none;" />
                 </div>
 
             </div>

@@ -3,6 +3,7 @@ Vue.component('comment-thread', {
         'comment',
         'loading',
         'level',
+        'is_guest',
         'user_data',
         "errors"
     ],
@@ -19,7 +20,7 @@ Vue.component('comment-thread', {
             if(!this.edit){
                 this.body = this.comment.commentText
             }
-            this.edit = !this.edit
+            this.edit = !this.edit;
         },
         updateComment(){
             if(this.loading)
@@ -39,21 +40,28 @@ Vue.component('comment-thread', {
             }
 
             this.$emit("update:loading", true);
+            // this.loading = true;
 
             this.$http.post("/comments/?action=mod", request, config).then((response) => {
+                // this.loading = false;
                 this.$emit("update:loading", false);
                 console.log(response)
                 if (response.status == 200) {
-                    const commentData = JSON.parse(JSON.stringify(this.comment));
-                    commentData.commentText = this.body;
+                    // const commentData = JSON.parse(JSON.stringify(this.comment));
+                    // commentData.commentText = this.body;
+                    // for some reason fine to update prop data, maybe b/c not overriding directly but contents
+                    this.comment.commentText = this.body;
 
-                    this.$emit("update:comment", commentData);
+                    // this.$emit("update:comment", commentData);
                 } else {
+                    // this.errors = "Failure in updating comment";
                     this.$emit("update:errors", "Failure in updating comment");
                 }
             }).catch((error) => {
+                // this.errors = "Failed to updating comment";
                 this.$emit("update:errors", "Failed to update comment");
                 console.log(error)
+                // this.loading = false;
                 this.$emit("update:loading", false);
 
             });
@@ -99,7 +107,7 @@ Vue.component('comment-thread', {
             </div>
         </div>
     </article>
-    <comment-thread v-if="showChildren" v-for="c in comment.children" :comment="c" :level='level+1' />
+    <comment-thread v-if="showChildren" :key="c.id" v-for="c in comment.children" :errors.sync="errors" :user_data="user_data" :is_guest="is_guest" :comment.sync="c" :level='level+1' />
     <div class="thread__collapse" role="button" tabindex="0">
         <div></div>
     </div>
