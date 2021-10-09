@@ -51,10 +51,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup PHP with intl
+      - name: Setup PHP with composer v2
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4.9'
+          tools: composer:v2
+
+      - name: composer
+        run: composer install
 
       - name: enabledb
         run: |
@@ -62,7 +66,10 @@ jobs:
           cp library/mailFunctions-sendGrid.php library/mailFunctions.php
           php ./tests/initialize.php
 
-      - uses: php-actions/composer@v5
+      - name: enabledb
+        run: vendor/bin/phpunit   
+
+      # - uses: php-actions/composer@v5
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2
@@ -70,5 +77,5 @@ jobs:
           TEST_NAME: Scarlett
         with:
           bootstrap: vendor/autoload.php
-          configuration: test/phpunit.xml
+          configuration: phpunit.xml
           args: --coverage-text
