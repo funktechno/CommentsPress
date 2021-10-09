@@ -39,7 +39,8 @@ function getConnConfig()
         'port' => "3306",
         'dbname' => 'testcomments',
         'password' => 'mysecretpw',
-        'username' => 'root'
+        'username' => 'root',
+        'unix_socket' => '/tmp/mysql.sock'
     );
     return $config;
 }
@@ -54,8 +55,9 @@ function acmeConnect()
     $dbname = $config['dbname'];
     $password = $config['password'];
     $username = $config['username'];
+    $socket = $config['unix_socket'];
     $port = $config["port"];
-    $dsn = 'mysql:host=' . $server . ';port=' . $port . ';dbname=' . $dbname;
+    $dsn = 'unix_socket=' . $socket . ';mysql:host=' . $server . ';port=' . $port . ';dbname=' . $dbname;
     $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     // Create the actual connection object and assign it to a variable
     try {
