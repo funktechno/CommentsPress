@@ -4,7 +4,6 @@ require_once 'config/connections.php';
 require_once 'library/functions.php';
 require_once 'model/accounts-model.php';
 
-// use drmonkeyninja\Average;
 use PHPUnit\Framework\TestCase;
 
 class accounts_modelTest extends TestCase
