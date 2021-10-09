@@ -31,14 +31,26 @@ function getFacebookSSO(){
     );
     return $facebookApp;
 }
+function getConnConfig(){
+    $config = array(
+        'server' => 'localhost_mysql',
+        'dbname' => 'testcomments',
+        'password' => 'mysecretpw',
+        'username' => 'root'
+    );
+    return $config;
+}
 
 // http://localhost/acme/library/connections.php
 function acmeConnect()
 {
-    $server = 'localhost_mysql';
-    $dbname = 'testcomments';
-    $password = 'mysecretpw';
-    $username = 'root';
+    $config = getConnConfig();
+
+    // same config from docker
+    $server = $config['server'];
+    $dbname = $config['dbname '];
+    $password = $config['password'];
+    $username = $config['username'];
     $dsn = 'mysql:host=' . $server . ';dbname=' . $dbname;
     $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     // Create the actual connection object and assign it to a variable

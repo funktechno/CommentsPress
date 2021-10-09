@@ -17,13 +17,26 @@ define('DEBUG',false);
 define('MAILMETHOD','disabled');
 define('DEMO',false);
 
+
+function getConnConfig(){
+    $config = array(
+        'server' => 'localhost',
+        'dbname' => 'testcomments',
+        'password' => 'my-secret-pw',
+        'username' => 'root'
+    );
+    return $config;
+}
+
 function acmeConnect()
 {
+    $config = getConnConfig();
+
     // same config from docker
-    $server = 'localhost';
-    $dbname = 'testcomments';
-    $password = 'my-secret-pw';
-    $username = 'root';
+    $server = $config['server'];
+    $dbname = $config['dbname '];
+    $password = $config['password'];
+    $username = $config['username'];
     $dsn = 'mysql:host=' . $server . ';dbname=' . $dbname;
     $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     // Create the actual connection object and assign it to a variable
