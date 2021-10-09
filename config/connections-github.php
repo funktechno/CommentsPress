@@ -33,7 +33,7 @@ function getFacebookSSO(){
 }
 function getConnConfig(){
     $config = array(
-        'server' => 'localhost_mysql',
+        'server' => 'localhost',
         'dbname' => 'testcomments',
         'password' => 'mysecretpw',
         'username' => 'root'
