@@ -16,7 +16,8 @@ class AverageTest extends TestCase
         // $this->Average = new Average();
     }
 
-    public function testPageComments(){
+    public function testPageComments()
+    {
         $slug = "test";
         $moderatedComments = false;
         $userId = null;
@@ -26,9 +27,24 @@ class AverageTest extends TestCase
         $this->assertEquals(18, count($comments));
     }
 
+    public function testgetPageStatus()
+    {
+        $slug = "test";
+        $result = getPageStatus($slug);
+        $result['id'] = null;
+        $expected = array(
+            'manualPages' => 'false',
+            'unlimitedReplies' => 'false',
+            'id' => null,
+            'deleted_at' => null,
+            'lockedcomments' => '0'
+        );
+        $this->assertEquals($expected, $result);
+    }
+
     public function testCalculationOfMean()
     {
         $numbers = [3, 7, 6, 1, 5];
-        $this->assertEquals(4.4, 1.1*4);
+        $this->assertEquals(4.4, 1.1 * 4);
     }
 }
