@@ -35,6 +35,10 @@
   * register a new account or use the existing ones
   * if new account change your clientLevel in the users table to 2 or above for admin access
 
+## testing
+* `composer install` also see `.github/workflows/unit_tests.yml`
+* `./vendor/bin/phpunit` or `.\vendor\bin\phpunit`
+
 ## documentation
 * see `rest` folder for api endpoints on creating comments and registering
 

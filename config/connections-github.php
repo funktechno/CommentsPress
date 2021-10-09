@@ -1,33 +1,47 @@
 <?php
-// debug options uncomment
-// error_reporting(E_ALL);
-// ini_set('display_errors', '1');
 // change document root if serving from somewhere else such as /
-// copy this file to connections.php w/ proper info
+// debug options
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 $GLOBALS['documentRoot'] = '/';
-require_once $GLOBALS['root'] .'library/Core.php';
+$GLOBALS['email_from'] = 'xxx@gmail.com';
+// require_once $GLOBALS['root'] .'library/Core.php';
 
+// use PHPMailer\PHPMailer\SMTP;
+// use PHPMailer\PHPMailer\Exception;
+// use PHPMailer\PHPMailer\PHPMailer;
+
+// require '../vendor/phpmailer/phpmailer/src/Exception.php';
+// require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+// require '../vendor/phpmailer/phpmailer/src/SMTP.php';
 // require '../vendor/autoload.php';
-define('Allowed_Origins','*');
-define('Allowed_Methods','GET,POST');
+define('Allowed_Origins', '*');
+define('Allowed_Methods', 'GET,POST');
 // jwt secret
-define('SECRET','CHANGEME!');
-define('DEBUG',false);
-// disabled, sendgrid, default, mail, phpmailer
-define('MAILMETHOD','disabled');
-define('DEMO',false);
+define('SECRET', 'SECRET');
+define('DEBUG', false);
+define('DEMO',true);
 
-
+function getFacebookSSO(){
+    $facebookApp = array(
+        'clientId'          => 'xxx',
+        'clientSecret'      => 'xxx',
+        'redirectUri'       => 'http://localhost:8000/',
+        'graphApiVersion'   => 'v2.10',
+    );
+    return $facebookApp;
+}
 function getConnConfig(){
     $config = array(
-        'server' => 'localhost',
+        'server' => 'localhost_mysql',
         'dbname' => 'testcomments',
-        'password' => 'my-secret-pw',
+        'password' => 'mysecretpw',
         'username' => 'root'
     );
     return $config;
 }
 
+// http://localhost/acme/library/connections.php
 function acmeConnect()
 {
     $config = getConnConfig();
@@ -49,23 +63,23 @@ function acmeConnect()
         $error = $e;
         // echo 'Sorry, the connection failed';
         // header('location: /view/500.php');
-        // this will cause issue w/ rest api returns, maybe fine if db connection never fails
         include $GLOBALS['root'] . 'view/500.php';
         exit;
     }
 }
+
 function getMailConfig(){
     $mailConfig = array(
-        'From' => 'sender@example.com',
-        'To' => 'recipient@example.com',
+        'From' => 'xxx@gmail.com',
+        'To' => 'xx@gmail.com',
         'Subject' => 'test subject',
-        'Reply-To' => 'sender@example.com',
+        'Reply-To' => 'xxx@gmail.com',
         'Msg' => 'test message',
         'Host' => 'smtp.gmail.com',
         'Port' => '465',
         'SendGridKey' => 'xxx',
-        'Password' => 'pw',
-        'Username' => 'user'
+        'Password' => 'xx',
+        'Username' => 'xx@gmail.com'
     );
     return $mailConfig;
 }
