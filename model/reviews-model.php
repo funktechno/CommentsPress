@@ -32,14 +32,18 @@ function getPageStatus($slug)
     return $prodInfo;
 }
 
-function buildTree(array $elements, $parentId = 0)
+function buildTree(array $elements, $userId, $parentId = 0)
 {
 
     $branch = array();
 
     foreach ($elements as $element) {
+        // clean up userids that dont match
+        if($element['userId'] != $userId){
+            unset($element['userId']);
+        }
         if ($element['parentId'] == $parentId) {
-            $children = buildTree($elements, $element['id']);
+            $children = buildTree($elements, $userId, $element['id']);
 
             if ($children) {
                 $element['children'] = $children;
@@ -56,12 +60,12 @@ function buildTree(array $elements, $parentId = 0)
 /**
  * grab a pages reviews, maybe also grab unapproved one that user owns
  */
-function getPageComments($slug, $moderatedComments)
+function getPageComments($slug, $moderatedComments, $userId)
 {
     // TODO: see a logged in users unapproved comments, maybe separate call
     // see the logged in users deleted comments
     $db = acmeConnect();
-    $sql = 'SELECT c.id, c.commentText, c.parentId, u.displayName, c.created_at, c.updated_at, c.reviewed_at FROM comments c join pages p on c.pageId = p.id join users u on u.id = c.userId WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null';
+    $sql = 'SELECT c.id, c.commentText, c.parentId, u.displayName, c.created_at, c.updated_at, c.reviewed_at, c.userId FROM comments c join pages p on c.pageId = p.id join users u on u.id = c.userId WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null';
     if ($moderatedComments) {
         $sql .= ' and c.approved = 1';
     }
@@ -76,7 +80,7 @@ function getPageComments($slug, $moderatedComments)
     $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
 
-    $tree_1 = buildTree($prodInfo);
+    $tree_1 = buildTree($prodInfo, $userId);
 
     echo json_encode(
         $tree_1
