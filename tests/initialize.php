@@ -5,6 +5,7 @@ require_once 'library/functions.php';
 
 function resetDb()
 {
+    echo "\n:::Resetting db:::\n";
     $config = getConnConfig();
 
     // same config from docker
