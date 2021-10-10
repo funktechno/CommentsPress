@@ -36,7 +36,7 @@ function getConnConfig()
 {
     $config = array(
         'server' => "localhost",
-        'port' => "3306",
+        'port' => "33306",
         'dbname' => 'testcomments',
         'password' => 'mysecretpw',
         'username' => 'root'
