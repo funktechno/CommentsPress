@@ -35,7 +35,7 @@ function getFacebookSSO()
 function getConnConfig()
 {
     $config = array(
-        'server' => "localhost",
+        'server' => "127.0.0.1",
         'port' => "33306",
         'dbname' => 'testcomments',
         'password' => 'mysecretpw',
