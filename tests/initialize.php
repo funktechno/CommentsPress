@@ -5,6 +5,7 @@ require_once 'library/functions.php';
 
 function resetDb()
 {
+    echo "\n:::Resetting db:::\n";
     $config = getConnConfig();
 
     // same config from docker
@@ -98,6 +99,8 @@ function initData()
     }
 }
 
-resetDb();
+// sleep for 10 seconds
+// sleep(15);
+// resetDb();
 initSchema();
 initData();

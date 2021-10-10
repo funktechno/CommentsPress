@@ -20,9 +20,10 @@ define('Allowed_Methods', 'GET,POST');
 // jwt secret
 define('SECRET', 'SECRET');
 define('DEBUG', false);
-define('DEMO',true);
+define('DEMO', true);
 
-function getFacebookSSO(){
+function getFacebookSSO()
+{
     $facebookApp = array(
         'clientId'          => 'xxx',
         'clientSecret'      => 'xxx',
@@ -31,12 +32,15 @@ function getFacebookSSO(){
     );
     return $facebookApp;
 }
-function getConnConfig(){
+function getConnConfig()
+{
     $config = array(
-        'server' => 'localhost_mysql',
+        'server' => "127.0.0.1",
+        'port' => "33306",
         'dbname' => 'testcomments',
         'password' => 'mysecretpw',
         'username' => 'root'
+        // 'unix_socket' => '/tmp/mysql.sock'
     );
     return $config;
 }
@@ -48,10 +52,13 @@ function acmeConnect()
 
     // same config from docker
     $server = $config['server'];
-    $dbname = $config['dbname '];
+    $dbname = $config['dbname'];
     $password = $config['password'];
     $username = $config['username'];
-    $dsn = 'mysql:host=' . $server . ';dbname=' . $dbname;
+    // $socket = $config['unix_socket'];
+    // 'unix_socket=' . $socket . 
+    $port = $config["port"];
+    $dsn = 'mysql:host=' . $server . ';port=' . $port . ';dbname=' . $dbname;
     $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     // Create the actual connection object and assign it to a variable
     try {
@@ -63,12 +70,16 @@ function acmeConnect()
         $error = $e;
         // echo 'Sorry, the connection failed';
         // header('location: /view/500.php');
-        include $GLOBALS['root'] . 'view/500.php';
+        if (isset($GLOBALS['root']))
+            include $GLOBALS['root'] . 'view/500.php';
+        else
+            throw $error;
         exit;
     }
 }
 
-function getMailConfig(){
+function getMailConfig()
+{
     $mailConfig = array(
         'From' => 'xxx@gmail.com',
         'To' => 'xx@gmail.com',

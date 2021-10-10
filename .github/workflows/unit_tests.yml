@@ -39,14 +39,15 @@ jobs:
     # Service containers to run with `runner-job`
     services:
       # Label used to access the service container
-      redis:
+      mysql:
         # Docker Hub image
         image: mysql:5.7.29
         #
         ports:
-          - 3306:3306
+          - 33306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         env:
-          MYSQL_DATABASE: "mockDb"
+          MYSQL_DATABASE: "testcomments"
           MYSQL_ROOT_PASSWORD: "mysecretpw"
     steps:
       - uses: actions/checkout@v2
@@ -65,9 +66,16 @@ jobs:
           cp ./config/connections-github.php ./config/connections.php
           cp library/mailFunctions-sendGrid.php library/mailFunctions.php
           php ./tests/initialize.php
+        # Environment variables used by the `client.js` script to create a new PostgreSQL table.
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          MYSQL_HOST: localhost 
 
       - name: run tests
         run: vendor/bin/phpunit   
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          MYSQL_HOST: localhost 
 
       # - uses: php-actions/composer@v5
 
