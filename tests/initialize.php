@@ -100,7 +100,7 @@ function initData()
 }
 
 // sleep for 10 seconds
-sleep(15);
+// sleep(15);
 // resetDb();
 initSchema();
 initData();
