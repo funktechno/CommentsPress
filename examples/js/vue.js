@@ -18,8 +18,8 @@ Vue.component('comment-thread', {
             commentReply: null,
         }
     },
-    computed:{
-        pendingApproval(){
+    computed: {
+        pendingApproval() {
             return this.moderate_comments && this.comment.approved != '1';
         }
     },
@@ -56,12 +56,12 @@ Vue.component('comment-thread', {
                 body: this.body
             }
 
-            this.$emit("update:loading", true);
+            this.$root.$emit("comment-loading", true);
             // this.loading = true;
 
             this.$http.post("/comments/?action=mod", request, config).then((response) => {
                 // this.loading = false;
-                this.$emit("update:loading", false);
+                this.$root.$emit("comment-loading", false);
                 console.log(response)
                 if (response.status == 200) {
                     // const commentData = JSON.parse(JSON.stringify(this.comment));
@@ -72,14 +72,14 @@ Vue.component('comment-thread', {
                     // this.$emit("update:comment", commentData);
                 } else {
                     // this.errors = "Failure in updating comment";
-                    this.$emit("update:errors", "Failure in updating comment");
+                    this.$root.$emit("global-error", "Failure in updating comment");
                 }
             }).catch((error) => {
                 // this.errors = "Failed to updating comment";
-                this.$emit("update:errors", "Failed to update comment");
+                this.$root.$emit("global-error", "Failed to update comment");
                 console.log(error)
                 // this.loading = false;
-                this.$emit("update:loading", false);
+                this.$root.$emit("comment-loading", false);
 
             });
         },
@@ -103,7 +103,8 @@ Vue.component('comment-thread', {
             if (this.is_guest) {
                 request.guest = true;
             }
-            this.$emit("update:loading", true);
+            // this.$emit("update:loading", true);
+            this.$root.$emit("comment-loading", true);
             console.log(request)
             this.$http.post("/comments/?action=submit", request, config).then((response) => {
                 this.$emit("update:loading", false);
@@ -112,21 +113,24 @@ Vue.component('comment-thread', {
                 if (response.status == 201) {
                     this.showReply = false;
                     console.log(response.data);
-                    if(this.comment.children){
+                    if (this.comment.children) {
                         this.comment.children.push(response.data);
                     } else {
                         this.comment.children = [response.data]
                     }
                 } else {
-                    this.errors = "Failed read new reply"
+                    this.$root.$emit("global-error", "Failed read new reply");
                 }
             }).catch((error) => {
+                // debugger;
+                // data change up to root
                 if (error && error.data && error.data.errors)
-                    this.errors = error.data.errors;
+                    this.$root.$emit("global-error", error.data.errors);
                 else
-                    this.errors = "Failed to add reply"
+                    this.$root.$emit("global-error", "Failed to add reply");
                 console.log(error)
                 this.$emit("update:loading", false);
+                this.$root.$emit("comment-loading", false);
 
             });
         }
@@ -192,7 +196,7 @@ Vue.component('comment-thread', {
         </div>
     </article>
     <comment-thread v-if="showChildren" :key="c.id" :moderate_comments="moderate_comments" :slug="slug"
-        v-for="c in comment.children" :errors.sync="errors" :user_data="user_data" :is_guest="is_guest"
+        v-for="c in comment.children" :errors="errors" :loading="loading" :user_data="user_data" :is_guest="is_guest"
         :comment.sync="c" :level='level+1' />
     <div class="thread__collapse" role="button" tabindex="0">
         <div></div>
@@ -362,6 +366,12 @@ var app = new Vue({
 
             });
         },
+        updateLoadingComment(n) {
+            this.loading.comments = n;
+        },
+        updateErrors(n){
+            this.errors = n;
+        },
         login() {
             if (this.isGuest || this.userData != null)
                 return;
@@ -469,5 +479,8 @@ var app = new Vue({
         this.threadId = Cookies.get('thread');
         if (this.threadId)
             this.getConversation();
+
+        this.$root.$on('comment-loading', this.updateLoadingComment)
+        this.$root.$on('global-error', this.updateErrors)
     }
 })
