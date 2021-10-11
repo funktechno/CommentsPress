@@ -27,7 +27,7 @@ if (!isset($input)) // if null then set to $_POST for simple posts
 $directoryURI = $_SERVER['REQUEST_URI'];
 switch ($action) {
     case 'submit':
-        $email = $input['email'];
+        $email = htmlentities($input['email'], ENT_QUOTES);
         $body = $input['body'];
         $subject = $input['subject'];
 

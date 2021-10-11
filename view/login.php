@@ -25,7 +25,7 @@ include '../common/head.php';
         <label>Email Address *</label>
 
         <br>
-        <input name="clientEmail" class="long" id="clientEmail" type="email" <?php echo (isset($clientEmail)) ? "value='$clientEmail'" : "" ?> required>
+        <input name="clientEmail" class="long" id="clientEmail" type="email" <?php echo htmlentities(isset($clientEmail) ? "value='$clientEmail'" : "") ?> required>
         <br>
         <label>Password *</label>
         <br>
