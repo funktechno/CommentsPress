@@ -157,6 +157,13 @@ var app = new Vue({
             this.userData = null
             this.isGuest = false
         },
+        canComment(){
+            if(this.pageResult && this.pageResult.page){
+                const page = this.pageResult.page;
+                return page.lockedComments != '1' && (page.manualPages == "true" || page.exists);
+            }
+            return false;
+        },
         submitMessage() {
             if (this.loading.form) {
                 return;

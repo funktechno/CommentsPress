@@ -96,10 +96,10 @@
                 <div class="comment-form__control-panel">
 
                 </div>
-                <div class="comment-form__field-wrapper" v-if="pageResult">
+                <div class="comment-form__field-wrapper" v-show="canComment()" style="display: none;">
                     <textarea id="textarea_1" class="comment-form__field" :readonly="loading.general || loading.comments" v-model="newComment.text" placeholder="Your comment here" spellcheck="true" style="height: 109px;"></textarea>
                 </div>
-                <div class="comment-form__actions">
+                <div class="comment-form__actions" v-show="canComment()" style="display: none;">
                     <div v-show="isGuest || userData != null" style="display: none;">
                         <button style="display: none;" class="button button_kind_secondary button_size_large button_theme_light comment-form__button" type="button">Preview</button>
                         <button class="button button_kind_primary button_size_large comment-form__button" v-on:click="addComment" type="submit">Send</button>
@@ -151,6 +151,9 @@
                     </div>
                     <!-- <div class="comment-form__markdown">Styling with <a class="comment-form__markdown-link"
                                     target="_blank" href="markdown-help.html">Markdown</a> is supported</div> -->
+                </div>
+                <div class="comment-form__field-wrapper" v-show="pageResult && !canComment()" style="display: none;">
+                    Comments are locked for this page.
                 </div>
                 <div class="root__pinned-comments" role="region" aria-label="Pinned comments">
                     <article class="comment comment_disabled comment_pinned comment_guest comment_view_admin comment_theme_light root__pinned-comment">
