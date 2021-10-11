@@ -185,7 +185,7 @@
                     </div>
                 </div>
                 <div class="root__threads" role="list" v-if="pageResult">
-                    <comment-thread v-show="pageResult.comments.length > 0" :moderate_comments="pageResult.page && pageResult.page.moderateComments == 'true'" v-bind:loading.sync="loading.comments" :is_guest="isGuest" :key="c.id" :user_data="userData" v-for="c in pageResult.comments" v-bind:comment.sync="c" v-bind:errors.sync="errors" level=0 style="display: none;" />
+                    <comment-thread v-show="pageResult.comments.length > 0" :moderate_comments="pageResult.page && pageResult.page.moderateComments == 'true'" v-bind:loading.sync="loading.comments"  :slug="pageSlug" :is_guest="isGuest" :key="c.id" :user_data="userData" v-for="c in pageResult.comments" v-bind:comment.sync="c" v-bind:errors.sync="errors" level=0 style="display: none;" />
                 </div>
 
             </div>

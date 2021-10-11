@@ -5,6 +5,7 @@ Vue.component('comment-thread', {
         'level',
         'is_guest',
         'user_data',
+        'slug',
         "errors",
         "moderate_comments"
     ],
@@ -13,7 +14,13 @@ Vue.component('comment-thread', {
             edit: false,
             showReply: false,
             body: null,
-            showChildren: true
+            showChildren: true,
+            commentReply: null,
+        }
+    },
+    computed:{
+        pendingApproval(){
+            return this.moderate_comments && this.comment.approved != '1';
         }
     },
     methods: {
@@ -22,6 +29,15 @@ Vue.component('comment-thread', {
                 this.body = this.comment.commentText
             }
             this.edit = !this.edit;
+        },
+        toggleReply() {
+            if (!this.showReply) {
+                // reset response on each toggle
+                this.commentReply = {
+                    text: ""
+                }
+            }
+            this.showReply = !this.showReply;
         },
         updateComment() {
             if (this.loading)
@@ -81,7 +97,8 @@ Vue.component('comment-thread', {
             <img class="avatar-icon avatar-icon_theme_light comment__avatar" src="/images/no-image.png" alt="">
             <span role="button" tabindex="0" class="comment__username" :title="'anonymous_'+ comment.id">{{
                 comment.displayName }}</span>
-            <span role="button" v-if="moderate_comments && comment.approved != '1'" class="comment__score_view_negative">&nbsp;Pending Approval&nbsp;</span>
+            <span role="button" v-if="pendingApproval"
+                class="comment__score_view_negative">&nbsp;Pending Approval&nbsp;</span>
             <a class="comment__time">{{comment.updated_at}}</a>
             <a class="comment__link-to-parent" target="_blank" :href="'./comment/'+comment.parentId"
                 aria-label="Go to parent comment" title="Go to parent comment">
@@ -104,8 +121,8 @@ Vue.component('comment-thread', {
                     v-on:click="updateComment()" type="submit">Send</button>
             </div>
             <div class="comment__actions">
-                <button v-if="user_data" class="button button_kind_link comment__action" type="button" role="button"
-                    tabindex="0">Reply</button>
+                <button v-if="user_data && !pendingApproval" class="button button_kind_link comment__action" type="button" role="button" v-on:click="toggleReply"
+                    tabindex="0">{{ showReply ? 'Cancel' : 'Reply' }}</button>
                 <button class="button button_kind_link comment__action" type="button" role="button"
                     v-if="user_data && comment.userId == user_data.userInfo.id" v-on:click="toggleEdit()"
                     tabindex="0">Edit</button>
@@ -115,9 +132,24 @@ Vue.component('comment-thread', {
                         'Show'}}</button></span>
             </div>
         </div>
+        <div class="comment-form comment-form_theme_light comment-form_type_reply comment__input"
+            aria-label="New comment" v-if="showReply">
+            <div class="comment-form__field-wrapper">
+                <textarea :id="'textarea_' + comment.id" v-model="commentReply.text" class="comment-form__field" placeholder="Your comment here" autofocus=""
+                    spellcheck="true" style="height: 109px;"></textarea>
+            </div>
+            <div class="comment-form__actions">
+                <div>
+                    <button class="button button_kind_primary button_size_large comment-form__button"
+                        v-on:click="replyComment"
+                        type="submit">Reply</button>
+                </div>
+            </div>
+        </div>
     </article>
-    <comment-thread v-if="showChildren" :key="c.id" :moderate_comments="moderate_comments" v-for="c in comment.children" :errors.sync="errors"
-        :user_data="user_data" :is_guest="is_guest" :comment.sync="c" :level='level+1' />
+    <comment-thread v-if="showChildren" :key="c.id" :moderate_comments="moderate_comments" :slug="slug"
+        v-for="c in comment.children" :errors.sync="errors" :user_data="user_data" :is_guest="is_guest"
+        :comment.sync="c" :level='level+1' />
     <div class="thread__collapse" role="button" tabindex="0">
         <div></div>
     </div>
