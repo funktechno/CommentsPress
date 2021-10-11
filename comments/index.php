@@ -213,6 +213,11 @@ switch ($action) {
             if ($parentComment['pageId'] != $pageData['id']) {
                 $errorStatus->response(400, "Parent comment must be of the same page.");
             }
+            // if moderated parent comment must be approved to add
+            $moderatedComments = $pageData['moderateComments'] == 'true' && $parentComment['approved'] != 1;
+            if($moderatedComments){
+                $errorStatus->response(400, "Parent comment must be approved to reply to.");
+            }
             if ((!isset($pageData['unlimitedReplies']) ||
                 $pageData['unlimitedReplies'] != 'true')) {
                 if (isset($parentComment['parentId'])) {
