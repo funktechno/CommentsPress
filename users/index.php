@@ -31,7 +31,7 @@ if (!isset($input)) // if null then set to $_POST for simple posts
 $directoryURI = $_SERVER['REQUEST_URI'];
 switch ($action) {
     case 'login':
-        $clientEmail = $input['email'];
+        $clientEmail = htmlentities($input['email'], ENT_QUOTES);
         $clientPassword = $input['password'];
         $clientEmail = checkEmail($clientEmail);
         $checkPassword = checkPassword($clientPassword);
@@ -86,7 +86,7 @@ switch ($action) {
         break;
     case 'register':
         $clientDisplayName = $input['displayName'];
-        $clientEmail = $input['email'];
+        $clientEmail = htmlentities($input['email'], ENT_QUOTES);
         $clientPassword = $input['password'];
         // echo $clientEmail;
         // echo $clientDisplayName;
