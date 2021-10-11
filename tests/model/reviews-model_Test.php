@@ -22,10 +22,11 @@ class reviews_modelTest extends TestCase
         $moderatedComments = false;
         $isAdmin = true;
         $userId = null;
-        $comments = getPageComments($slug, $moderatedComments, $userId, $isAdmin);
+        $result = getPageComments($slug, $moderatedComments, $userId, $isAdmin);
         // $expected = array();
         // $this->assertEquals($expected, $comments);
-        $this->assertEquals(18, count($comments));
+        $this->assertEquals(6, count($result));
+        // $this->assertEquals('[]',json_encode($result));
     }
 
     public function testgetPageStatus()

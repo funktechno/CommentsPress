@@ -33,7 +33,7 @@ function getPageStatus($slug)
     return $prodInfo;
 }
 
-function buildTree(array $elements, $userId, $parentId = 0)
+function buildTree(array $elements, $userId, $parentId = "")
 {
 
     $branch = array();
@@ -43,7 +43,7 @@ function buildTree(array $elements, $userId, $parentId = 0)
         if ($element['userId'] != $userId) {
             unset($element['userId']);
         }
-        if ($element['parentId'] == $parentId) {
+        if ((empty($parentId) && empty($element['parentId'])) || (!empty($element['parentId']) && !empty($parentId) && $element['parentId'] == $parentId)) {
             $children = buildTree($elements, $userId, $element['id']);
 
             if ($children) {

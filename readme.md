@@ -39,6 +39,7 @@
 * `composer install` also see `.github/workflows/unit_tests.yml`
 * `php tests/initialize.php` uncomment `resetDb();`
 * `./vendor/bin/phpunit` or `.\vendor\bin\phpunit`
+  * `.\vendor\bin\phpunit --filter testPageComments`
 
 ## documentation
 * see `rest` folder for api endpoints on creating comments and registering
