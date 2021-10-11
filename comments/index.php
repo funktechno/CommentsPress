@@ -112,6 +112,7 @@ switch ($action) {
     case 'get':
         $token = getBearerToken();
         $userId = null;
+        $isAdmin = false;
         if (!empty($token)) {
             $payload = getJwtPayload($token);
             $clientData = getClient($payload['email']);
@@ -120,6 +121,8 @@ switch ($action) {
                 $errorStatus->response(400, "Invalid user or password");
             }
             $userId = $clientData['id'];
+            // check user role
+            $isAdmin = $clientData['clientLevel'] == 3;
         }
         // echo $payload;
         // exit;
@@ -128,22 +131,18 @@ switch ($action) {
         if (empty($slug)) {
             $errorStatus->response(400, "page slug field is required");
         }
-        $configCondition = getConfigData('moderateComments');
 
-        $moderatedComments = true;
-        if ($configCondition && $configCondition['data'] != 'true') {
-            $moderatedComments = false;
-        }
-        // check if moderate
-        // echo json_encode($configCondition);
         $pageData = getPageStatus($slug);
+        // only check config if moderated is true
+        // check if moderate
+        $moderatedComments =  $pageData['moderateComments'] == 'true';
         if ($pageData['id'] != null)
             $pageData['exists'] = true;
-        unset($pageData['id']);
         // remove id
-        // exit();
+        unset($pageData['id']);
+
         // recursively updated comments w/ child comments
-        $comments = getPageComments($slug, $moderatedComments, $userId);
+        $comments = getPageComments($slug, $moderatedComments, $userId, $isAdmin);
 
         $result = array(
             'comments' => $comments,
@@ -163,10 +162,9 @@ switch ($action) {
         }
         $userId = $clientData['id'];
 
-        $slug = $input['slug'];
-        // $pageId = $input['pageId'];
+        $slug = isset($input['slug']) ? $input['slug'] : "";
         $parentId = isset($input['parentId']) ? $input['parentId'] : null;
-        $body = $input['body'];
+        $body = isset($input['body']) ? $input['body'] : "";
 
         if (empty($userId) || empty($slug) || empty($body)) {
             $errorStatus->response(400, "page slug and body fields are required");

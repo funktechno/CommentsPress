@@ -21,9 +21,10 @@ function getPageStatus($slug)
     $db = acmeConnect();
     $sql = 'SELECT (SELECT c.data FROM configuration  c WHERE c.name = "manualPages") as "manualPages",
     (SELECT c.data FROM configuration  c WHERE c.name = "unlimitedReplies") as "unlimitedReplies",
+    (SELECT c.data FROM configuration  c WHERE c.name = "moderateComments") as "moderateComments",
     (SELECT p.id FROM pages p WHERE p.slug = :slug) as id,
     (SELECT p.deleted_at FROM pages p WHERE p.slug = :slug) as deletedAt,
-    (SELECT p.lockedcomments FROM pages p WHERE p.slug = :slug) as lockedComments';
+    (SELECT p.lockedComments FROM pages p WHERE p.slug = :slug) as lockedComments';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
     $stmt->execute();
@@ -39,7 +40,7 @@ function buildTree(array $elements, $userId, $parentId = 0)
 
     foreach ($elements as $element) {
         // clean up userids that dont match
-        if($element['userId'] != $userId){
+        if ($element['userId'] != $userId) {
             unset($element['userId']);
         }
         if ($element['parentId'] == $parentId) {
@@ -60,22 +61,29 @@ function buildTree(array $elements, $userId, $parentId = 0)
 /**
  * grab a pages reviews, maybe also grab unapproved one that user owns
  */
-function getPageComments($slug, $moderatedComments, $userId)
+function getPageComments($slug, $moderatedComments, $userId, $isAdmin)
 {
-    // TODO: see a logged in users unapproved comments, maybe separate call
+    // see a logged in users unapproved comments, maybe separate call
     // see the logged in users deleted comments
     $db = acmeConnect();
-    $sql = 'SELECT c.id, c.commentText, c.parentId, u.displayName, c.created_at, c.updated_at, c.reviewed_at, c.userId FROM comments c join pages p on c.pageId = p.id join users u on u.id = c.userId WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null';
-    if ($moderatedComments) {
-        $sql .= ' and c.approved = 1';
+    $approvedText = $moderatedComments ? "c.approved, c.reviewed_at, " : "";
+    $sql = 'SELECT c.id, c.commentText, c.parentId, u.displayName, ' . $approvedText . 'c.created_at, c.updated_at, c.userId 
+        FROM comments c join pages p on c.pageId = p.id join users u on u.id = c.userId WHERE p.slug = :slug and p.deleted_at  is null and c.deleted_at is null';
+    // if not admin and moderated query by approved or user id
+    if (!$isAdmin && $moderatedComments) {
+        if (isset($userId)) {
+            $sql .= ' and (c.approved = 1 or c.userId = :userId)';
+        } else {
+            $sql .= ' and c.approved = 1';
+        }
     }
 
     $sql .= ' order by c.created_at asc';
-
-    // echo $sql;
-    // exit;
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
+    if (!$isAdmin && $moderatedComments && isset($userId)) {
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+    }
     $stmt->execute();
     $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();

@@ -94,7 +94,7 @@ Vue.component('comment-thread', {
                 <button class="button button_kind_primary button_size_large comment-form__button" v-on:click="updateComment()" type="submit">Send</button>
             </div>
             <div class="comment__actions">
-                <button class="button button_kind_link comment__action" type="button" role="button"
+                <button v-if="user_data" class="button button_kind_link comment__action" type="button" role="button"
                     tabindex="0">Reply</button>
                 <button class="button button_kind_link comment__action" type="button" role="button"
                     v-if="user_data && comment.userId == user_data.userInfo.id"
@@ -155,10 +155,11 @@ var app = new Vue({
     methods: {
         logout() {
             this.userData = null
-            this.isGuest = false
+            this.isGuest = false;
+            this.getComments();
         },
-        canComment(){
-            if(this.pageResult && this.pageResult.page){
+        canComment() {
+            if (this.pageResult && this.pageResult.page) {
                 const page = this.pageResult.page;
                 return page.lockedComments != '1' && (page.manualPages == "true" || page.exists);
             }
@@ -262,10 +263,14 @@ var app = new Vue({
                     // this.$set()
                     // this.comments = response.data;
                 } else {
-                    this.errors = "Failed to load comments"
+                    this.errors = "Failed read new comment"
                 }
             }).catch((error) => {
-                this.errors = "Failed to get comments"
+                // TODO; make error parse a standard function
+                if (error && error.data && error.data.errors)
+                    this.errors = error.data.errors;
+                else
+                    this.errors = "Failed to add comment"
                 console.log(error)
                 this.loading.general = null;
 

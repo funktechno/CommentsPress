@@ -80,7 +80,7 @@ CREATE TABLE `pages` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME NULL,
-  `lockedcomments` TINYINT NULL,
+  `lockedComments` TINYINT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pages_slug_unique` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;

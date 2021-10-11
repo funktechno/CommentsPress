@@ -37,7 +37,7 @@ class reviews_modelTest extends TestCase
             'unlimitedReplies' => 'false',
             'id' => null,
             'deleted_at' => null,
-            'lockedcomments' => '0'
+            'lockedComments' => '0'
         );
         $this->assertEquals($expected, $result);
     }
