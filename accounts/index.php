@@ -11,33 +11,17 @@ if ($action == NULL) {
 }
 $GLOBALS['root'] = "../";
 // Get the database connection file
-require_once '../library/connections.php';
+require_once '../config/connections.php';
 require_once '../library/functions.php';
 // Get the acme model for use as needed
+require_once '../model/form-model.php';
 require_once '../model/accounts-model.php';
 require_once '../model/pages-model.php';
 require_once '../model/reviews-model.php';
 require_once '../model/configuration-model.php';
 
 
-// Get the array of categories
-// $categories = getCategories();
-// var_dump($categories);
-// exit;
-
-// Build a navigation bar using the $categories array
 $directoryURI = $_SERVER['REQUEST_URI'];
-// $navList = getNavList($categories, $directoryURI);
-
-// echo $navList;
-// exit;
-
-// if ($action == NULL) {
-//     include 'view/home.php';
-//     exit;
-// }
-// echo $action;
-// exit();
 
 switch ($action) {
     case 'registration':
@@ -48,12 +32,10 @@ switch ($action) {
         // destroy session
         session_destroy();
         session_start();
-        // include '../view/login.php';
         header('location: /');
         break;
     case 'register_user':
         // echo 'You are in the register case statement.';
-        // $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
         $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
         $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
         $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
@@ -70,11 +52,6 @@ switch ($action) {
             include '../view/login.php';
             exit;
         }
-        // else {
-        //     //return 1;
-        //     echo 'Match found';
-        //     exit;
-        // }
         if (empty($clientDisplayName) || empty($clientEmail) || empty($checkPassword)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
             include '../view/registration.php';
@@ -158,26 +135,10 @@ switch ($action) {
         $_SESSION['clientData'] = $clientData;
         // Send them to the admin view
         include '../view/admin.php';
-        exit;
 
         break;
-        // case 'home':
-        //     include 'view/home.php';
-        //     break;
-        // case 'template':
-        //     include 'template/template.php';
-
-        //     break;
     case 'modClient':
-        // $clientId = filter_input(INPUT_GET, 'clientId', FILTER_VALIDATE_INT);
         $clientId = $_SESSION['clientData']['id'];
-
-        // $prodInfo = getProductInfo($invId);
-        // if (count($prodInfo) < 1) {
-        //     $_SESSION['message'] = '<p class="error">Sorry, no product information could be found.</p>';
-        //     header('location: /acme/products/');
-        //     exit;
-        // }
         include '../view/client-update.php';
         break;
     case 'updateClient':
@@ -185,6 +146,7 @@ switch ($action) {
             include '../view/client-update.php';
             exit();
         }
+        // only allow display name update
         $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
         // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
         // $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
@@ -232,12 +194,7 @@ switch ($action) {
             include '../view/admin.php';
             exit();
         }
-        // echo 'test1';
-        // echo 'test55';
         $formEmails = getContactFormEmails();
-        // echo json_encode($formEmails);
-        // echo 'test2';
-        // exit;
         $sentEmail = sentTestEmail($formEmails);
         echo $sentEmail;
         // send email
@@ -353,10 +310,7 @@ switch ($action) {
         $configInput = [];
         $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
-        // $configInput['userId'] = $_SESSION['clientData']['id'];
         $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-        // echo json_encode($configInput);
-        // exit();
         try {
             $updateResult = updateConfig(
                 $configInput
@@ -375,12 +329,10 @@ switch ($action) {
 
         if ($updateResult) {
             $message = "<p class='notice'>Config " . $configInput['id'] . " was updated successfuly.</p>";
-            $_SESSION['message'] = $message;
-            // header('location: /acme/accounts/');
-            // exit;
         } else {
             $message = "<p class='notice'>Error. Updating config " . $configInput['id'] . ".</p>";
         }
+        $_SESSION['message'] = $message;
 
         include '../view/updateConfig.php';
         break;
@@ -411,13 +363,11 @@ switch ($action) {
 
         if ($updateResult) {
             $message = "<p class='notice'>Config " . $configInput['slug'] . " was added successfuly.</p>";
-            $_SESSION['message'] = $message;
-            // header('location: /acme/accounts/');
-            // exit;
         } else {
             $message = "<p class='notice'>Error. Adding page " . $configInput['slug'] . ".</p>";
-            $_SESSION['message'] = $message;
         }
+        $_SESSION['message'] = $message;
+
         include '../view/managePages.php';
         break;
     case 'addConfigData':
@@ -435,24 +385,23 @@ switch ($action) {
         } catch (\Throwable $th) {
             if (isset($th->errorInfo)) {
                 $message = "<p class='notice'>Error. Adding config " . $configInput['name'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
-                $_SESSION['message'] = $message;
             } else {
                 $message = "<p class='notice'>Error. Adding config " . $configInput['name'] . ".</p>";
-                $_SESSION['message'] = $message;
             }
+            $_SESSION['message'] = $message;
+
             include '../view/updateConfig.php';
             exit();
         }
 
         if ($updateResult) {
             $message = "<p class='notice'>Config " . $configInput['name'] . " was added successfuly.</p>";
-            $_SESSION['message'] = $message;
-            // header('location: /acme/accounts/');
-            // exit;
         } else {
             $message = "<p class='notice'>Error. Adding config " . $configInput['name'] . ".</p>";
             $_SESSION['message'] = $message;
         }
+        $_SESSION['message'] = $message;
+
         include '../view/updateConfig.php';
         break;
     case 'contactForms':
@@ -466,17 +415,10 @@ switch ($action) {
             include '../view/client-update.php';
             exit();
         }
-        // $clientFirstname = filter_input(INPUT_POST, 'clientFirstname', FILTER_SANITIZE_STRING);
-        // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
-        // $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
         $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
 
         // validate
-        // $clientEmail = checkEmail($clientEmail);
         $checkPassword = checkPassword($clientPassword);
-
-        // $existingEmail = checkExistingEmail($clientEmail);
-        // $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
         $clientId = $_SESSION['clientData']['id'];
         if (empty($checkPassword)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';

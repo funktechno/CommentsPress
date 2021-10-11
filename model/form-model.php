@@ -17,3 +17,15 @@ function submitForm($subject, $body, $email)
     // Return the indication of success (rows changed)
     return $rowsChanged;
 }
+
+
+function getContactForms()
+{
+    $db = acmeConnect();
+    $sql = 'SELECT f.* FROM contactForms as f;';
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $prodInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $prodInfo;
+}

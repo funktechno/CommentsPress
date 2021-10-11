@@ -1,0 +1,18 @@
+### get thread
+POST http://127.0.0.1:8000/conversations/?action=get HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "threadId": "effba2487ece11eb8e3a0242ac110002"
+}
+
+### sendmessage, pass null threadId to start a new conversation
+POST http://127.0.0.1:8000/conversations/?action=submit HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "threadId": null,
+    "message": "test comment"
+}

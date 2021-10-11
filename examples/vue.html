@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- this will be broken if there are any echos before the head -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/site/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/site/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/site/favicon-16x16.png">
+    <link rel="manifest" href="/images/site/site.webmanifest">
+    <link rel="mask-icon" href="/images/site/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>
+        CommentPress Vue Example
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile.css" media="screen and (max-width: 585px)">
+    <link rel="stylesheet" href="./css/remark.css">
+    <link rel="stylesheet" href="./css/styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+</head>
+
+<body>
+    <div class="">
+        <h2>Comment Press Vue Example</h2>
+        <a href=. />home</a>
+        <div id="comments">
+            <div v-show="errors" style="display: none;">
+                {{ errors }}
+            </div>
+            <div v-show="status" style="display: none;">
+                {{ status }}
+            </div>
+            <div v-show="example == 'form'" style="display: none;">
+                <h3>Contact Form Example</h3>
+                <div class="lds-ellipsis" v-show="loading.form" style="display: none;">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <button v-on:click="example = 'comments'">Comments</button>
+
+                <label>Subject</label>
+                <br>
+                <input type="text" v-model="form.subject" name="subject" id="subject" required>
+                <br>
+                <label>Email</label>
+                <br>
+                <input type="email" v-model="form.email" name="email" id="email" required>
+                <br>
+                <label>Message</label>
+                <br>
+                <textarea v-model="form.body" name="message" id="message" required>
+                    </textarea>
+                <br>
+                <button v-on:click="submitMessage()">Submit</button>
+
+            </div>
+            <div v-show="example=='comments' && (userData!=null || isGuest)" class=" auth-panel auth-panel_theme_light auth-panel_logged-in" style="display: none;">
+
+                <div class=" auth-panel__column" v-if="userData!=null || isGuest">You logged in as
+                    <div class="dropdown dropdown_theme_light">
+                        <span v-if="isGuest">Guest</span>
+                        <button v-else class="button button_kind_link button_theme_light dropdown__title auth-panel__user-dropdown-title" type="button" aria-haspopup="listbox" aria-expanded="false">
+                            {{ userData.userInfo.displayName }}
+                        </button>
+                    </div> <button class="button button_kind_link button_theme_light" type="button" v-on:click="logout()">Logout?</button>
+                </div>
+                <div class="auth-panel__column"><button class="button button_kind_link auth-panel__admin-action" type="button" role="link" tabindex="0">Show settings</button> • <span class="auth-panel__sort">Sort
+                        by <span class="auth-panel__select-label"><span class="auth-panel__select-label-value">Recently
+                                updated</span><select class="auth-panel__select">
+                                <option value="-score">Best</option>
+                                <option value="+score">Worst</option>
+                                <option value="-time">Newest</option>
+                                <option value="+time">Oldest</option>
+                                <option value="-active">Recently updated</option>
+                                <option value="+active">Least recently updated</option>
+                                <option value="-controversy">Most controversial</option>
+                                <option value="+controversy">Least controversial</option>
+                            </select></span>
+                    </span>
+                </div>
+            </div>
+            <div v-show="example=='comments'" class="root__main">
+                <button v-on:click="example = 'form'">Contact Form</button>
+
+                <div class="comment-form__control-panel">
+
+                </div>
+                <div class="comment-form__field-wrapper" v-show="canComment()" style="display: none;">
+                    <textarea id="textarea_1" class="comment-form__field" :readonly="loading.general || loading.comments" v-model="newComment.text" placeholder="Your comment here" spellcheck="true" style="height: 109px;"></textarea>
+                </div>
+                <div class="comment-form__actions" v-show="canComment()" style="display: none;">
+                    <div v-show="isGuest || userData != null" style="display: none;">
+                        <button style="display: none;" class="button button_kind_secondary button_size_large button_theme_light comment-form__button" type="button">Preview</button>
+                        <button class="button button_kind_primary button_size_large comment-form__button" v-on:click="addComment" type="submit">Send</button>
+                    </div>
+                    <div class="auth auth-module__root_641f4" v-show="!(isGuest || userData != null)">
+                        <button v-on:click="modal.signIn = !modal.signIn" class="auth-button button-module__button_b7044">Sign
+                            In
+                            <div class="button-module__suffix_6ab7b">
+                                <svg width="14" height="14" viewBox="0 0 28 28" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 11.5L14.5 19L22 11" stroke="currentColor" stroke-width="4"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <div v-show="modal.signIn" class="auth-dropdown auth-module__dropdown_cf466" style="display: none;">
+                            <h5 class="auth-form-title auth-module__title_f76db">Use Social Network</h5>
+                            <ul class="oauth oauth-module__root_c133c">
+                                <li class="oauth-item oauth-module__item_3b36c">
+                                    <a target="_blank" rel="noopener noreferrer" href="/auth/google/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark" class="oauth-button oauth-module__button_0d123" data-provider-name="Google" title="Sign In with Google"><img class="oauth-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE5IDEwLjJjMC0uNiAwLTEuMi0uMi0xLjhoLTguNnYzLjRoNWE0LjIgNC4yIDAgMDEtMS45IDIuOHYyLjJoM2E4LjcgOC43IDAgMDAyLjctNi42eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xMC4yIDE5YzIuNSAwIDQuNS0uOCA2LTIuMmwtMi45LTIuMmMtLjguNS0xLjkuOC0zLjEuOEE1LjUgNS41IDAgMDE1IDExLjdIMlYxNGMxLjUgMyA0LjcgNSA4LjIgNXoiIGZpbGw9IiMzNEE4NTMiLz48cGF0aCBkPSJNNSAxMS43YTUuMyA1LjMgMCAwMTAtMy40VjZIMmE4LjggOC44IDAgMDAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA0Ii8+PHBhdGggZD0iTTEwLjIgNC42YTUgNSAwIDAxMy41IDEuM2wyLjYtMi42QTkuMiA5LjIgMCAwMDIgNmwzIDIuNGE1LjUgNS41IDAgMDE1LjItMy43eiIgZmlsbD0iI0VBNDMzNSIvPjwvc3ZnPgo="
+                                            width="20" height="20" alt="" aria-hidden="true"></a>
+                                </li>
+                                <li class="oauth-item oauth-module__item_3b36c">
+                                    <a target="_blank" rel="noopener noreferrer" href="/auth/github/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark" class="oauth-button oauth-module__button_0d123" data-provider-name="GitHub" title="Sign In with GitHub"><img class="oauth-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTYuNyAxNi4xbC0uMi4yYy0uMiAwLS4yLS4xLS4yLS4ybC4yLS4xLjIuMXptLTEuMy0uMmMwIC4xIDAgLjIuMi4ySDZjMC0uMSAwLS4yLS4yLS4zbC0uMy4xem0xLjggMGMtLjEgMC0uMiAwLS4yLjJoLjNsLjItLjEtLjMtLjJ6TTEwIDBBOS44IDkuOCAwIDAwMCAxMGMwIDQuNyAyLjggOC42IDYuOCAxMCAuNiAwIC43LS4yLjctLjV2LTIuNnMtMi44LjctMy40LTEuMmMwIDAtLjUtMS4yLTEuMS0xLjUgMCAwLTEtLjcgMC0uNiAwIDAgMSAwIDEuNiAxIC45IDEuNiAyLjQgMS4yIDMgLjkgMC0uNy4zLTEuMS42LTEuNC0yLjMtLjMtNC41LS42LTQuNS00LjYgMC0xLjEuMy0xLjcgMS0yLjRhNCA0IDAgMDEwLTIuOGMuOS0uMyAyLjggMS4xIDIuOCAxLjFhOS4zIDkuMyAwIDAxNSAwczItMS40IDIuOC0xLjFhNCA0IDAgMDEuMiAyLjhjLjYuNyAxIDEuMyAxIDIuNCAwIDQtMi40IDQuMy00LjYgNC42LjMuMy42IDEgLjYgMnYzLjRjMCAuMi4yLjYuNy41IDQtMS40IDYuOC01LjMgNi44LTEwQTEwIDEwIDAgMDA5LjkgMHptLTYgMTQuM3YuMmguM3YtLjJoLS4zem0tLjQtLjR2LjJoLjNsLS4xLS4yaC0uMnptMS4zIDEuNXYuM2guM3YtLjNoLS4zem0tLjUtLjZ2LjJjLjEuMS4yLjIuMy4xVjE1Yy0uMS0uMS0uMi0uMi0uMy0uMXoiIGZpbGw9IiMwMDAiLz48L3N2Zz4K"
+                                            width="20" height="20" alt="" aria-hidden="true"></a>
+                                </li>
+                                <li class="oauth-item oauth-module__item_3b36c">
+                                    <a target="_blank" rel="noopener noreferrer" href="/auth/facebook/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark" class="oauth-button oauth-module__button_0d123" data-provider-name="Facebook" title="Sign In with Facebook"><img class="oauth-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAgMTAuMDYwOUMyMCA0LjUwMzA0IDE1LjUyNDIgMCAxMCAwQzQuNDc1ODEgMCAwIDQuNTAzMDQgMCAxMC4wNjA5QzAgMTUuMDgyNCAzLjY1Njg2IDE5LjI0NDYgOC40Mzc1IDIwVjEyLjk2OTJINS44OTcxOFYxMC4wNjA5SDguNDM3NVY3Ljg0NDIyQzguNDM3NSA1LjMyMjkyIDkuOTI5NDQgMy45MzAyMiAxMi4yMTQ1IDMuOTMwMjJDMTMuMzA4OSAzLjkzMDIyIDE0LjQ1MzIgNC4xMjY1NyAxNC40NTMyIDQuMTI2NTdWNi42MDEyMkgxMy4xOTE5QzExLjk1IDYuNjAxMjIgMTEuNTYyNSA3LjM3Njg4IDExLjU2MjUgOC4xNzI0MVYxMC4wNjA5SDE0LjMzNTlMMTMuODkyMyAxMi45NjkySDExLjU2MjVWMjBDMTYuMzQzMSAxOS4yNDQ2IDIwIDE1LjA4MjQgMjAgMTAuMDYwOVoiIGZpbGw9IiMwQTgyRUQiLz48L3N2Zz4K"
+                                            width="20" height="20" alt="" aria-hidden="true"></a>
+                                </li>
+                                <li class="oauth-item oauth-module__item_3b36c">
+                                    <a target="_blank" rel="noopener noreferrer" href="/auth/twitter/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark" class="oauth-button oauth-module__button_0d123" data-provider-name="Twitter" title="Sign In with Twitter"><img class="oauth-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE3Ljk0IDUuNTRjLjAyLjIuMDIuNC4wMi41OCAwIDUuOTQtNC4xMyAxMi43Ny0xMS42NyAxMi43Ny0yLjMyIDAtNC40OC0uNzQtNi4yOS0yLjAyYTcuNzcgNy43NyAwIDAwNi4wOC0xLjg2IDQuMTcgNC4xNyAwIDAxLTMuODMtMy4xIDMuOTkgMy45OSAwIDAwMS44NS0uMDhBNC40IDQuNCAwIDAxLjggNy40di0uMDZjLjU1LjMzIDEuMTguNTQgMS44NS41N2E0Ljc4IDQuNzggMCAwMS0xLjI3LTYgMTEuMzUgMTEuMzUgMCAwMDguNDYgNC43Yy0uMDctLjM0LS4xLS42OS0uMS0xLjAzIDAtMi40OCAxLjgyLTQuNDkgNC4xLTQuNDkgMS4xOCAwIDIuMjQuNTQgMi45OSAxLjQyLjkzLS4yIDEuODEtLjU3IDIuNi0xLjA5YTQuNDIgNC40MiAwIDAxLTEuOCAyLjQ4Yy44Mi0uMSAxLjYyLS4zNSAyLjM2LS43YTkuMzEgOS4zMSAwIDAxLTIuMDYgMi4zMnoiIGZpbGw9IiMxREExRjIiLz48L3N2Zz4K"
+                                            width="20" height="20" alt="" aria-hidden="true"></a>
+                                </li>
+                            </ul>
+                            <div class="auth-divider auth-module__divider_1fe73" title="or"></div>
+                            <div class="auth-tabs auth-module__tabs_c4203"><input class="auth-module__radio_02e79" type="radio" id="form-provider-email" v-model="modal.type" name="form-provider" value="email"><label class="auth-tabs-item auth-module__provider_89bc0" for="form-provider-email">email</label>
+                                <input v-model="modal.type" class="auth-module__radio_02e79" type="radio" id="form-provider-anonymous" name="form-provider" value="anonymous"><label class="auth-tabs-item auth-module__provider_89bc0" for="form-provider-anonymous">anonym</label>
+                            </div>
+                            <div class="auth-row auth-module__row_1b3b9" v-if="modal.type=='email'">
+                                <input class="auth-input-email input-module__input_f6995" v-model="userForm.email" type="email" required="" name="email" placeholder="Email Address">
+                            </div>
+                            <div class="auth-row auth-module__row_1b3b9" v-if="modal.type=='email'">
+                                <input class="auth-input-email input-module__input_f6995" v-model="userForm.password" type="password" required="" name="password" placeholder="Password"
+                                @keyup.enter="login">
+                            </div>
+                            <input class="auth-module__honeypot_7ea53" type="checkbox" tabindex="-1" autocomplete="off"><button v-on:click="login()" class="auth-submit button-module__button_b7044" type="submit">Submit</button>
+                        </div>
+                    </div>
+                    <!-- <div class="comment-form__markdown">Styling with <a class="comment-form__markdown-link"
+                                    target="_blank" href="markdown-help.html">Markdown</a> is supported</div> -->
+                </div>
+                <div class="comment-form__field-wrapper" v-show="pageResult && !canComment()" style="display: none;">
+                    Comments are locked for this page.
+                </div>
+                <div class="root__pinned-comments" role="region" aria-label="Pinned comments">
+                    <article class="comment comment_disabled comment_pinned comment_guest comment_view_admin comment_theme_light root__pinned-comment">
+                        <div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar" src="/images/no-image.png" alt=""><span role="button" tabindex="0" class="comment__username" title="github_ef0f706a79cc24b17bbbb374cd234a691d034128">funktechno</span>
+                            <span title="Verified user" class="comment__verification comment__verification_active"></span><a href="https://github.com/funktechno" class="comment__time">5/11/2018 at 5:40 PM</a><span class="comment__score comment__score_view_positive"><span
+                                    class="comment__vote comment__vote_type_up comment__vote_disabled"
+                                    aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span class="comment__score-value" title="Controversy: 1.92">+184</span><span class="comment__vote comment__vote_type_down comment__vote_disabled"
+                                aria-disabled="true" role="button" title="Sign in to vote">Vote down</span></span>
+                        </div>
+                        <div class="comment__body">
+                            <div class="comment__text raw-content raw-content_theme_light">
+                                <p>If you see a bug pls <a href="https://github.com/funktechno/CommentsPress/issues/new" rel="nofollow">report</a></p>
+                            </div>
+                            <div class="comment__actions"><span class="comment__controls"><button
+                                        class="button button_kind_link comment__control" type="button" role="button"
+                                        tabindex="0">Hide</button></span></div>
+                        </div>
+                    </article>
+                    <div class="lds-facebook" v-show="loading.comments" style="display: none;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="lds-ellipsis" v-show="loading.general" style="display: none;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="root__threads" role="list" v-if="pageResult">
+                    <comment-thread v-show="pageResult.comments.length > 0" :moderate_comments="pageResult.page && pageResult.page.moderateComments == 'true'" v-bind:loading="loading.comments"  :slug="pageSlug" :is_guest="isGuest" :key="c.id" :user_data="userData" v-for="c in pageResult.comments" v-bind:comment.sync="c" v-bind:errors="errors" level=0 style="display: none;" />
+                </div>
+
+            </div>
+            <!-- end root main -->
+            <!-- chat popup -->
+            <div class="intercom-lightweight-app" aria-live="polite">
+                <div v-show="modal.chat" class="intercom-namespace" style="display: none">
+                    <div class="intercom-messenger-frame intercom-1k5islr e52psle0 intercom-messenger-frame-enter-done">
+                        <div id="intercom-container" class="intercom-namespace" role="main" aria-live="polite">
+                            <div tabindex="-1" role="region">
+                                <ul>
+                                    <li v-for="m in conversations">{{ m.message }}</li>
+                                </ul>
+                                <textarea v-model="chat.message"></textarea>
+                                <button v-on:click="sendMessage()">Send</button>
+                                <!-- <div>
+                                    <div class="intercom-1xha1pw e16fp1gy0">
+                                        <div class="intercom-messenger intercom-messenger-new-conversation intercom-k9lbvn e16fp1gy1 intercom-messenger-main-animated-appear-done intercom-messenger-main-animated-enter-done" tabindex="0">
+                                            <div tabindex="-1" aria-label="Close" aria-hidden="true" role="button" class="intercom-1r9pix7 euc31aa0">
+                                                <div class="intercom-1wfu0cf euc31aa1"><svg focusable="false" aria-hidden="true" class="intercom-s470fx euc31aa2">
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                            fill-rule="evenodd">
+                                                            <g transform="translate(-340.000000, -32.000000)"
+                                                                fill="#ffffff">
+                                                                <polygon
+                                                                    points="350.656537 44 346 39.343463 341.343463 44 340 42.656537 344.656537 38 340 33.343463 341.343463 32 346 36.656537 350.656537 32 352 33.343463 347.343463 38 352 42.656537">
+                                                                </polygon>
+                                                            </g>
+                                                        </g>
+                                                    </svg></div>
+                                            </div>
+                                            <div class="intercom-messenger-header intercom-1i24npt e1nh735m0" style="height: 232.4px;">
+                                                <div>
+                                                    <div class="intercom-1yrq9n7 efz2uwp1 intercom-messenger-header-view-appear-done intercom-messenger-header-view-enter-done">
+                                                        <div class="intercom-messenger-header-buttons-back-button intercom-99sib9 e1qhgb490" aria-label="Back" role="button" tabindex="0">
+                                                            <div class="intercom-1hjlqg7 e1qhgb491"><svg focusable="false" aria-hidden="true" class="intercom-6a43gu e1ipshzy0">
+                                                                    <g fill="none">
+                                                                        <g fill="#FFF">
+                                                                            <polygon
+                                                                                transform="translate(-40 -29)translate(47.071068 36.071068)rotate(-315)translate(-47.071068 -36.071068)"
+                                                                                points="44.3 38.8 44.3 31.1 42.1 31.1 42.1 40 42.1 41.1 52.1 41.1 52.1 38.8">
+                                                                            </polygon>
+                                                                        </g>
+                                                                    </g>
+                                                                </svg></div>
+                                                        </div>
+                                                        <div class="intercom-0 efz2uwp0">
+                                                            <div class="intercom-1jpj1hd emkvacf0">
+                                                                <div aria-hidden="false" class="intercom-m8mn7f emkvacf1" style="opacity: 1;">
+                                                                    <h2 class="intercom-kdbfby emkvacf2">Reportz</h2>
+                                                                    <div class="intercom-1qjqs0o emkvacf3"><span class="intercom-rtmz9l">If you need any help
+                                                                            with our
+                                                                            tool or just want a quick chat about Reportz
+                                                                            and
+                                                                            its
+                                                                            functionalities - we are here for
+                                                                            you!</span>
+                                                                    </div>
+                                                                    <div style="display: flex; align-items: center; margin: 24px 0px 32px;">
+                                                                        <div class="intercom-1ouvpeb e1e91qmz0">
+                                                                            <div class="intercom-tnzgro e1e91qmz1">
+                                                                                <div class="intercom-79elbk ecseou40">
+                                                                                    <div size="56" class="intercom-3l8njf e1chjwx0">
+                                                                                        <img src="https://static.intercomassets.com/avatars/4620706/square_128/153540096_2888694214688638_8556751522606011418_n-1614250734.jpg?1614250734" alt="Danilo profile">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="intercom-1i3me23 e1e91qmz1">
+                                                                                <div class="intercom-79elbk ecseou40">
+                                                                                    <div size="56" class="intercom-3l8njf e1chjwx0">
+                                                                                        <img src="https://static.intercomassets.com/avatars/4620705/square_128/IMG_2126_Facetune_21-09-2019-18-40-44_Original-1614256296.jpg?1614256296" alt="Sofija profile">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="intercom-1lglmf e1tiptuf0">
+                                                                            <div class="intercom-1s9onah e1tiptuf1">Our usual reply time
+                                                                            </div>
+                                                                            <div class="intercom-3g84y e1tiptuf2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" class="intercom-fla6qy e1tfcp060">
+                                                                                    <path fill-rule="evenodd"
+                                                                                        d="M12.5 7c0 3.0376-2.4624 5.5-5.5 5.5-3.03757 0-5.5-2.4624-5.5-5.5 0-3.03757 2.46243-5.5 5.5-5.5 3.0376 0 5.5 2.46243 5.5 5.5zM14 7c0 3.866-3.134 7-7 7-3.86599 0-7-3.134-7-7 0-3.86599 3.13401-7 7-7 3.866 0 7 3.13401 7 7zM6.27844 3.48219v3.78093l.00105.00104c.00305.07805.03658.1518.09341.20546l.07452.0566L9.6706 9.69708l.15009.03773h.05667c.09341-.01886.14904-.07442.20574-.13102l.4125-.65514c.0355-.04926.0552-.10809.0566-.16876 0-.09329-.0566-.14885-.1501-.20545L7.62817 6.68345V3.48219c0-.14989-.1312-.29979-.30017-.29979h-.74938c-.16898 0-.30018.1499-.30018.29979z"
+                                                                                        clip-rule="evenodd"></path>
+                                                                                </svg>A few minutes</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div aria-hidden="true" aria-expanded="true" tabindex="-1" role="region" class="intercom-1nwxprz emkvacf5" style="opacity: 0;">
+                                                                    <div class="intercom-1jd31b9 emkvacf4">
+                                                                        <div style="display: flex; align-items: center;">
+                                                                            <div class="intercom-1ouvpeb e1e91qmz0">
+                                                                                <div class="intercom-tnzgro e1e91qmz1">
+                                                                                    <div size="28" class="intercom-vw6d7w e1chjwx0">
+                                                                                        <img src="https://static.intercomassets.com/avatars/4620706/square_128/153540096_2888694214688638_8556751522606011418_n-1614250734.jpg?1614250734" alt="Danilo profile">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="intercom-1jl5gq4 e1e91qmz1">
+                                                                                    <div size="28" class="intercom-vw6d7w e1chjwx0">
+                                                                                        <img src="https://static.intercomassets.com/avatars/4620705/square_128/IMG_2126_Facetune_21-09-2019-18-40-44_Original-1614256296.jpg?1614256296" alt="Sofija profile">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div style="margin-left: 10px;">
+                                                                                <div class="intercom-1jhai5t emkvacf6">
+                                                                                    Reportz</div>
+                                                                                <div class="intercom-wb11v3 e1tiptuf2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 14 14" class="intercom-fla6qy e1tfcp060">
+                                                                                        <path fill-rule="evenodd"
+                                                                                            d="M12.5 7c0 3.0376-2.4624 5.5-5.5 5.5-3.03757 0-5.5-2.4624-5.5-5.5 0-3.03757 2.46243-5.5 5.5-5.5 3.0376 0 5.5 2.46243 5.5 5.5zM14 7c0 3.866-3.134 7-7 7-3.86599 0-7-3.134-7-7 0-3.86599 3.13401-7 7-7 3.866 0 7 3.13401 7 7zM6.27844 3.48219v3.78093l.00105.00104c.00305.07805.03658.1518.09341.20546l.07452.0566L9.6706 9.69708l.15009.03773h.05667c.09341-.01886.14904-.07442.20574-.13102l.4125-.65514c.0355-.04926.0552-.10809.0566-.16876 0-.09329-.0566-.14885-.1501-.20545L7.62817 6.68345V3.48219c0-.14989-.1312-.29979-.30017-.29979h-.74938c-.16898 0-.30018.1499-.30018.29979z"
+                                                                                            clip-rule="evenodd"></path>
+                                                                                    </svg>A few minutes
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="intercom-1xafcqx e8111ny0">
+                                                <div class="intercom-conversation intercom-74t546 e1qfa7ao0 intercom-messenger-body-view-appear-done intercom-messenger-body-view-enter-done" tabindex="-1" role="presentation">
+                                                    <div class="intercom-conversation-body intercom-1cu59x3 esmjpyp0">
+                                                        <div class="intercom-conversation-body-parts intercom-90ug9k esmjpyp1" tabindex="0" aria-live="assertive" aria-atomic="false" role="alert" style="bottom: 56px;">
+                                                            <div class="intercom-conversation-body-main-group">
+                                                                <div class="intercom-dj4xvs e1h2hbch0">
+                                                                    <div class="intercom-19eruh8 e1h2hbch1" style="transform: translateY(0px);">
+                                                                        <div></div>
+                                                                        <div></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="composer-suggestions-container intercom-1ttta75 e1y2xk9v0">
+                                                                    <div class="intercom-xbrvud e1y2xk9v2">
+                                                                        <div height="0" class="intercom-18khmar e1y2xk9v3">
+                                                                            <div class="intercom-36wep1 e1y2xk9v5">
+                                                                                <div class="intercom-1baulvz e1y2xk9v6">
+                                                                                    <button value="" class=" intercom-7yx4mb e1y2xk9v4" style="display: none; max-width: 287px;"></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="intercom-6ve7wk eszl1uz0">
+                                                        <div class="intercom-composer intercom-lrxvm eoxa25q0">
+                                                            <pre><br></pre><textarea name="message" placeholder="Send a message…" aria-label="Send a message…" tabindex="0"></textarea>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div class="intercom-composer-buttons intercom-hloib6 eoxa25q1">
+                                                                <button class="intercom-composer-gif-button intercom-1ddvelc eoxa25q4" aria-disabled="false" aria-label="Gif picker" tabindex="0"><svg focusable="false"
+                                                                        aria-hidden="true" viewBox="0 0 29 18">
+                                                                        <g fill-rule="evenodd">
+                                                                            <path
+                                                                                d="M9 1a8 8 0 1 0 0 16h11a8 8 0 1 0 0-16H9zm0-1h11a9 9 0 0 1 0 18H9A9 9 0 0 1 9 0z"
+                                                                                fill-rule="nonzero"></path>
+                                                                            <path
+                                                                                d="M6.561 9.337c0-2.277 1.683-3.795 3.773-3.795 1.298 0 2.2.572 2.849 1.375l-.726.451c-.462-.594-1.243-1.012-2.123-1.012-1.606 0-2.827 1.232-2.827 2.981 0 1.738 1.221 2.992 2.827 2.992.88 0 1.606-.429 1.969-.792v-1.496H9.784v-.814h3.432v2.651a3.822 3.822 0 0 1-2.882 1.265c-2.09 0-3.773-1.529-3.773-3.806zM14.701 13V5.663h.913V13h-.913zm2.629 0V5.663h4.807v.814h-3.894v2.365h3.817v.814h-3.817V13h-.913z">
+                                                                            </path>
+                                                                        </g>
+                                                                    </svg></button><button class="intercom-composer-emoji-button intercom-ntzf10 eoxa25q2" aria-disabled="false" aria-label="Emoji picker"
+                                                                    tabindex="0"><svg focusable="false"
+                                                                        aria-hidden="true" viewBox="0 0 18 18">
+                                                                        <path
+                                                                            d="M9 0a9 9 0 1 1 0 18A9 9 0 0 1 9 0zm0 1C4.589 1 1 4.589 1 9s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8zM5 6.999a1 1 0 1 1 2.002.004A1 1 0 0 1 5 6.999zm5.999 0a1.002 1.002 0 0 1 2.001 0 1 1 0 1 1-2.001 0zM8.959 13.5c-.086 0-.173-.002-.26-.007-2.44-.132-4.024-2.099-4.09-2.182l-.31-.392.781-.62.312.39c.014.017 1.382 1.703 3.37 1.806 1.306.072 2.61-.554 3.882-1.846l.351-.356.712.702-.35.356c-1.407 1.427-2.886 2.15-4.398 2.15z"
+                                                                            fill-rule="evenodd"></path>
+                                                                    </svg></button>
+                                                                <div class="intercom-composer-upload-button intercom-ntzf10 eoxa25q6" aria-label="Upload attachment" role="button" tabindex="0"><svg focusable="false" aria-hidden="true" viewBox="0 0 16 18">
+                                                                        <path
+                                                                            d="M14.154 6.918l-.004.003.001-.004-3.287 3.286-.006-.005-3.574 3.574c-.016.017-.03.036-.048.053l-.05.047-.043.041v-.002c-1.167 1.07-2.692 1.331-3.823.2-1.13-1.13-.89-2.677.18-3.843l-.005-.004.074-.073.016-.018c.006-.005.012-.009.017-.016l6.053-6.053.761.76-6.053 6.054-.029.028v.001l-.005.004-.073.074c.011-.01.025-.018.035-.03-.688.75-.93 1.636-.21 2.356.72.72 1.583.456 2.333-.232l-.03.034.04-.042.01-.008.008-.009.033-.03.031-.034.01-.009.007-.009 5.004-5.003.005.006 1.858-1.859c1.223-1.218 1.51-2.913.291-4.132C12.462.806 10.414.74 9.195 1.958L2.248 8.905c.003 0 .006-.002.008-.004-1.625 1.667-1.542 4.43.103 6.074 1.646 1.646 4.474 1.795 6.141.17-.003.002-.004.008-.008.012l.047-.047 6.053-6.054.042-.042.743.78-.025.021.001.002-6.05 6.05-.002.002-.002.001-.046.046h-.002c-2.094 2.04-5.578 1.894-7.652-.18-2.049-2.049-2.15-5.407-.183-7.505l-.006-.005h-.002l.076-.078 6.943-6.944.003-.002.004-.005c1.641-1.64 4.367-1.574 6.008.066 1.64 1.642 1.353 4.014-.288 5.655z"
+                                                                            fill-rule="evenodd"></path>
+                                                                    </svg><input type="file" style="display: none;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="intercom-k9w1th e19wqfua4"></div>
+                                        </div>
+                                    </div>
+                                    <div class="intercom-mlalzq edndopr1">
+                                        <div></div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="intercom-lightweight-app-launcher intercom-launcher" v-on:click="modal.chat = !modal.chat" role="button" tabindex="0" aria-label="Open Intercom Messenger">
+                    <div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open">
+                        <svg v-show="!modal.chat" style="display:none;" focusable="false" viewBox="0 0 16 14" width="28" height="25" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path>
+                        </svg>
+                        <svg v-show="modal.chat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32">
+                            <path
+                                d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize">
+                        <!-- open chat -->
+                        <svg v-show="!modal.chat" style="display:none;" focusable="false" viewBox="0 0 16 14" width="28" height="25" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path>
+                        </svg>
+                        <!-- opened chat -->
+                        <svg v-show="modal.chat" viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/vue.js"></script>
+
+</body>
+
+</html>

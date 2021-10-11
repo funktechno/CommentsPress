@@ -17,63 +17,137 @@
     </title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/mobile.css" media="screen and (max-width: 585px)">
+    <link rel="stylesheet" href="./css/remark.css">
+
 </head>
 
 <body>
     <div class="">
-        <p>Page: test comments</p>
-        <div class="comments">
-            <ul id="comments">
+        <h2>Comment Press Example</h2>
+        <h4>Demos</h4>
+        <ul>
+            <li> <a href="./vue.html?page=test">vue (more complete)</a>
+            </li>
+            <li> <a href=../>Back to portal</a>
 
-            </ul>
+            </li>
+        </ul>
+        <div id="comments">
+            <div class="root__main">
+                <div class="comment-form__control-panel">
+
+                </div>
+                <div class="comment-form__field-wrapper">
+                    <textarea id="textarea_1" class="comment-form__field" v-model="newComment.text"
+                        placeholder="Your comment here" spellcheck="true" style="height: 109px;"></textarea>
+                </div>
+                <div class="comment-form__actions">
+                    <div class="auth auth-module__root_641f4">
+                        <button 
+                            class="auth-button button-module__button_b7044">Sign
+                            In
+                            <div class="button-module__suffix_6ab7b">
+                                <svg width="14" height="14" viewBox="0 0 28 28" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 11.5L14.5 19L22 11" stroke="currentColor" stroke-width="4"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <div class="auth-dropdown auth-module__dropdown_cf466"
+                            style="display: none;">
+                            <h5 class="auth-form-title auth-module__title_f76db">Use Social Network</h5>
+                            <ul class="oauth oauth-module__root_c133c">
+                                <li class="oauth-item oauth-module__item_3b36c"><a target="_blank"
+                                        rel="noopener noreferrer"
+                                        href="/auth/google/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark"
+                                        class="oauth-button oauth-module__button_0d123" data-provider-name="Google"
+                                        title="Sign In with Google"><img class="oauth-icon"
+                                            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE5IDEwLjJjMC0uNiAwLTEuMi0uMi0xLjhoLTguNnYzLjRoNWE0LjIgNC4yIDAgMDEtMS45IDIuOHYyLjJoM2E4LjcgOC43IDAgMDAyLjctNi42eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xMC4yIDE5YzIuNSAwIDQuNS0uOCA2LTIuMmwtMi45LTIuMmMtLjguNS0xLjkuOC0zLjEuOEE1LjUgNS41IDAgMDE1IDExLjdIMlYxNGMxLjUgMyA0LjcgNSA4LjIgNXoiIGZpbGw9IiMzNEE4NTMiLz48cGF0aCBkPSJNNSAxMS43YTUuMyA1LjMgMCAwMTAtMy40VjZIMmE4LjggOC44IDAgMDAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA0Ii8+PHBhdGggZD0iTTEwLjIgNC42YTUgNSAwIDAxMy41IDEuM2wyLjYtMi42QTkuMiA5LjIgMCAwMDIgNmwzIDIuNGE1LjUgNS41IDAgMDE1LjItMy43eiIgZmlsbD0iI0VBNDMzNSIvPjwvc3ZnPgo="
+                                            width="20" height="20" alt="" aria-hidden="true"></a></li>
+                                <li class="oauth-item oauth-module__item_3b36c"><a target="_blank"
+                                        rel="noopener noreferrer"
+                                        href="/auth/github/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark"
+                                        class="oauth-button oauth-module__button_0d123" data-provider-name="GitHub"
+                                        title="Sign In with GitHub"><img class="oauth-icon"
+                                            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTYuNyAxNi4xbC0uMi4yYy0uMiAwLS4yLS4xLS4yLS4ybC4yLS4xLjIuMXptLTEuMy0uMmMwIC4xIDAgLjIuMi4ySDZjMC0uMSAwLS4yLS4yLS4zbC0uMy4xem0xLjggMGMtLjEgMC0uMiAwLS4yLjJoLjNsLjItLjEtLjMtLjJ6TTEwIDBBOS44IDkuOCAwIDAwMCAxMGMwIDQuNyAyLjggOC42IDYuOCAxMCAuNiAwIC43LS4yLjctLjV2LTIuNnMtMi44LjctMy40LTEuMmMwIDAtLjUtMS4yLTEuMS0xLjUgMCAwLTEtLjcgMC0uNiAwIDAgMSAwIDEuNiAxIC45IDEuNiAyLjQgMS4yIDMgLjkgMC0uNy4zLTEuMS42LTEuNC0yLjMtLjMtNC41LS42LTQuNS00LjYgMC0xLjEuMy0xLjcgMS0yLjRhNCA0IDAgMDEwLTIuOGMuOS0uMyAyLjggMS4xIDIuOCAxLjFhOS4zIDkuMyAwIDAxNSAwczItMS40IDIuOC0xLjFhNCA0IDAgMDEuMiAyLjhjLjYuNyAxIDEuMyAxIDIuNCAwIDQtMi40IDQuMy00LjYgNC42LjMuMy42IDEgLjYgMnYzLjRjMCAuMi4yLjYuNy41IDQtMS40IDYuOC01LjMgNi44LTEwQTEwIDEwIDAgMDA5LjkgMHptLTYgMTQuM3YuMmguM3YtLjJoLS4zem0tLjQtLjR2LjJoLjNsLS4xLS4yaC0uMnptMS4zIDEuNXYuM2guM3YtLjNoLS4zem0tLjUtLjZ2LjJjLjEuMS4yLjIuMy4xVjE1Yy0uMS0uMS0uMi0uMi0uMy0uMXoiIGZpbGw9IiMwMDAiLz48L3N2Zz4K"
+                                            width="20" height="20" alt="" aria-hidden="true"></a></li>
+                                <li class="oauth-item oauth-module__item_3b36c"><a target="_blank"
+                                        rel="noopener noreferrer"
+                                        href="/auth/facebook/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark"
+                                        class="oauth-button oauth-module__button_0d123" data-provider-name="Facebook"
+                                        title="Sign In with Facebook"><img class="oauth-icon"
+                                            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAgMTAuMDYwOUMyMCA0LjUwMzA0IDE1LjUyNDIgMCAxMCAwQzQuNDc1ODEgMCAwIDQuNTAzMDQgMCAxMC4wNjA5QzAgMTUuMDgyNCAzLjY1Njg2IDE5LjI0NDYgOC40Mzc1IDIwVjEyLjk2OTJINS44OTcxOFYxMC4wNjA5SDguNDM3NVY3Ljg0NDIyQzguNDM3NSA1LjMyMjkyIDkuOTI5NDQgMy45MzAyMiAxMi4yMTQ1IDMuOTMwMjJDMTMuMzA4OSAzLjkzMDIyIDE0LjQ1MzIgNC4xMjY1NyAxNC40NTMyIDQuMTI2NTdWNi42MDEyMkgxMy4xOTE5QzExLjk1IDYuNjAxMjIgMTEuNTYyNSA3LjM3Njg4IDExLjU2MjUgOC4xNzI0MVYxMC4wNjA5SDE0LjMzNTlMMTMuODkyMyAxMi45NjkySDExLjU2MjVWMjBDMTYuMzQzMSAxOS4yNDQ2IDIwIDE1LjA4MjQgMjAgMTAuMDYwOVoiIGZpbGw9IiMwQTgyRUQiLz48L3N2Zz4K"
+                                            width="20" height="20" alt="" aria-hidden="true"></a></li>
+                                <li class="oauth-item oauth-module__item_3b36c"><a target="_blank"
+                                        rel="noopener noreferrer"
+                                        href="/auth/twitter/login?from=https%3A%2F%2Fdemo.remark42.com%2Fweb%2Fiframe.html%3FselfClose&amp;site=remark"
+                                        class="oauth-button oauth-module__button_0d123" data-provider-name="Twitter"
+                                        title="Sign In with Twitter"><img class="oauth-icon"
+                                            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE3Ljk0IDUuNTRjLjAyLjIuMDIuNC4wMi41OCAwIDUuOTQtNC4xMyAxMi43Ny0xMS42NyAxMi43Ny0yLjMyIDAtNC40OC0uNzQtNi4yOS0yLjAyYTcuNzcgNy43NyAwIDAwNi4wOC0xLjg2IDQuMTcgNC4xNyAwIDAxLTMuODMtMy4xIDMuOTkgMy45OSAwIDAwMS44NS0uMDhBNC40IDQuNCAwIDAxLjggNy40di0uMDZjLjU1LjMzIDEuMTguNTQgMS44NS41N2E0Ljc4IDQuNzggMCAwMS0xLjI3LTYgMTEuMzUgMTEuMzUgMCAwMDguNDYgNC43Yy0uMDctLjM0LS4xLS42OS0uMS0xLjAzIDAtMi40OCAxLjgyLTQuNDkgNC4xLTQuNDkgMS4xOCAwIDIuMjQuNTQgMi45OSAxLjQyLjkzLS4yIDEuODEtLjU3IDIuNi0xLjA5YTQuNDIgNC40MiAwIDAxLTEuOCAyLjQ4Yy44Mi0uMSAxLjYyLS4zNSAyLjM2LS43YTkuMzEgOS4zMSAwIDAxLTIuMDYgMi4zMnoiIGZpbGw9IiMxREExRjIiLz48L3N2Zz4K"
+                                            width="20" height="20" alt="" aria-hidden="true"></a></li>
+                            </ul>
+                            <div class="auth-divider auth-module__divider_1fe73" title="or"></div>
+                            <div class="auth-tabs auth-module__tabs_c4203"><input class="auth-module__radio_02e79"
+                                    type="radio" id="form-provider-email" name="form-provider" value="email"><label
+                                    class="auth-tabs-item auth-module__provider_89bc0"
+                                    for="form-provider-email">email</label><input class="auth-module__radio_02e79"
+                                    type="radio" id="form-provider-anonymous" name="form-provider"
+                                    value="anonymous"><label class="auth-tabs-item auth-module__provider_89bc0"
+                                    for="form-provider-anonymous">anonym</label></div>
+                            <div class="auth-row auth-module__row_1b3b9"><input
+                                    class="auth-input-username input-module__input_f6995" type="text" required=""
+                                    name="username" minlength="3" pattern="^[\p{L}\d_]+$"
+                                    title="Username must contain only letters, numbers, underscores or spaces"
+                                    placeholder="Username"></div>
+                            <div class="auth-row auth-module__row_1b3b9"><input
+                                    class="auth-input-email input-module__input_f6995" type="email" required=""
+                                    name="email" placeholder="Email Address"></div><input
+                                class="auth-module__honeypot_7ea53" type="checkbox" tabindex="-1"
+                                autocomplete="off"><button class="auth-submit button-module__button_b7044"
+                                type="submit">Submit</button>
+                        </div>
+                    </div>
+                    <!-- <div class="comment-form__markdown">Styling with <a class="comment-form__markdown-link"
+                                target="_blank" href="markdown-help.html">Markdown</a> is supported</div> -->
+                </div>
+                <div class="root__pinned-comments" role="region" aria-label="Pinned comments">
+                    <article
+                        class="comment comment_disabled comment_pinned comment_guest comment_view_admin comment_theme_light root__pinned-comment">
+                        <div class="comment__info"><img class="avatar-icon avatar-icon_theme_light comment__avatar"
+                                src="https://demo.remark42.com/api/v1/avatar/cb42ff493ade696d88a3a590f136ae9e34de7c1b.image"
+                                alt=""><span role="button" tabindex="0" class="comment__username"
+                                title="github_ef0f706a79cc24b17bbbb374cd234a691d034128">funktechno</span><span
+                                title="Verified user"
+                                class="comment__verification comment__verification_active"></span><a
+                                href="https://github.com/funktechno" class="comment__time">5/11/2018 at 5:40 PM</a><span
+                                class="comment__score comment__score_view_positive"><span
+                                    class="comment__vote comment__vote_type_up comment__vote_disabled"
+                                    aria-disabled="true" role="button" title="Sign in to vote">Vote up</span><span
+                                    class="comment__score-value" title="Controversy: 1.92">+184</span><span
+                                    class="comment__vote comment__vote_type_down comment__vote_disabled"
+                                    aria-disabled="true" role="button" title="Sign in to vote">Vote down</span></span>
+                        </div>
+                        <div class="comment__body">
+                            <div class="comment__text raw-content raw-content_theme_light">
+                                <p>If you see a bug pls <a href="https://github.com/funktechno/CommentsPress/issues/new"
+                                        rel="nofollow">report</a></p>
+                            </div>
+                            <div class="comment__actions"><span class="comment__controls"><button
+                                        class="button button_kind_link comment__control" type="button" role="button"
+                                        tabindex="0">Hide</button></span></div>
+                        </div>
+                    </article>
+                </div>
+                <div class="root__threads" id="commentThreads" role="list">
+                </div>
+
+            </div>
         </div>
     </div>
+    <script src="./js/index.js">
+    </script>
 </body>
-<script>
-    function renderComments(commentList) {
-        var ele = document.getElementById(`comments`)
-        console.log(commentList);
 
-        // ele.innerHTML="<li>test</li>"
-        let commentsHtml = "";
-        commentList.forEach(element => {
-            let commentBody = `<li>`
-            commentBody += "<strong>User:" + element['displayName'] + "</strong>"
-            commentBody += "<p>" + element['commentText'] + "</p>"
-
-            commentBody += `</li>`
-            commentsHtml += commentBody
-        });
-
-
-        ele.innerHTML = commentsHtml
-
-    }
-    const data = JSON.stringify({
-        "slug": "test"
-    });
-
-    const xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-
-    xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === this.DONE) {
-            try {
-                const comments = JSON.parse(this.responseText);
-                renderComments(comments);
-
-            } catch (e) {
-                console.log(e);
-            }
-            console.log(this.responseText);
-        }
-    });
-
-    xhr.open("POST", "/comments/?action=get");
-    xhr.setRequestHeader("content-type", "application/json");
-    xhr.setRequestHeader("accept", "application/json");
-
-    xhr.send(data);
-</script>
 
 </html>

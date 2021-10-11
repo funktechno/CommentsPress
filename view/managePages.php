@@ -52,7 +52,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2)
                                     <br />
                                     <label>LockedComments:</label>
                                     <br />
-                                    <input name="lockedComments" class="long" type="checkbox" <?php echo $row['lockedcomments'] == 1 ? 'checked' : '' ?> value="1">
+                                    <input name="lockedComments" class="long" type="checkbox" <?php echo $row['lockedComments'] == 1 ? 'checked' : '' ?> value="1">
                                     <input type="hidden" name="action" value="deleteUpdatePage">
                                     <input type="submit" name="update" class="btn red" name="submit" id="updatebtn" value="Update Page">
                                     <input type="submit" name="delete" class="btn red" name="submit" id="updatebtn" value="Delete Page">

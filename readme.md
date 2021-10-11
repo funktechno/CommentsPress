@@ -1,6 +1,8 @@
+![Logo](./images/site/logo.png)
+
 # Comments Administration PHP
-* An opensourced software to administer commentsa 
-* php application for serving comments
+* An opensourced software to administer comments
+* lightweight php application for serving comments
 * very jamstack friendly
 
 ## getting started
@@ -20,10 +22,11 @@
   * may want to comment dummy data at the bottom
 
 ## deploying
+* pending install scripts and being featured on one click softaculous, manual setup below
 * run `sql/acme-db.sql` CAREFUL TO NOT RESET EXISTING DATA against chosen mysql db
   * may want to change the admin user w/ your email
 * copy all most files excluding `assets,rest,mail` folders
-* copy `cp ./library/connections-backup.php ./library/connections.php`
+* copy `cp ./config/connections-backup.php ./config/connections.php`
   * fill out database settings, mail provider, jwt secret
 * test working mail form server in `mail` folder
   * copy `mailConfig-back.php mailConfig.php`
@@ -31,6 +34,12 @@
 * navigate to the website
   * register a new account or use the existing ones
   * if new account change your clientLevel in the users table to 2 or above for admin access
+
+## testing
+* `composer install` also see `.github/workflows/unit_tests.yml`
+* `php tests/initialize.php` uncomment `resetDb();`
+* `./vendor/bin/phpunit` or `.\vendor\bin\phpunit`
+  * `.\vendor\bin\phpunit --filter testPageComments`
 
 ## documentation
 * see `rest` folder for api endpoints on creating comments and registering
@@ -48,8 +57,10 @@
 * [x] jwt
   * from https://github.com/adhocore/php-jwt
 * [x] configuration flags
-* [ ]comment moderation
-* [ ]contact form support
+* [x] comment moderation
+ * [x] approve comments
+ * [x] change if moderation needed
+* [x] contact form support
   * send contact us messages as api
   * view messages
 * [x] api
@@ -67,24 +78,3 @@
 * plans for sso (facebook, google)
 * [ ] comment filter
   * flagging system?
-
-* uploads folder:
-
-    ### Mac Users
-    1. Locate the "uploads" folder in the operating system finder window.
-    1. Right-click the folder icon, choose "Get info".
-    1. In the new window that opens scroll down and find the "Sharing & Permissions:" area. Expand it if needed to see 1. the options.
-    1. Change the privileges for "everyone" to Read & Write.
-    1. Close the window.
-    1. Repeat these steps for the "images" folder inside of the " uploads" folder.
-    1. Repeat these steps for the "images" folder at the root of the Acme site and for the "products" folder within the 1. "images" folder.
-
-    ### Windows Users
-    1. Locate the "uploads" folder in the operating system files window.
-    1. Right-click the folder icon, choose "Properties".
-    1. In the dialog box that opens, click the "Security" tab.
-    1. In the name list box, select "Everyone", then make sure the "Modify" option is set to "Allow".
-    1. Click "OK".
-    1. Close the window.
-    1. Repeat these steps for the "images" folder inside of the " uploads" folder.
-    1. Repeat these steps for the "images" folder at the root of the Acme site and for the "products" folder within the "images" folder.

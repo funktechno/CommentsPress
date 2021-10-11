@@ -5,26 +5,38 @@
 // change document root if serving from somewhere else such as /
 // copy this file to connections.php w/ proper info
 $GLOBALS['documentRoot'] = '/';
-require_once 'Core.php';
+require_once $GLOBALS['root'] .'library/Core.php';
 
-// run composer require phpmailer/phpmailer
-// use PHPMailer\PHPMailer\SMTP;
-// use PHPMailer\PHPMailer\Exception;
-// use PHPMailer\PHPMailer\PHPMailer;
 // require '../vendor/autoload.php';
 define('Allowed_Origins','*');
 define('Allowed_Methods','GET,POST');
 // jwt secret
 define('SECRET','CHANGEME!');
 define('DEBUG',false);
+// disabled, sendgrid, default, mail, phpmailer
+define('MAILMETHOD','disabled');
+define('DEMO',false);
 
-// http://localhost/acme/library/connections.php
+
+function getConnConfig(){
+    $config = array(
+        'server' => 'localhost',
+        'dbname' => 'testcomments',
+        'password' => 'my-secret-pw',
+        'username' => 'root'
+    );
+    return $config;
+}
+
 function acmeConnect()
 {
-    $server = 'localhost';
-    $dbname = 'acme';
-    $password = 'acme';
-    $username = 'acme';
+    $config = getConnConfig();
+
+    // same config from docker
+    $server = $config['server'];
+    $dbname = $config['dbname'];
+    $password = $config['password'];
+    $username = $config['username'];
     $dsn = 'mysql:host=' . $server . ';dbname=' . $dbname;
     $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
     // Create the actual connection object and assign it to a variable
@@ -37,7 +49,11 @@ function acmeConnect()
         $error = $e;
         // echo 'Sorry, the connection failed';
         // header('location: /view/500.php');
-        include $GLOBALS['root'] . 'view/500.php';
+        // this will cause issue w/ rest api returns, maybe fine if db connection never fails
+        if (isset($GLOBALS['root']))
+            include $GLOBALS['root'] . 'view/500.php';
+        else
+            throw $error;
         exit;
     }
 }
