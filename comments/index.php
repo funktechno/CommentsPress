@@ -77,8 +77,8 @@ switch ($action) {
             $errorStatus->response(400, "Invalid user or password");
         }
         $userId = $clientData['id'];
-        $id = $input['id'];
-        $body = $input['body'];
+        $id = isset($input['id']) ? $input['id'] : "";
+        $body = isset($input['body']) ? $input['body'] : "";
 
         if (empty($userId) || empty($id) || empty($body)) {
             $errorStatus->response(400, "comment id and body fields are required");
@@ -108,6 +108,59 @@ switch ($action) {
             $errorStatus->response(500, "Error updating message");
         }
 
+        break;
+    case 'moderate':
+        $payload = getJwtPayload();
+        $clientData = getClient($payload['email']);
+
+        if (!isset($clientData) || !isset($clientData['id'])) {
+            $errorStatus->response(400, "Invalid user or password");
+        }
+        $isAdmin = $clientData['clientLevel'] == 3;
+        if (!$isAdmin) {
+            $errorStatus->response(403, "Not permitted.");
+        }
+
+        $id = isset($input['id']) ? $input['id'] : "";
+        // reject, approve
+        $approveType = isset($input['type']) ? $input['type'] : "";
+        if (empty($id) || empty($approveType)) {
+            $errorStatus->response(400, "comment id and type fields are required");
+        }
+        // $validStatus = ["reject", "approve"];
+        $approveValue = null;
+        switch ($approveType) {
+            case 'approve':
+                $approveValue = 1;
+                break;
+
+            case 'reject':
+                $approveValue = 1;
+                break;
+
+                // default:
+                //     # code...
+                //     break;
+        }
+        if ($approveValue == null) {
+            $errorStatus->response(400, "type must be reject or approve.");
+        }
+
+        $configInput = [];
+        $configInput['id'] = $id;
+        $configInput['approved'] = $approveValue;
+        $updateResult = moderateComment(
+            $configInput
+        );
+        if ($updateResult) {
+            $statuscode = 200;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+        } else {
+            $errorStatus->response(500, "Failed to change comment approve status.");
+        }
         break;
     case 'get':
         $token = getBearerToken();
@@ -215,7 +268,7 @@ switch ($action) {
             }
             // if moderated parent comment must be approved to add
             $moderatedComments = $pageData['moderateComments'] == 'true' && $parentComment['approved'] != 1;
-            if($moderatedComments){
+            if ($moderatedComments) {
                 $errorStatus->response(400, "Parent comment must be approved to reply to.");
             }
             if ((!isset($pageData['unlimitedReplies']) ||
