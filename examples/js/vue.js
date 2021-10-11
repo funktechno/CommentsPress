@@ -84,7 +84,51 @@ Vue.component('comment-thread', {
             });
         },
         replyComment() {
-            //
+            // don't run if not logged in or loading
+            if (!this.is_guest && this.user_data == null || this.loading)
+                return;
+            let config = {}
+            let request = {
+                slug: this.slug,
+                parentId: this.comment.id,
+                body: this.commentReply.text
+            }
+            if (this.user_data) {
+                config = {
+                    headers: {
+                        Authorization: "Bearer " + this.user_data.token
+                    }
+                };
+            }
+            if (this.is_guest) {
+                request.guest = true;
+            }
+            this.$emit("update:loading", true);
+            console.log(request)
+            this.$http.post("/comments/?action=submit", request, config).then((response) => {
+                this.$emit("update:loading", false);
+                console.log(response)
+                // this.message = response.data.message;
+                if (response.status == 201) {
+                    this.showReply = false;
+                    console.log(response.data);
+                    if(this.comment.children){
+                        this.comment.children.push(response.data);
+                    } else {
+                        this.comment.children = [response.data]
+                    }
+                } else {
+                    this.errors = "Failed read new reply"
+                }
+            }).catch((error) => {
+                if (error && error.data && error.data.errors)
+                    this.errors = error.data.errors;
+                else
+                    this.errors = "Failed to add reply"
+                console.log(error)
+                this.$emit("update:loading", false);
+
+            });
         }
     },
     template: `
