@@ -96,7 +96,7 @@
                 <div class="comment-form__control-panel">
 
                 </div>
-                <div class="comment-form__field-wrapper">
+                <div class="comment-form__field-wrapper" v-if="pageResult">
                     <textarea id="textarea_1" class="comment-form__field" :readonly="loading.general || loading.comments" v-model="newComment.text" placeholder="Your comment here" spellcheck="true" style="height: 109px;"></textarea>
                 </div>
                 <div class="comment-form__actions">
@@ -181,8 +181,8 @@
                         <div></div>
                     </div>
                 </div>
-                <div class="root__threads" role="list">
-                    <comment-thread v-show="comments.length > 0" v-bind:loading.sync="loading.comments" :is_guest="isGuest" :key="c.id" :user_data="userData" v-for="c in comments" v-bind:comment.sync="c" v-bind:errors.sync="errors" level=0 style="display: none;" />
+                <div class="root__threads" role="list" v-if="pageResult">
+                    <comment-thread v-show="pageResult.comments.length > 0" v-bind:loading.sync="loading.comments" :is_guest="isGuest" :key="c.id" :user_data="userData" v-for="c in pageResult.comments" v-bind:comment.sync="c" v-bind:errors.sync="errors" level=0 style="display: none;" />
                 </div>
 
             </div>

@@ -15,15 +15,15 @@ Vue.component('comment-thread', {
             showChildren: true
         }
     },
-    methods:{
-        toggleEdit(){
-            if(!this.edit){
+    methods: {
+        toggleEdit() {
+            if (!this.edit) {
                 this.body = this.comment.commentText
             }
             this.edit = !this.edit;
         },
-        updateComment(){
-            if(this.loading)
+        updateComment() {
+            if (this.loading)
                 return;
 
             let config = {}
@@ -66,7 +66,7 @@ Vue.component('comment-thread', {
 
             });
         },
-        replyComment(){
+        replyComment() {
             //
         }
     },
@@ -119,10 +119,10 @@ var app = new Vue({
     el: '#comments',
     name: "ExampleComponent",
     data: {
-        pageSlug: "test",
+        pageSlug: null,
         newComment: {},
         chat: {},
-        comments: [],
+        pageResult: null,
         example: "comments",
         status: null,
         form: {},
@@ -145,7 +145,7 @@ var app = new Vue({
         isGuest: false
     },
     filters: {
-        date: function(str) {
+        date: function (str) {
             if (!str) { return '(n/a)'; }
             str = new Date(str);
             return str.getFullYear() + '-' + ((str.getMonth() < 9) ? '0' : '') + (str.getMonth() + 1) + '-' +
@@ -168,7 +168,7 @@ var app = new Vue({
             this.$http.post("/form/?action=submit", request).then((response) => {
                 this.loading.form = false;
                 console.log(response)
-                    // this.message = response.data.message;
+                // this.message = response.data.message;
                 if (response.status == 201) {
                     this.form = {};
                     console.log(response.data);
@@ -204,7 +204,7 @@ var app = new Vue({
             this.$http.post("/conversations/?action=submit", request, config).then((response) => {
                 this.loading.chat = false;
                 console.log(response)
-                    // this.message = response.data.message;
+                // this.message = response.data.message;
                 if (response.status == 201) {
                     this.chat.message = "";
                     console.log(response.data);
@@ -247,11 +247,11 @@ var app = new Vue({
             this.$http.post("/comments/?action=submit", request, config).then((response) => {
                 this.loading.general = false;
                 console.log(response)
-                    // this.message = response.data.message;
+                // this.message = response.data.message;
                 if (response.status == 201) {
                     this.newComment.text = "";
                     console.log(response.data);
-                    this.comments.push(response.data);
+                    this.pageResult.comments.push(response.data);
                     // this.$set()
                     // this.comments = response.data;
                 } else {
@@ -281,7 +281,7 @@ var app = new Vue({
                 this.$http.post("/users/?action=login", request).then((response) => {
                     this.loading.general = false;
                     console.log(response)
-                        // this.message = response.data.message;
+                    // this.message = response.data.message;
                     if (response.status == 200) {
                         console.log(response.data)
                         this.userData = response.data;
@@ -316,7 +316,7 @@ var app = new Vue({
             this.$http.post("/conversations/?action=get", { "threadId": threadId }, config).then((response) => {
                 this.loading.chat = false;
                 console.log(response)
-                    // this.message = response.data.message;
+                // this.message = response.data.message;
                 if (response.status == 200) {
                     console.log(response.data)
                     this.conversations = response.data;
@@ -345,22 +345,28 @@ var app = new Vue({
             this.$http.post("/comments/?action=get", { "slug": this.pageSlug }, config).then((response) => {
                 this.loading.comments = false;
                 console.log(response)
-                    // this.message = response.data.message;
+                // this.message = response.data.message;
                 if (response.status == 200) {
                     console.log(response.data)
-                    this.comments = response.data;
+                    this.pageResult = response.data;
                 } else {
-                    this.errors = "Failed to load comments"
+                    this.errors = "Failed to load page comments"
                 }
             }).catch((error) => {
-                this.errors = "Failed to get comments"
+                this.errors = "Failed to get page comments"
                 console.log(error)
-                this.loading.comments = null;
+                this.loading.pageResult = null;
 
             });
         }
     },
     mounted() {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        if (params.page)
+            this.pageSlug = params.page
+        else
+            this.pageSlug = "test";
         this.getComments();
         this.threadId = Cookies.get('thread');
         if (this.threadId)

@@ -28,7 +28,7 @@ include 'common/head.php';
               <li><a href="/accounts/?action=login">Login</a></li>
             <?php } ?>
             <?php if (folder_exist('examples')) { ?>
-              <li><a href="/examples/vue.html">Examples</a></li>
+              <li><a href="/examples/vue.html?page=test">Examples</a></li>
             <?php } ?>
           </ul>
           <?php if (DEMO) { ?>
