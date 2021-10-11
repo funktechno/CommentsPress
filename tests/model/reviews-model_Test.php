@@ -20,11 +20,13 @@ class reviews_modelTest extends TestCase
     {
         $slug = "test";
         $moderatedComments = false;
+        $isAdmin = true;
         $userId = null;
-        $comments = getPageComments($slug, $moderatedComments, $userId);
+        $result = getPageComments($slug, $moderatedComments, $userId, $isAdmin);
         // $expected = array();
         // $this->assertEquals($expected, $comments);
-        $this->assertEquals(18, count($comments));
+        $this->assertEquals(6, count($result));
+        // $this->assertEquals('[]',json_encode($result));
     }
 
     public function testgetPageStatus()
@@ -36,8 +38,9 @@ class reviews_modelTest extends TestCase
             'manualPages' => 'false',
             'unlimitedReplies' => 'false',
             'id' => null,
-            'deleted_at' => null,
-            'lockedcomments' => '0'
+            'deletedAt' => null,
+            'lockedComments' => '0',
+            'moderateComments' => 'false'
         );
         $this->assertEquals($expected, $result);
     }

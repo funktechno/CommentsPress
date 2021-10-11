@@ -77,8 +77,8 @@ switch ($action) {
             $errorStatus->response(400, "Invalid user or password");
         }
         $userId = $clientData['id'];
-        $id = $input['id'];
-        $body = $input['body'];
+        $id = isset($input['id']) ? $input['id'] : "";
+        $body = isset($input['body']) ? $input['body'] : "";
 
         if (empty($userId) || empty($id) || empty($body)) {
             $errorStatus->response(400, "comment id and body fields are required");
@@ -109,9 +109,63 @@ switch ($action) {
         }
 
         break;
+    case 'moderate':
+        $payload = getJwtPayload();
+        $clientData = getClient($payload['email']);
+
+        if (!isset($clientData) || !isset($clientData['id'])) {
+            $errorStatus->response(400, "Invalid user or password");
+        }
+        $isAdmin = $clientData['clientLevel'] == 3;
+        if (!$isAdmin) {
+            $errorStatus->response(403, "Not permitted.");
+        }
+
+        $id = isset($input['id']) ? $input['id'] : "";
+        // reject, approve
+        $approveType = isset($input['type']) ? $input['type'] : "";
+        if (empty($id) || empty($approveType)) {
+            $errorStatus->response(400, "comment id and type fields are required");
+        }
+        // $validStatus = ["reject", "approve"];
+        $approveValue = null;
+        switch ($approveType) {
+            case 'approve':
+                $approveValue = 1;
+                break;
+
+            case 'reject':
+                $approveValue = 1;
+                break;
+
+                // default:
+                //     # code...
+                //     break;
+        }
+        if ($approveValue == null) {
+            $errorStatus->response(400, "type must be reject or approve.");
+        }
+
+        $configInput = [];
+        $configInput['id'] = $id;
+        $configInput['approved'] = $approveValue;
+        $updateResult = moderateComment(
+            $configInput
+        );
+        if ($updateResult) {
+            $statuscode = 200;
+
+            header("HTTP/1.1 " . $statuscode);
+
+            $response = array('Status' => 'success');
+        } else {
+            $errorStatus->response(500, "Failed to change comment approve status.");
+        }
+        break;
     case 'get':
         $token = getBearerToken();
         $userId = null;
+        $isAdmin = false;
         if (!empty($token)) {
             $payload = getJwtPayload($token);
             $clientData = getClient($payload['email']);
@@ -120,6 +174,8 @@ switch ($action) {
                 $errorStatus->response(400, "Invalid user or password");
             }
             $userId = $clientData['id'];
+            // check user role
+            $isAdmin = $clientData['clientLevel'] == 3;
         }
         // echo $payload;
         // exit;
@@ -128,19 +184,25 @@ switch ($action) {
         if (empty($slug)) {
             $errorStatus->response(400, "page slug field is required");
         }
-        $configCondition = getConfigData('moderateComments');
 
-        $moderatedComments = true;
-        if ($configCondition && $configCondition['data'] != 'true') {
-            $moderatedComments = false;
-        }
+        $pageData = getPageStatus($slug);
+        // only check config if moderated is true
         // check if moderate
-        // echo json_encode($configCondition);
-        // exit();
-        $comments = getPageComments($slug, $moderatedComments, $userId);
-        // recursively updated comments w/ child comments
+        $moderatedComments =  $pageData['moderateComments'] == 'true';
+        if ($pageData['id'] != null)
+            $pageData['exists'] = true;
+        // remove id
+        unset($pageData['id']);
 
-        echo json_encode($comments);
+        // recursively updated comments w/ child comments
+        $comments = getPageComments($slug, $moderatedComments, $userId, $isAdmin);
+
+        $result = array(
+            'comments' => $comments,
+            'page' => $pageData
+        );
+
+        echo json_encode($result);
 
         break;
     case 'submit':
@@ -153,10 +215,9 @@ switch ($action) {
         }
         $userId = $clientData['id'];
 
-        $slug = $input['slug'];
-        // $pageId = $input['pageId'];
+        $slug = isset($input['slug']) ? $input['slug'] : "";
         $parentId = isset($input['parentId']) ? $input['parentId'] : null;
-        $body = $input['body'];
+        $body = isset($input['body']) ? $input['body'] : "";
 
         if (empty($userId) || empty($slug) || empty($body)) {
             $errorStatus->response(400, "page slug and body fields are required");
@@ -204,6 +265,11 @@ switch ($action) {
             // check that pageid matches
             if ($parentComment['pageId'] != $pageData['id']) {
                 $errorStatus->response(400, "Parent comment must be of the same page.");
+            }
+            // if moderated parent comment must be approved to add
+            $moderatedComments = $pageData['moderateComments'] == 'true' && $parentComment['approved'] != 1;
+            if ($moderatedComments) {
+                $errorStatus->response(400, "Parent comment must be approved to reply to.");
             }
             if ((!isset($pageData['unlimitedReplies']) ||
                 $pageData['unlimitedReplies'] != 'true')) {

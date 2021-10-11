@@ -2,7 +2,7 @@
 
 # Comments Administration PHP
 * An opensourced software to administer comments
-* php application for serving comments
+* lightweight php application for serving comments
 * very jamstack friendly
 
 ## getting started
@@ -37,7 +37,9 @@
 
 ## testing
 * `composer install` also see `.github/workflows/unit_tests.yml`
+* `php tests/initialize.php` uncomment `resetDb();`
 * `./vendor/bin/phpunit` or `.\vendor\bin\phpunit`
+  * `.\vendor\bin\phpunit --filter testPageComments`
 
 ## documentation
 * see `rest` folder for api endpoints on creating comments and registering
@@ -55,7 +57,7 @@
 * [x] jwt
   * from https://github.com/adhocore/php-jwt
 * [x] configuration flags
-* [ ] comment moderation
+* [x] comment moderation
  * [x] approve comments
  * [x] change if moderation needed
 * [x] contact form support
