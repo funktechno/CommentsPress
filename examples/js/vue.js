@@ -81,7 +81,7 @@ Vue.component('comment-thread', {
             <img class="avatar-icon avatar-icon_theme_light comment__avatar" src="/images/no-image.png" alt="">
             <span role="button" tabindex="0" class="comment__username" :title="'anonymous_'+ comment.id">{{
                 comment.displayName }}</span>
-            <span role="button" v-if="moderate_comments && comment.approved != '1'" class="comment__score_view_negative">Pending Approval</span>
+            <span role="button" v-if="moderate_comments && comment.approved != '1'" class="comment__score_view_negative">&nbsp;Pending Approval&nbsp;</span>
             <a class="comment__time">{{comment.updated_at}}</a>
             <a class="comment__link-to-parent" target="_blank" :href="'./comment/'+comment.parentId"
                 aria-label="Go to parent comment" title="Go to parent comment">
