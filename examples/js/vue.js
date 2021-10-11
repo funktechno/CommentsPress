@@ -30,6 +30,54 @@ Vue.component('comment-thread', {
             }
             this.edit = !this.edit;
         },
+        changeApproval() {
+            if (!this.moderate_comments || this.loading)
+                return;
+            let config = {}
+            if (this.user_data) {
+                config = {
+                    headers: {
+                        Authorization: "Bearer " + this.user_data.token
+                    }
+                };
+            }
+            const approvalType = this.comment.approved == '1' ? 'reject' : 'approve';
+            const approved = this.comment.approved;
+            let request = {
+                id: this.comment.id,
+                type: approvalType
+            }
+
+            this.$root.$emit("comment-loading", true);
+
+            this.$http.post("/comments/?action=moderate", request, config).then((response) => {
+                // this.loading = false;
+                this.$root.$emit("comment-loading", false);
+                console.log(response)
+                if (response.status == 200) {
+                    this.comment.approved = approved == '1' ? '0' : '1';
+                } else {
+                    this.$root.$emit("global-error", "Failure in moderating comment");
+                }
+            }).catch((error) => {
+                this.$root.$emit("global-error", "Failed to moderate comment");
+                console.log(error)
+                this.$root.$emit("comment-loading", false);
+
+            });
+        },
+        moderateStatus(type) {
+            if (this.user_data && this.user_data.userInfo && this.user_data.userInfo.clientLevel == '3') {
+                if (this.moderate_comments) {
+                    if (type == 'approve' && this.comment.approved != '1') {
+                        return true;
+                    } else if (type != 'approve' && this.comment.approved == '1') {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
         toggleReply() {
             if (!this.showReply) {
                 // reset response on each toggle
@@ -145,12 +193,18 @@ Vue.component('comment-thread', {
             <img class="avatar-icon avatar-icon_theme_light comment__avatar" src="/images/no-image.png" alt="">
             <span role="button" tabindex="0" class="comment__username" :title="'anonymous_'+ comment.id">{{
                 comment.displayName }}</span>
-            <span role="button" v-if="pendingApproval"
-                class="comment__score_view_negative">&nbsp;Pending Approval&nbsp;</span>
+            <span role="button" v-if="pendingApproval" class="comment__score_view_negative">&nbsp;Pending
+                Approval&nbsp;</span>
             <a class="comment__time">{{comment.updated_at}}</a>
             <a class="comment__link-to-parent" target="_blank" :href="'./comment/'+comment.parentId"
                 aria-label="Go to parent comment" title="Go to parent comment">
             </a>
+            <span role="button" v-if="moderateStatus('approve')"
+                class="comment__score_view_positive" v-on:click="changeApproval()">&nbsp;Approve&nbsp;
+            </span>
+            <span role="button" v-if="moderateStatus('reject')"
+                class="comment__score_view_negative" v-on:click="changeApproval()">&nbsp;Reject&nbsp;
+            </span>
             <span class="comment__score">
                 <span class="comment__vote comment__vote_type_up comment__vote_disabled" aria-disabled="true"
                     role="button" title="Sign in to vote">Vote up</span>
@@ -169,8 +223,9 @@ Vue.component('comment-thread', {
                     v-on:click="updateComment()" type="submit">Send</button>
             </div>
             <div class="comment__actions">
-                <button v-if="user_data && !pendingApproval" class="button button_kind_link comment__action" type="button" role="button" v-on:click="toggleReply"
-                    tabindex="0">{{ showReply ? 'Cancel' : 'Reply' }}</button>
+                <button v-if="user_data && !pendingApproval" class="button button_kind_link comment__action"
+                    type="button" role="button" v-on:click="toggleReply" tabindex="0">{{ showReply ? 'Cancel' : 'Reply'
+                    }}</button>
                 <button class="button button_kind_link comment__action" type="button" role="button"
                     v-if="user_data && comment.userId == user_data.userInfo.id" v-on:click="toggleEdit()"
                     tabindex="0">Edit</button>
@@ -183,14 +238,13 @@ Vue.component('comment-thread', {
         <div class="comment-form comment-form_theme_light comment-form_type_reply comment__input"
             aria-label="New comment" v-if="showReply">
             <div class="comment-form__field-wrapper">
-                <textarea :id="'textarea_' + comment.id" v-model="commentReply.text" class="comment-form__field" placeholder="Your comment here" autofocus=""
-                    spellcheck="true" style="height: 109px;"></textarea>
+                <textarea :id="'textarea_' + comment.id" v-model="commentReply.text" class="comment-form__field"
+                    placeholder="Your comment here" autofocus="" spellcheck="true" style="height: 109px;"></textarea>
             </div>
             <div class="comment-form__actions">
                 <div>
                     <button class="button button_kind_primary button_size_large comment-form__button"
-                        v-on:click="replyComment"
-                        type="submit">Reply</button>
+                        v-on:click="replyComment" type="submit">Reply</button>
                 </div>
             </div>
         </div>
@@ -369,7 +423,7 @@ var app = new Vue({
         updateLoadingComment(n) {
             this.loading.comments = n;
         },
-        updateErrors(n){
+        updateErrors(n) {
             this.errors = n;
         },
         login() {
