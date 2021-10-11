@@ -136,11 +136,21 @@ switch ($action) {
         }
         // check if moderate
         // echo json_encode($configCondition);
+        $pageData = getPageStatus($slug);
+        if ($pageData['id'] != null)
+            $pageData['exists'] = true;
+        unset($pageData['id']);
+        // remove id
         // exit();
-        $comments = getPageComments($slug, $moderatedComments, $userId);
         // recursively updated comments w/ child comments
+        $comments = getPageComments($slug, $moderatedComments, $userId);
 
-        echo json_encode($comments);
+        $result = array(
+            'comments' => $comments,
+            'page' => $pageData
+        );
+
+        echo json_encode($result);
 
         break;
     case 'submit':
