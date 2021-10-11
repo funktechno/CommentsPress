@@ -22,8 +22,8 @@ function getPageStatus($slug)
     $sql = 'SELECT (SELECT c.data FROM configuration  c WHERE c.name = "manualPages") as "manualPages",
     (SELECT c.data FROM configuration  c WHERE c.name = "unlimitedReplies") as "unlimitedReplies",
     (SELECT p.id FROM pages p WHERE p.slug = :slug) as id,
-    (SELECT p.deleted_at FROM pages p WHERE p.slug = :slug) as deleted_at,
-    (SELECT p.lockedcomments FROM pages p WHERE p.slug = :slug) as lockedcomments';
+    (SELECT p.deleted_at FROM pages p WHERE p.slug = :slug) as deletedAt,
+    (SELECT p.lockedcomments FROM pages p WHERE p.slug = :slug) as lockedComments';
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
     $stmt->execute();
