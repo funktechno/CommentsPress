@@ -160,6 +160,29 @@ BEGIN
 END
 ;;
 -- DELIMITER ;
+CREATE TABLE `commentVotes` (
+  `id` varchar(32) NOT NULL,
+  `commentId` varchar(32) NULL,
+  `value` TINYINT NOT NULL, -- -1 0 or 1
+  `userId` varchar(32) NOT NULL,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT FK_user_commentVote FOREIGN KEY (userId) REFERENCES users(id),
+  CONSTRAINT FK_commentVote_comment FOREIGN KEY (commentId) REFERENCES comments(id)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
+;;
+-- DELIMITER ;;
+CREATE TRIGGER before_insert_commentVotes
+BEFORE INSERT ON commentVotes
+FOR EACH ROW
+BEGIN
+  IF new.id is null or new.id = '' THEN  
+		SET new.id = replace(uuid(),'-','');
+  END IF;
+  SET @last_uuid = new.id;
+END
+;;
 
 -- do I need a type
 CREATE TABLE `flaggedComment` (
