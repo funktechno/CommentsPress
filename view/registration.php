@@ -34,7 +34,7 @@
         <em>Passwords must be at least 8 characters and contain at least 1 number, 1 capital letter, and 1 special character</em>
         <br>
 
-        <input type="password" name="clientPassword" id="clientPassword" <?php echo (isset($clientPassword)) ? "value='$clientPassword'" : "" ?>  pattern="(?=^.{8,}$)(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required>
+        <input type="password" name="clientPassword" id="clientPassword" <?php echo htmlentities(isset($clientPassword) ? "value='$clientPassword'" : "") ?>  pattern="(?=^.{8,}$)(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required>
         <br>
         <!-- <button class=" btn red" type="submit">Register</button> -->
         <input type="submit" class="btn red" name="submit" id="regbtn" value="Register">
