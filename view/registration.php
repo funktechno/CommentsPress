@@ -20,13 +20,13 @@
       <form action="/accounts/?action=registration" method="post">
         <label>Display Name *</label>
         <br>
-        <input name="clientDisplayName" id="clientFirstname" type="text" <?php echo (isset($clientDisplayName)) ? "value='$clientDisplayName'" : "" ?> required>
+        <input name="clientDisplayName" id="clientFirstname" type="text" <?php echo htmlentities(isset($clientDisplayName) ? "value='$clientDisplayName'" : "") ?> required>
 
         <br>
         <br>
         <label>Email Address *</label>
         <br>
-        <input name="clientEmail" id="clientEmail" <?php echo (isset($clientEmail)) ? "value='$clientEmail'" : "" ?>  type="email" required>
+        <input name="clientEmail" id="clientEmail" <?php echo htmlentities(isset($clientEmail) ? "value='$clientEmail'" : "") ?>  type="email" required>
         <br>
         <label>Password *</label>
         <br>
