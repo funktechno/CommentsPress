@@ -9,7 +9,7 @@ concurrency:
 env:
   DOCKER_DRIVER: overlay
   rIds: ${{ secrets.rIds }}
-  phpVersion: 7.1
+  phpVersion: 7.4.9
 
 on:
   pull_request:
@@ -60,7 +60,7 @@ jobs:
       - name: Setup PHP with composer v2
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4.9'
+          php-version: '${{ env.phpVersion }}'
           tools: composer:v2
 
       - name: composer

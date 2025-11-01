@@ -5,6 +5,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
+env:
+  DOCKER_DRIVER: overlay
+  rIds: ${{ secrets.rIds }}
+  phpVersion: 7.4.9
+
 on:
   push:
     branches: [ master ]
@@ -19,6 +24,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Setup PHP with composer v2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ env.phpVersion }}'
+          tools: composer:v2
 
       - name: Psalm Security Scan
         uses: docker://vimeo/psalm-github-actions
