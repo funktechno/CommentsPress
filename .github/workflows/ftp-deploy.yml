@@ -59,7 +59,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
           local-dir: deploy
-        #   server-dir: ${{ secrets.FTP_REMOTE_DIR }}
+          server-dir: /
+          # ${{ secrets.FTP_REMOTE_DIR }}
 
     #   - name: Cleanup
     #     if: always()
