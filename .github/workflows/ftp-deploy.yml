@@ -59,14 +59,23 @@ jobs:
           echo "Deploy package contents:"
           find deploy -maxdepth 4 -type f | sed -n '1,200p'
 
-      - name: Deploy to FTP server
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      - name: Upload via SFTP
+        uses: appleboy/sftp-action@v0.1.4
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          local-dir: deploy/
+          source: "deploy/*"
+          target: "/"
+      # - name: Deploy to FTP server
+      #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USER }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     port: ${{ secrets.FTP_PORT }}
+      #     local-dir: deploy/
           # server-dir: /
           # ${{ secrets.FTP_REMOTE_DIR }}
 
