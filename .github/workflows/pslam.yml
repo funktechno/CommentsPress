@@ -25,11 +25,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup PHP with composer v2
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '${{ env.phpVersion }}'
-          tools: composer:v2
+      # - name: Setup PHP with composer v2
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: '${{ env.phpVersion }}'
+      #     tools: composer:v2
 
       - name: Psalm Security Scan
         uses: docker://vimeo/psalm-github-actions
@@ -37,6 +37,7 @@ jobs:
           security_analysis: true
           report_file: results.sarif
           composer_require_dev: true
+          php_version: ${{ env.phpVersion }}
         
       - name: Upload Security Analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v1
