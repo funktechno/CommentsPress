@@ -1,3 +1,8 @@
+<?php
+if (!defined('APP_INIT')) {
+  require_once '../library/defaultRouting.php';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 

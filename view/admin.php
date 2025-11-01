@@ -1,4 +1,7 @@
 <?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 if (isset($_SESSION['loggedin'])) {
     // header('location: /acme/');
     $clientId = $_SESSION['clientData']['id'];

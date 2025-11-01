@@ -1,4 +1,7 @@
 <?php
+if (!defined('APP_INIT')) {
+  require_once '../library/defaultRouting.php';
+}
 // reviews model
 
 function getUserReviews($clientId)

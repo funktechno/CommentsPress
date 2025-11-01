@@ -1,3 +1,8 @@
+<?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
+?>
 <head>
   <!-- this will be broken if there are any echos before the head -->
   <meta charset="UTF-8">

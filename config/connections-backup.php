@@ -1,4 +1,7 @@
 <?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 // debug options uncomment
 // error_reporting(E_ALL);
 // ini_set('display_errors', '1');

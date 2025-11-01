@@ -1,11 +1,14 @@
 <?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 $directoryURI = $_SERVER['REQUEST_URI'];
 $path = parse_url($directoryURI, PHP_URL_PATH);
 $acme = strpos($path, 'acme');
 $components = explode('/', $path);
 $first_part = $components[sizeof($components) - 1];
 if (isset($_COOKIE['firstname'])) {
-  $cookieFirstname = filter_input(INPUT_COOKIE, 'firstname', FILTER_SANITIZE_STRING);
+  $cookieFirstname = filter_input(INPUT_COOKIE, 'firstname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 }
 ?>
 <div id="topNav">

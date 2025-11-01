@@ -4,6 +4,7 @@
  * account controller
  */
 // Create or access a Session 
+define('APP_INIT', true);
 session_start();
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
@@ -148,9 +149,9 @@ switch ($action) {
         }
         // only allow display name update
     $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
+        // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         // $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
-        // $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
+        // $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // validate
         // $clientEmail = checkEmail($clientEmail);
@@ -158,7 +159,7 @@ switch ($action) {
 
         // $existingEmail = checkExistingEmail($clientEmail);
 
-        // $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_STRING);
+    // $clientId = filter_input(INPUT_POST, 'clientId', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $clientId = $_SESSION['clientData']['id'];
 
         // exit();
@@ -255,7 +256,7 @@ switch ($action) {
             exit();
         }
         $configInput = [];
-        $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
+        $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         if (isset($_POST['update'])) {
             $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -342,8 +343,8 @@ switch ($action) {
             exit();
         }
         $configInput = [];
-    $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         try {
             $updateResult = addPage(
                 $configInput['slug'],
@@ -351,10 +352,10 @@ switch ($action) {
             );
         } catch (\Throwable $th) {
             if (isset($th->errorInfo)) {
-                $message = "<p class='notice'>Error. Adding page " . $configInput['name'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                $message = "<p class='notice'>Error. Adding page " . $configInput['slug'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
                 $_SESSION['message'] = $message;
             } else {
-                $message = "<p class='notice'>Error. Adding page " . $configInput['name'] . ".</p>";
+                $message = "<p class='notice'>Error. Adding page " . $configInput['slug'] . ".</p>";
                 $_SESSION['message'] = $message;
             }
             include '../view/managePages.php';
@@ -415,7 +416,7 @@ switch ($action) {
             include '../view/client-update.php';
             exit();
         }
-        $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
+        $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // validate
         $checkPassword = checkPassword($clientPassword);
