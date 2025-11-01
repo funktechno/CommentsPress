@@ -1,8 +1,23 @@
 name: FTP Deploy
 
+# Cancel in-progress workflows when a new workflow is created. Should only apply to PRs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
+    # inputs:
+    #   build_windows:
+    #     description: "Build for Windows"
+    #     required: true
+    #     type: boolean
+    #     default: true
+    # tmp comment out after testing
+  pull_request:
+    branches: [master]
 
 jobs:
   deploy:
@@ -40,7 +55,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
           server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
           local-dir: deploy
