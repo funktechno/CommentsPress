@@ -52,6 +52,7 @@ jobs:
         with:
           sarif_file: results.sarif
 
+      # can preview in https://microsoft.github.io/sarif-web-component/
       - uses: actions/upload-artifact@v4
         with:
           name: psalm_results
