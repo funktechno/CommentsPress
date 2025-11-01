@@ -43,13 +43,13 @@ jobs:
         run: composer global require vimeo/psalm
 
       - name: Run psalm
-        run: psalm --root=./ --output-format=github
+        run: psalm --no-autoloader --root=./ --output-format=github
       
       # - name: Run psalm
       #   run: ./vendor/bin/psalm --output-format=github
 
       - name: Run Psalm with SARIF output
-        run: psalm --root=./ --output-format=sarif --report=results.sarif
+        run: psalm --no-autoloader --root=./ --output-format=sarif --report=results.sarif
         
       - name: Upload Security Analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v1
