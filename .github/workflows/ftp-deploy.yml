@@ -38,13 +38,18 @@ jobs:
           # Copy all .php files while preserving directory structure, but exclude the config folder
           # --prune-empty-dirs removes directories that would be empty after filtering
           rsync -av --prune-empty-dirs \
-            --include='*/' \
             --include='*.php' \
             --exclude='config/**' \
             --exclude='library/mailFunctions.php' \
             --exclude='tests/**' \
             --exclude='mail/**' \
-            --exclude='*' \
+            ./ deploy/
+
+          rsync -av --prune-empty-dirs \
+            --include='css/**' \
+            --include='images/**' \
+            --include='assets/**' \
+            --include='examples/**' \
             ./ deploy/
 
           # Ensure specific asset directories are included
