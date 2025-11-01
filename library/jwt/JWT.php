@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Ahc\Jwt;
 if (!defined('APP_INIT')) {
-    require_once '../library/defaultRouting.php';
+    require_once '../../library/defaultRouting.php';
 }
 
 /**

@@ -343,8 +343,8 @@ switch ($action) {
             exit();
         }
         $configInput = [];
-    $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         try {
             $updateResult = addPage(
                 $configInput['slug'],
@@ -352,10 +352,10 @@ switch ($action) {
             );
         } catch (\Throwable $th) {
             if (isset($th->errorInfo)) {
-                $message = "<p class='notice'>Error. Adding page " . $configInput['name'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
+                $message = "<p class='notice'>Error. Adding page " . $configInput['slug'] . ".<br/>" . json_encode($th->errorInfo) . "</p>";
                 $_SESSION['message'] = $message;
             } else {
-                $message = "<p class='notice'>Error. Adding page " . $configInput['name'] . ".</p>";
+                $message = "<p class='notice'>Error. Adding page " . $configInput['slug'] . ".</p>";
                 $_SESSION['message'] = $message;
             }
             include '../view/managePages.php';
