@@ -1,4 +1,7 @@
 <?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 // change document root if serving from somewhere else such as /
 // debug options
 error_reporting(E_ALL);

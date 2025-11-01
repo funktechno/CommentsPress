@@ -2,6 +2,9 @@
 <html lang="en">
 
 <?php
+if (!defined('APP_INIT')) {
+  require_once '../library/defaultRouting.php';
+}
 $titleValue = "Login";
 include '../common/head.php';
 ?>
@@ -10,7 +13,7 @@ include '../common/head.php';
   <header>
     <?php include '../common/header.php'; ?>
   </header>
-
+  
   <main>
     <section>
       <h1 class="acmeHeader">Comment Login</h1>

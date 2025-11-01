@@ -1,4 +1,7 @@
 <?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 require_once 'error_responses.php';
 require_once 'jwt/ValidatesJWT.php';
 require_once 'jwt/JWTException.php';

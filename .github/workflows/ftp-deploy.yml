@@ -39,7 +39,7 @@ jobs:
           # --prune-empty-dirs removes directories that would be empty after filtering
           rsync -av --prune-empty-dirs \
             --include='*/' --include='*.php' \
-            --exclude='config/**' --exclude='*' ./ deploy/
+            --exclude='config/**' --exclude='library/mailFunctions.php' --exclude='tests/**' --exclude='mail/**' --exclude='*' ./ deploy/
 
           # Ensure specific asset directories are included
           for d in assets css images examples; do
@@ -58,8 +58,8 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          local-dir: deploy
-          server-dir: /
+          local-dir: deploy/
+          # server-dir: /
           # ${{ secrets.FTP_REMOTE_DIR }}
 
     #   - name: Cleanup

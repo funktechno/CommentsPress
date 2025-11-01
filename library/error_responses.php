@@ -1,5 +1,8 @@
 <?php
 namespace App;
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 
 class errorStatus
 {

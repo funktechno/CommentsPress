@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 // send grid email
 /**
  * to is a comma split list of emails to send to
