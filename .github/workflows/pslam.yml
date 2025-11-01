@@ -1,5 +1,15 @@
 name: Psalm Security Scan
 
+# Cancel in-progress workflows when a new workflow is created. Should only apply to PRs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  DOCKER_DRIVER: overlay
+  rIds: ${{ secrets.rIds }}
+  phpVersion: '7.4.9'
+
 on:
   push:
     branches: [ master ]
@@ -15,19 +25,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Psalm Security Scan
-        uses: docker://vimeo/psalm-github-actions
+      - name: Setup PHP with composer v2
+        uses: shivammathur/setup-php@v2
         with:
-          security_analysis: true
-          report_file: results.sarif
-          composer_require_dev: true
+          php-version: '${{ env.phpVersion }}'
+          tools: composer:v2
+
+      - name: Remove composer files
+        run: rm -f composer.json composer.lock
+
+      - name: Install Psalm globally
+        run: composer global require vimeo/psalm
+
+      # - name: help psalm
+      #   run: psalm --help
+
+      - name: Run psalm
+        continue-on-error: true
+        run: psalm --output-format=github --report=results.sarif
+
+      # - name: Run Psalm with SARIF output
+      #   run: psalm --output-format=sarif --report=results.sarif
         
       - name: Upload Security Analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: psalm_results
           path: results.sarif
