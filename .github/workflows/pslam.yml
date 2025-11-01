@@ -38,21 +38,23 @@ jobs:
       #     report_file: results.sarif
       #     composer_require_dev: true
       #     php-version: ${{ env.phpVersion }}
+      - name: Remove composer files
+        run: rm -f composer.json composer.lock
 
       - name: Install Psalm globally
         run: composer global require vimeo/psalm
 
-      - name: help psalm
-        run: psalm --help
+      # - name: help psalm
+      #   run: psalm --help
 
       - name: Run psalm
-        run: psalm --root=CommentsPress --output-format=github
+        run: psalm --output-format=github
       
       # - name: Run psalm
       #   run: ./vendor/bin/psalm --output-format=github
 
       - name: Run Psalm with SARIF output
-        run: psalm --root=CommentsPress --output-format=sarif --report=results.sarif
+        run: psalm --output-format=sarif --report=results.sarif
         
       - name: Upload Security Analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v1
