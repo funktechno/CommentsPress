@@ -32,7 +32,7 @@ jobs:
       #     tools: composer:v2
 
       - name: Psalm Security Scan
-        uses: docker://vimeo/psalm-github-actions
+        uses: docker://ghcr.io/psalm/psalm-github-actions
         with:
           security_analysis: true
           report_file: results.sarif
