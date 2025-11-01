@@ -16,8 +16,8 @@ on:
     #     type: boolean
     #     default: true
     # tmp comment out after testing
-  # pull_request:
-  #   branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   deploy:
