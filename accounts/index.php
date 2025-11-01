@@ -338,7 +338,7 @@ switch ($action) {
         break;
     case 'addPage':
         if (!IsLoggedInAndHasAccess(2)) {
-            include '../view/managePage.php';
+            include '../view/managePages.php';
             exit();
         }
         $configInput = [];
@@ -357,7 +357,7 @@ switch ($action) {
                 $message = "<p class='notice'>Error. Adding page " . $configInput['name'] . ".</p>";
                 $_SESSION['message'] = $message;
             }
-            include '../view/managePage.php';
+            include '../view/managePages.php';
             exit();
         }
 
@@ -422,7 +422,7 @@ switch ($action) {
         $clientId = $_SESSION['clientData']['id'];
         if (empty($checkPassword)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
-            include '../client-update.php';
+            include '../view/client-update.php';
             exit;
         }
 
@@ -440,7 +440,7 @@ switch ($action) {
             exit;
         } else {
             $message = "<p class='notice'>Error. Password was not updated.</p>";
-            include '../client-update.php';
+            include '../view/client-update.php';
             exit;
         }
         break;

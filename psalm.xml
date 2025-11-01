@@ -9,7 +9,13 @@
     findUnusedCode="true"
 >
     <projectFiles>
-        <directory name="./" />
+        <!-- <directory name="./" /> -->
+        <file name="index.php" />
+        <file name="accounts/index.php" />
+        <file name="comments/index.php" />
+        <file name="conversations/index.php" />
+        <file name="form/index.php" />
+        <file name="users/index.php" />
         <ignoreFiles>
             
         </ignoreFiles>
