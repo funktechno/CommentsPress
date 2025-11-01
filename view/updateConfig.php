@@ -1,4 +1,7 @@
 <?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 if (!isset($_SESSION['loggedin']) || $_SESSION['clientData']['clientLevel'] < 2) {
     header('location: /accounts/');
 } else {

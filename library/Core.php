@@ -1,4 +1,7 @@
 <?php
+if (!defined('APP_INIT')) {
+    require_once '../library/defaultRouting.php';
+}
 //should contain app meta data such as version
 define('APP_VERSION', '0.0.8');
 

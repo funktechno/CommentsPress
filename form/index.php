@@ -1,4 +1,5 @@
 <?php
+define('APP_INIT', true);
 // session_start();
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {

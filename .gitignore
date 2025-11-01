@@ -5,3 +5,4 @@ mail/mailConfig.php
 library/mailFunctions.php
 config/connections-*.php
 library/sso
+results.sarif

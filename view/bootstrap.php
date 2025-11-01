@@ -1,3 +1,8 @@
+<?php
+if (!defined('APP_INIT')) {
+  require_once '../library/defaultRouting.php';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +22,8 @@
   </header>
 
   <main>
+    <section>
+      <h1 class="acmeHeader">Database Connection Test</h1>
     <?php 
     try{
       $db = acmeConnect();
@@ -35,6 +42,7 @@
     }
     ?>
       
+    </section>
   </main>
 
   <footer class="text-center">
