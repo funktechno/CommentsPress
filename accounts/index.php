@@ -36,9 +36,9 @@ switch ($action) {
         break;
     case 'register_user':
         // echo 'You are in the register case statement.';
-        $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
+    $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
-        $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
+    $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // validate
         $clientEmail = checkEmail($clientEmail);
@@ -100,7 +100,7 @@ switch ($action) {
 
     case 'login_user':
         $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
-        $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
+        $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // validate
         $clientEmail = checkEmail($clientEmail);
@@ -147,7 +147,7 @@ switch ($action) {
             exit();
         }
         // only allow display name update
-        $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_STRING);
+    $clientDisplayName = filter_input(INPUT_POST, 'clientDisplayName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         // $clientLastname = filter_input(INPUT_POST, 'clientLastname', FILTER_SANITIZE_STRING);
         // $clientEmail = filter_input(INPUT_POST, 'clientEmail', FILTER_SANITIZE_EMAIL);
         // $clientPassword = filter_input(INPUT_POST, 'clientPassword', FILTER_SANITIZE_STRING);
@@ -162,7 +162,7 @@ switch ($action) {
         $clientId = $_SESSION['clientData']['id'];
 
         // exit();
-        if (empty($clientDisplayName) || empty($clientEmail)) {
+    if (empty($clientDisplayName) || empty($clientEmail)) {
             $_SESSION['message'] = '<p class="error">Please provide information for all empty form fields.</p>';
             include '../view/client-update.php';
             exit;
@@ -210,7 +210,7 @@ switch ($action) {
             exit();
         }
         $configInput = [];
-        $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
+    $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $approvedStatus = null;
         // null or 0 isunapproved if moderated
         // 2 is blocked
@@ -258,8 +258,8 @@ switch ($action) {
         $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
 
         if (isset($_POST['update'])) {
-            $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_STRING);
-            $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_STRING);
+            $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             // $configInput['userId'] = $_SESSION['clientData']['id'];
 
             // echo json_encode($configInput);
@@ -308,8 +308,8 @@ switch ($action) {
             exit();
         }
         $configInput = [];
-        $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
+    $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $configInput['id'] = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
         try {
             $updateResult = updateConfig(
@@ -342,8 +342,8 @@ switch ($action) {
             exit();
         }
         $configInput = [];
-        $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_STRING);
-        $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_STRING);
+    $configInput['slug'] = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $configInput['lockedComments'] = filter_input(INPUT_POST, 'lockedComments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         try {
             $updateResult = addPage(
                 $configInput['slug'],
@@ -376,8 +376,8 @@ switch ($action) {
             exit();
         }
         $configInput = [];
-        $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
+    $configInput['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $configInput['data'] = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         try {
             $updateResult = addConfig(
                 $configInput

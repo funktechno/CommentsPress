@@ -1,80 +1,112 @@
 ![Logo](./images/site/logo.png)
 
-# Comments Administration PHP
-* An opensourced software to administer comments
-* lightweight php application for serving comments
-* very jamstack friendly
+# CommentsPress — Comments Administration (PHP)
 
-## getting started
-* make sure xamp foulder is working, http://localhost//index.php
-  * http://localhost//acme/index.php
-  * http://localhost/phpmyadmin/
-* simple server `php -S 127.0.0.1:8000`
-  * open `http://localhost:8000`
-  * need a mysql running, can use docker or one from a shared host
-* docker mysql
- `docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql:5.7.29` user: root
-* restart data
-  * run `sql/acme-db.sql`, then `sql/acme-data.sql` if you want the dummy data CAREFUL TO NOT RESET EXISTING DATA
-     * if your schema doesn't match manually fix the table columns
-     * simple db
-       * tables: `users,comments,pages,contactForms,configuration`
-  * may want to comment dummy data at the bottom
+> A lightweight, open-source PHP application for managing comments. Jamstack-friendly and easy to self-host.
 
-## deploying
-* pending install scripts and being featured on one click softaculous, manual setup below
-* run `sql/acme-db.sql` CAREFUL TO NOT RESET EXISTING DATA against chosen mysql db
-  * may want to change the admin user w/ your email
-* copy all most files excluding `assets,rest,mail` folders
-* copy `cp ./config/connections-backup.php ./config/connections.php`
-  * fill out database settings, mail provider, jwt secret
-* test working mail form server in `mail` folder
-  * copy `mailConfig-back.php mailConfig.php`
-  * copy a working mail provider method in the library folder e.g. `cp library/mailFunctions-sendGrid.php library/mailFunctions.php`
-* navigate to the website
-  * register a new account or use the existing ones
-  * if new account change your clientLevel in the users table to 2 or above for admin access
+## Quick start
 
-## testing
-* `composer install` also see `.github/workflows/unit_tests.yml`
-* `php tests/initialize.php` uncomment `resetDb();`
-* `./vendor/bin/phpunit` or `.\vendor\bin\phpunit`
-  * `.\vendor\bin\phpunit --filter testPageComments`
+1. Start a simple PHP server for local testing:
 
-## documentation
-* see `rest` folder for api endpoints on creating comments and registering
+```bash
+php -S 127.0.0.1:8000
+# then open http://localhost:8000 in your browser
+```
 
-## dependencies
-* no composer
-* mail
-  * you choose
-* mysql database
-  * can configure for other providers or replace
-* php 7
+2. Ensure you have a running MySQL instance. You can use Docker:
 
+```bash
+# MySQL 5.7
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql:5.7.29
+# or an ARM-compatible image
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d arm64v8/mysql:8
+```
 
-## features
-* [x] jwt
-  * from https://github.com/adhocore/php-jwt
-* [x] configuration flags
-* [x] comment moderation
- * [x] approve comments
- * [x] change if moderation needed
-* [x] contact form support
-  * send contact us messages as api
-  * view messages
-* [x] api
-  * login, register
-  * comments
-  * form submission
-* basic user management
-  * reset password
-  * [x] change password
-  * [x] update display name
-  * [x] register user
-  * [x] login user
-  * [x] view own comments
-  * all other functions require a clientLevel > 1, e.g. review comments see messages
-* plans for sso (facebook, google)
-* [ ] comment filter
-  * flagging system?
+3. Import the schema and (optionally) dummy data:
+
+```bash
+# Run the schema first (be careful not to overwrite an existing DB)
+mysql -u root -p < sql/acme-db.sql
+# Optional: import dummy data
+mysql -u root -p < sql/acme-data.sql
+```
+
+Notes:
+- If your schema doesn't match, update table columns manually.
+- Tables used include: `users`, `comments`, `pages`, `contactForms`, `configuration`.
+
+## Configuration & deployment
+
+1. Copy the connections template and edit database/mail/JWT settings:
+
+```bash
+cp ./config/connections-backup.php ./config/connections.php
+# edit ./config/connections.php with your DB and mail settings
+```
+
+  * verify db connection working http://localhost:8000/?action=bootstrap
+
+2. Mail provider
+
+- Copy `mailConfig-back.php` to `mailConfig.php` in `mail/` and configure.
+- If you use SendGrid, you can copy `library/mailFunctions-sendGrid.php` to `library/mailFunctions.php`.
+
+3. Files to deploy
+
+Copy the project files to your host, excluding the `assets`, `rest`, and `mail` folders if you plan different deployment strategies. Adjust file ownership and permissions for your web server.
+
+4. Admin access
+
+Register a new account or use an existing one. To grant admin access, set `clientLevel` >= 2 for the user in the `users` table.
+
+## Testing
+
+Install dependencies and run tests:
+
+```bash
+composer install
+php tests/initialize.php   # uncomment resetDb() when you want tests to reset the DB
+./vendor/bin/phpunit
+# or on Windows: .\vendor\bin\phpunit
+```
+
+To run a single test class or filter:
+
+```bash
+./vendor/bin/phpunit --filter testPageComments
+```
+
+## Documentation
+
+See the `rest/` folder for API endpoints (comments, registration, contact forms).
+
+## Requirements
+
+- PHP 7+
+- MySQL (or compatible)
+- Composer (for running the unit tests)
+- Mail provider account (SendGrid, SMTP, etc.)
+
+## Features
+
+- ✅ JWT authentication (uses adhocore/php-jwt)
+- ✅ Configuration flags
+- ✅ Comment moderation (approve/require moderation)
+- ✅ Contact form support (send/view messages)
+- ✅ API endpoints for comments and forms
+- User management:
+  - ✅ Register
+  - ✅ Login
+  - ✅ Change password
+  - ✅ Update display name
+  - ✅ View own comments
+
+Planned:
+
+- SSO integrations (Google, Facebook)
+- [ ] Comment filtering / flagging system
+
+## Notes & warnings
+
+- Be careful when running SQL files against existing databases — these can overwrite data.
+- The example Docker commands are helpful for local development but evaluate security and persistence for production use.

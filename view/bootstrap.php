@@ -17,6 +17,8 @@
   </header>
 
   <main>
+    <section>
+      <h1 class="acmeHeader">Database Connection Test</h1>
     <?php 
     try{
       $db = acmeConnect();
@@ -35,6 +37,7 @@
     }
     ?>
       
+    </section>
   </main>
 
   <footer class="text-center">
