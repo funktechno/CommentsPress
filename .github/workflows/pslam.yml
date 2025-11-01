@@ -42,6 +42,9 @@ jobs:
       - name: Install Psalm globally
         run: composer global require vimeo/psalm
 
+      - name: help psalm
+        run: psalm --help
+
       - name: Run psalm
         run: psalm --no-autoloader --root=./ --output-format=github
       
