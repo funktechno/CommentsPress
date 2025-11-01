@@ -1,4 +1,5 @@
 <?php
+define('APP_INIT', true);
 // $GLOBALS['root'] = "";
 // run sql files
 require_once 'config/connections.php';

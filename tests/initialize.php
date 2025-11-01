@@ -1,4 +1,5 @@
 <?php
+define('APP_INIT', true);
 // run sql files
 require_once 'config/connections.php';
 require_once 'library/functions.php';
