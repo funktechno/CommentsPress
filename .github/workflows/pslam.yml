@@ -31,6 +31,11 @@ jobs:
           php-version: '${{ env.phpVersion }}'
           tools: composer:v2
 
+      - name: setup config files
+        run: |
+          cp ./config/connections-github.php ./config/connections.php
+          cp library/mailFunctions-sendGrid.php library/mailFunctions.php
+
       - name: Remove composer files
         run: rm -f composer.json composer.lock
 
