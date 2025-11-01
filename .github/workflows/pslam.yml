@@ -8,7 +8,7 @@ concurrency:
 env:
   DOCKER_DRIVER: overlay
   rIds: ${{ secrets.rIds }}
-  phpVersion: 7.4.9
+  phpVersion: 7.4
 
 on:
   push:
