@@ -6,8 +6,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches: [ master ]
+  # push:
+  #   branches: [ master ]
   workflow_dispatch:
     # inputs:
     #   build_windows:
@@ -36,10 +36,25 @@ jobs:
           mkdir -p deploy
 
           # Copy all .php files while preserving directory structure, but exclude the config folder
-          # --prune-empty-dirs removes directories that would be empty after filtering
+          # --prune-empty-dirs removes directories that would be empty after filtering  --dry-run
           rsync -av --prune-empty-dirs \
-            --include='*/' --include='*.php' \
-            --exclude='config/**' --exclude='library/mailFunctions.php' --exclude='tests/**' --exclude='mail/**' --exclude='*' ./ deploy/
+            --exclude='config' \
+            --exclude='library/mailFunctions.php' \
+            --exclude='tests' \
+            --exclude='mail' \
+            --include='*.php' \
+            --include='*/' \
+            --exclude='*' \
+            ./ deploy/
+
+          # rsync -av --prune-empty-dirs \
+          #   --include='css/**' \
+          #   --include='images/**' \
+          #   --include='assets/**' \
+          #   --include='examples/**' \
+          #   --include='*/' \
+          #   --exclude='*' \
+          #   ./ deploy/
 
           # Ensure specific asset directories are included
           for d in assets css images examples; do
@@ -51,14 +66,42 @@ jobs:
           echo "Deploy package contents:"
           find deploy -maxdepth 4 -type f | sed -n '1,200p'
 
-      - name: Deploy to FTP server
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}
-          local-dir: deploy/
+      - name: Manual SFTP Upload
+        run: |
+          echo "Starting manual SFTP upload..."
+
+          echo "put deploy/*" > sftp_batch.txt
+          export SSHPASS=${{ secrets.FTP_PASSWORD }}
+          sshpass -e \
+            sftp -o StrictHostKeyChecking=no \
+                  -o UserKnownHostsFile=/dev/null \
+                  -P ${{ secrets.FTP_PORT }} \
+                  -b sftp_batch.txt \
+                  ${{ secrets.FTP_USER }}@${{ secrets.FTP_SERVER }}
+      # sshpass -p "${{ secrets.FTP_PASSWORD }}" sftp user@host
+
+      # lftp -u "$FTP_USER","$FTP_PASSWORD" -p 221 sftp://$FTP_SERVER <<EOF
+      #   mirror -R ./deploy /
+      #   EOF
+      # - name: Upload via SFTP
+      #   uses: appleboy/scp-action@v1
+      #   with:
+      #     host: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USER }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     port: ${{ secrets.FTP_PORT }}
+      #     source: "deploy/*"
+      #     target: "/"
+      #     debug: true
+
+      # - name: Deploy to FTP server
+      #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USER }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     port: ${{ secrets.FTP_PORT }}
+      #     local-dir: deploy/
           # server-dir: /
           # ${{ secrets.FTP_REMOTE_DIR }}
 
