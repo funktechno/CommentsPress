@@ -6,8 +6,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches: [ master ]
+  # push:
+  #   branches: [ master ]
   workflow_dispatch:
     # inputs:
     #   build_windows:
@@ -16,8 +16,8 @@ on:
     #     type: boolean
     #     default: true
     # tmp comment out after testing
-  pull_request:
-    branches: [master]
+  # pull_request:
+  #   branches: [master]
 
 jobs:
   deploy:
