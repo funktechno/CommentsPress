@@ -70,7 +70,7 @@ jobs:
         run: |
           echo "Starting manual SFTP upload..."
           echo "put deploy/*" > sftp_batch.txt
-          sftp -P ${{ secrets.FTP_PORT }} -b sftp_batch.txt ${{ secrets.FTP_USER }}@${{ secrets.FTP_SERVER }}
+          sftp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P ${{ secrets.FTP_PORT }} -b sftp_batch.txt ${{ secrets.FTP_USER }}@${{ secrets.FTP_SERVER }}
 
       # - name: Upload via SFTP
       #   uses: appleboy/scp-action@v1
