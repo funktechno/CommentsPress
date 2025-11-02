@@ -69,14 +69,20 @@ jobs:
       - name: Manual SFTP Upload
         run: |
           echo "Starting manual SFTP upload..."
+
           echo "put deploy/*" > sftp_batch.txt
-          sshpass -p "${{ secrets.FTP_PASSWORD }}" \
+          export SSHPASS=${{ secrets.FTP_PASSWORD }}
+          sshpass -e \
             sftp -o StrictHostKeyChecking=no \
                   -o UserKnownHostsFile=/dev/null \
                   -P ${{ secrets.FTP_PORT }} \
                   -b sftp_batch.txt \
                   ${{ secrets.FTP_USER }}@${{ secrets.FTP_SERVER }}
+      # sshpass -p "${{ secrets.FTP_PASSWORD }}" sftp user@host
 
+      # lftp -u "$FTP_USER","$FTP_PASSWORD" -p 221 sftp://$FTP_SERVER <<EOF
+      #   mirror -R ./deploy /
+      #   EOF
       # - name: Upload via SFTP
       #   uses: appleboy/scp-action@v1
       #   with:
