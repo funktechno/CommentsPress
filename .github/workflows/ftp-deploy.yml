@@ -66,16 +66,22 @@ jobs:
           echo "Deploy package contents:"
           find deploy -maxdepth 4 -type f | sed -n '1,200p'
 
-      - name: Upload via SFTP
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}
-          source: "deploy/*"
-          target: "/"
-          debug: true
+      - name: Manual SFTP Upload
+        run: |
+          echo "Starting manual SFTP upload..."
+          echo "put deploy/*" > sftp_batch.txt
+          sftp -P ${{ secrets.FTP_PORT }} -b sftp_batch.txt ${{ secrets.FTP_USER }}@${{ secrets.FTP_SERVER }}
+
+      # - name: Upload via SFTP
+      #   uses: appleboy/scp-action@v1
+      #   with:
+      #     host: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USER }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     port: ${{ secrets.FTP_PORT }}
+      #     source: "deploy/*"
+      #     target: "/"
+      #     debug: true
 
       # - name: Deploy to FTP server
       #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
