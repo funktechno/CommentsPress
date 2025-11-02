@@ -75,6 +75,7 @@ jobs:
           port: ${{ secrets.FTP_PORT }}
           source: "deploy/*"
           target: "/"
+          debug: true
 
       # - name: Deploy to FTP server
       #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
