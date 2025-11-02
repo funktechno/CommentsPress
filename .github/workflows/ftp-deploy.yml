@@ -67,7 +67,7 @@ jobs:
           find deploy -maxdepth 4 -type f | sed -n '1,200p'
 
       - name: Upload via SFTP
-        uses: appleboy/sftp-action@v0.1.4
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
@@ -75,6 +75,7 @@ jobs:
           port: ${{ secrets.FTP_PORT }}
           source: "deploy/*"
           target: "/"
+
       # - name: Deploy to FTP server
       #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
       #   with:
